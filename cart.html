@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>購物車 | 曜石智能科技</title>
+<meta name="description" content="曜石智能科技產品購物車，可调整數量並提交模拟訂單。">
+<link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<header class="site-header">
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies"></a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="展開導航"><span></span></button>
+    <nav class="nav" id="site-nav" aria-label="主導航">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="about.html">關於</a></li>
+        <li><a class="nav__link" href="products.html">產品</a></li>
+        <li><a class="nav__link" href="services.html">服務</a></li>
+        <li><a class="nav__link" href="support.html">支持</a></li>
+        <li><a class="nav__link" href="news.html">動態</a></li>
+        <li><a class="nav__link" href="contact.html">聯繫</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn--secondary" href="login.html">登入</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="面包屑"><a href="index.html">首頁</a><span>/</span><a href="products.html">產品</a><span>/</span>購物車</nav>
+      <h1 class="h2 page-head__title">購物車</h1>
+      <p class="page-head__lead">本示範不進行任何真實交易，也不會索取支付資訊。填寫資料僅用于生成訂單副本。</p>
+    </div>
+  </section>
+
+  <section class="section bg-cloud">
+    <div class="container">
+      <div class="notice notice--warn mb-8">
+        <span>
+          <strong>示範站點，非真實商店。</strong>
+          頁面不接入支付網關，不收集信用卡資料，提交后僅在本機生成訂單記錄。
+        </span>
+      </div>
+
+      <div class="grid grid--2">
+
+        <div>
+          <div data-cart-table hidden>
+            <div class="table-scroll">
+              <table class="table">
+                <caption class="visually-hidden">購物車商品明細</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">型号 / 规格</th>
+                    <th scope="col">名称</th>
+                    <th scope="col">單價</th>
+                    <th scope="col">數量</th>
+                    <th scope="col">小計</th>
+                    <th scope="col">操作</th>
+                  </tr>
+                </thead>
+                <tbody data-cart-body></tbody>
+              </table>
+            </div>
+
+            <div class="mt-8">
+              <a class="btn btn--secondary" href="products.html">繼續选购</a>
+            </div>
+          </div>
+
+          <div data-cart-empty class="card">
+            <div class="card__body text-center">
+              <h2 class="h3">購物車是空的</h2>
+              <p class="card__text">你还没有加入任何设备。</p>
+              <a class="btn btn--primary mt-4" href="products.html">前往產品頁</a>
+            </div>
+          </div>
+        </div>
+
+        <div data-cart-summary hidden>
+          <div class="card">
+            <div class="card__body">
+              <h2 class="h3 mb-6">訂單摘要</h2>
+
+              <div class="flow mb-6">
+                <div class="row-between"><span class="caption">商品小計</span><span class="mono" data-sum-subtotal>HK$0.00</span></div>
+                <div class="row-between"><span class="caption">運費</span><span class="mono" data-sum-shipping>免運費</span></div>
+                <hr style="border:0;border-top:1px solid rgba(11,31,58,.12);margin:0">
+                <div class="row-between"><strong>应付總額</strong><strong class="mono" data-sum-total>HK$0.00</strong></div>
+              </div>
+
+              <p class="caption mb-6">訂單满 HK$5,000 免運費，未满加收 HK$120。</p>
+
+              <form class="form" data-checkout novalidate>
+                <div class="field">
+                  <label class="field__label" for="cname">收件人 <span class="req">*</span></label>
+                  <input class="input" type="text" id="cname" name="name" data-rule="required|minLen:2" autocomplete="name">
+                  <span class="field__error caption"></span>
+                </div>
+
+                <div class="field">
+                  <label class="field__label" for="cemail">电邮 <span class="req">*</span></label>
+                  <input class="input" type="email" id="cemail" name="email" data-rule="required|email" autocomplete="email">
+                  <span class="field__error caption"></span>
+                </div>
+
+                <div class="field">
+                  <label class="field__label" for="cphone">聯繫電話 <span class="req">*</span></label>
+                  <input class="input" type="tel" id="cphone" name="phone" data-rule="required|phone" autocomplete="tel-national">
+                  <span class="field__error caption"></span>
+                </div>
+
+                <div class="field">
+                  <label class="field__label" for="caddr">送货地址 <span class="req">*</span></label>
+                  <textarea class="textarea" id="caddr" name="address" data-rule="required|minLen:6" placeholder="区域、街道、楼栋与单位"></textarea>
+                  <span class="field__error caption"></span>
+                </div>
+
+                <div class="field">
+                  <label class="field__label" for="cnote">備註</label>
+                  <textarea class="textarea" id="cnote" name="note" placeholder="送货时段、楼层限制等" style="min-height:90px"></textarea>
+                </div>
+
+                <button class="btn btn--primary btn--block" type="submit">提交訂單（模拟）</button>
+                <p class="form-note">不會跳转至任何支付頁面，也不會扣款。</p>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44" loading="lazy">
+        <p class="footer__slogan">讓每台設備可靠連接</p>
+        <p class="footer__tagline">曜石智能科技 · 香港科學園</p>
+      </div>
+      <div>
+        <h3 class="footer__heading">產品</h3>
+        <ul class="footer__list">
+          <li><a href="products.html">環境感測終端 S1</a></li>
+          <li><a href="products.html">智能網關 G2</a></li>
+          <li><a href="products.html">能耗管理套件 E3</a></li>
+          <li><a href="services.html">服務方案</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">公司</h3>
+        <ul class="footer__list">
+          <li><a href="about.html">關於我們</a></li>
+          <li><a href="news.html">企業動態</a></li>
+          <li><a href="careers.html">加入我們</a></li>
+          <li><a href="sitemap.html">站點地圖</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">支持</h3>
+        <ul class="footer__list">
+          <li><a href="support.html">技術支持</a></li>
+          <li><a href="contact.html">聯繫我們</a></li>
+          <li><a href="login.html">客戶登入</a></li>
+          <li><a href="register.html">註冊會員</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> 曜石智能科技有限公司. All rights reserved.</span>
+      <span>香港科學園</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/cart.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  OBSIDIAN.liveValidate(document.querySelector('[data-checkout]'));
+
+  var s = OBSIDIAN.session();
+  if (s) {
+    var acc = document.getElementById('cname');
+    if (acc && !acc.value) acc.value = s.name;
+  }
+
+  OBSIDIAN_CART.render();
+})();
+</script>
+</body>
+</html>

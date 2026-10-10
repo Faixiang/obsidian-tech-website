@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="曜石智能科技设备网络示意图">
+  <title>设备网络</title>
+  <defs>
+    <linearGradient id="bgNet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1F3A"/>
+      <stop offset="1" stop-color="#071120"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bgNet)"/>
+  <g stroke="#00D4B8" stroke-opacity="0.08" stroke-width="1">
+    <path d="M0 150H800M0 300H800M0 450H800M200 0V600M400 0V600M600 0V600"/>
+  </g>
+  <g stroke="#00D4B8" stroke-width="1.5" stroke-opacity="0.55" fill="none">
+    <path d="M400 300 L210 168M400 300 L590 168M400 300 L210 432M400 300 L590 432"/>
+    <path d="M210 168 L590 168M210 432 L590 432" stroke-opacity="0.25" stroke-dasharray="4 6"/>
+  </g>
+  <g>
+    <circle cx="400" cy="300" r="66" fill="#13233A" stroke="#00D4B8" stroke-width="2"/>
+    <circle cx="400" cy="300" r="46" fill="none" stroke="#00D4B8" stroke-width="1.2" stroke-opacity="0.55"/>
+    <circle cx="400" cy="300" r="12" fill="#00D4B8"/>
+    <text x="400" y="300" text-anchor="middle" dy="-84" font-family="Consolas, monospace" font-size="17" letter-spacing="3" fill="#F5F7FA">G2</text>
+  </g>
+  <g fill="#13233A" stroke="#00D4B8" stroke-width="1.8">
+    <circle cx="210" cy="168" r="46"/>
+    <circle cx="590" cy="168" r="46"/>
+    <circle cx="210" cy="432" r="46"/>
+    <circle cx="590" cy="432" r="46"/>
+  </g>
+  <g font-family="Consolas, monospace" font-size="16" letter-spacing="2" fill="#00D4B8" text-anchor="middle">
+    <text x="210" y="174">S1</text>
+    <text x="590" y="174">S1</text>
+    <text x="210" y="438">E3</text>
+    <text x="590" y="438">S1</text>
+  </g>
+  <g font-family="Noto Sans SC, sans-serif" font-size="12" fill="#8A94A6" text-anchor="middle">
+    <text x="210" y="228">在线</text>
+    <text x="590" y="228">在线</text>
+    <text x="210" y="492">在线</text>
+    <text x="590" y="492">在线</text>
+  </g>
+  <text x="400" y="566" text-anchor="middle" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8A94A6">设备连接拓扑 · 边缘网关本地存储</text>
+</svg>

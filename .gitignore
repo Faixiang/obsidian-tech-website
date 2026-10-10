@@ -1,0 +1,35 @@
+# 依賴與構建產物
+node_modules/
+dist/
+build/
+
+# AI 助手本地記憶（不進倉庫）
+.workbuddy/
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志
+*.log
+npm-debug.log*
+
+# 环境与密钥（本项目为纯静态站点，保留规则以防将来引入构建工具）
+.env
+.env.local
+*.key
+*.pem
+
+# 临时文件
+*.tmp
+*.bak
+~$*
+.~*
+
+# Office 临时档（报告 / PPT 编辑期间产生）
+~$*.docx
+~$*.pptx
+
+# 打包产物（提交前生成的 zip 不入库）
+*.zip

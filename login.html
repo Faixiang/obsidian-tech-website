@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>員工 / 客戶登入 | 曜石智能科技</title>
+<meta name="description" content="曜石智能科技員工与客戶登入入口。">
+<link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<header class="site-header">
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies"></a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="展開導航"><span></span></button>
+    <nav class="nav" id="site-nav" aria-label="主導航">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="about.html">關於</a></li>
+        <li><a class="nav__link" href="products.html">產品</a></li>
+        <li><a class="nav__link" href="services.html">服務</a></li>
+        <li><a class="nav__link" href="support.html">支持</a></li>
+        <li><a class="nav__link" href="news.html">動態</a></li>
+        <li><a class="nav__link" href="contact.html">聯繫</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn--secondary" href="login.html">登入</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="面包屑"><a href="index.html">首頁</a><span>/</span>登入</nav>
+      <h1 class="h2 page-head__title">員工 / 客戶登入</h1>
+      <p class="page-head__lead">两类身份共用此入口，登入后按角色进入对应工作区。示範環境不校驗真實凭证。</p>
+    </div>
+  </section>
+
+  <section class="section bg-cloud">
+    <div class="container">
+      <div class="grid grid--2">
+
+        <div class="card">
+          <div class="card__body">
+            <h2 class="h3">选择登入身份</h2>
+            <p class="caption">不同身份可见的功能不同。</p>
+
+            <form class="form mt-4" id="loginForm" novalidate>
+              <fieldset style="border:0;padding:0;margin:0">
+                <legend class="field__label" style="margin-bottom:var(--s2)">身份类型 <span class="req">*</span></legend>
+                <div class="grid grid--2" style="gap:var(--s3)">
+                  <label class="notice notice--info" style="cursor:pointer;align-items:center;gap:var(--s2)">
+                    <input type="radio" name="role" value="員工" checked style="width:16px;height:16px;accent-color:var(--cyan-dark)">
+                    <span><strong>員工</strong><br><span class="caption">工号 + 内部電郵</span></span>
+                  </label>
+                  <label class="notice notice--info" style="cursor:pointer;align-items:center;gap:var(--s2)">
+                    <input type="radio" name="role" value="客戶" style="width:16px;height:16px;accent-color:var(--cyan-dark)">
+                    <span><strong>客戶</strong><br><span class="caption">註冊電郵</span></span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div class="field">
+                <label class="field__label" for="account">帳號 <span class="req">*</span></label>
+                <input class="input" type="text" id="account" name="account" data-rule="required|minLen:2" placeholder="員工請輸入工号" autocomplete="username">
+                <span class="field__hint caption" id="accHint">員工使用公司電郵，例如 emp001@obsidian-tech.hk</span>
+                <span class="field__error caption"></span>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="lpwd">密碼 <span class="req">*</span></label>
+                <input class="input" type="password" id="lpwd" name="lpwd" data-rule="required|minLen:6" placeholder="至少 6 個字符" autocomplete="current-password">
+                <span class="field__error caption"></span>
+              </div>
+
+              <label class="checkbox" for="remember">
+                <input type="checkbox" id="remember" name="remember" checked>
+                <span>在此瀏覽器保持登入状态</span>
+              </label>
+
+              <button class="btn btn--primary btn--block" type="submit">登入</button>
+
+              <p class="form-note">
+                示範說明：任意帳號与不少于 6 位的密碼即可登入。本頁不做真實凭证校驗，
+                真實系統须在后端校驗並使用 HTTPS 传输、數據库加盐哈希儲存密碼。
+              </p>
+            </form>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="h3 mb-6">登入后可见</h2>
+
+          <div class="card mb-6">
+            <div class="card__body">
+              <span class="badge badge--cyan">員工</span>
+              <h3 class="card__title mt-4">内部工作区</h3>
+              <ul class="card__text flow">
+                <li>· 待处理工单与设备告警</li>
+                <li>· 库存与在途设备查询</li>
+                <li>· 客戶檔案（脱敏视图）</li>
+                <li>· 内部文档与固件版本</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card mb-6">
+            <div class="card__body">
+              <span class="badge badge--success">客戶</span>
+              <h3 class="card__title mt-4">客戶中心</h3>
+              <ul class="card__text flow">
+                <li>· 我的设备与保修状态</li>
+                <li>· 历史訂單与发票</li>
+                <li>· 技術支持工单</li>
+                <li>· 固件与文档下載</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__body">
+              <h3 class="card__title">还没有帳號？</h3>
+              <p class="card__text">註冊後可查看设备檔案与保修期限。</p>
+              <a class="btn btn--secondary btn--block" href="register.html">前往註冊</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44" loading="lazy">
+        <p class="footer__slogan">讓每台設備可靠連接</p>
+        <p class="footer__tagline">曜石智能科技 · 香港科學園</p>
+      </div>
+      <div>
+        <h3 class="footer__heading">產品</h3>
+        <ul class="footer__list">
+          <li><a href="products.html">環境感測終端 S1</a></li>
+          <li><a href="products.html">智能網關 G2</a></li>
+          <li><a href="products.html">能耗管理套件 E3</a></li>
+          <li><a href="services.html">服務方案</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">公司</h3>
+        <ul class="footer__list">
+          <li><a href="about.html">關於我們</a></li>
+          <li><a href="news.html">企業動態</a></li>
+          <li><a href="careers.html">加入我們</a></li>
+          <li><a href="sitemap.html">站點地圖</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">支持</h3>
+        <ul class="footer__list">
+          <li><a href="support.html">技術支持</a></li>
+          <li><a href="contact.html">聯繫我們</a></li>
+          <li><a href="login.html">客戶登入</a></li>
+          <li><a href="register.html">註冊會員</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> 曜石智能科技有限公司. All rights reserved.</span>
+      <span>香港科學園</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var form = document.getElementById('loginForm');
+  OBSIDIAN.liveValidate(form);
+
+  var hint = document.getElementById('accHint');
+
+  form.querySelectorAll('input[name="role"]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      hint.textContent =
+        r.value === '員工'
+          ? '員工使用公司電郵，例如 emp001@obsidian-tech.hk'
+          : '客戶使用註冊时填寫的电邮地址';
+    });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var res = OBSIDIAN.validateForm(form);
+    if (!res.ok) return;
+
+    var role = form.querySelector('input[name="role"]:checked').value;
+    OBSIDIAN.login(role, res.data.account);
+
+    var toast = document.querySelector('.toast');
+    toast.textContent = '登入成功（' + role + '）· 工作区頁面建設中';
+    toast.classList.add('is-in');
+    setTimeout(function () {
+      location.href = 'index.html';
+    }, 1400);
+  });
+
+  OBSIDIAN.renderSession();
+})();
+</script>
+</body>
+</html>

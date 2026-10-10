@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="环境传感终端 S1 产品图">
+  <title>环境传感终端 S1</title>
+  <defs>
+    <linearGradient id="bgS1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1C2530"/>
+      <stop offset="1" stop-color="#0B1F3A"/>
+    </linearGradient>
+    <linearGradient id="litS1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00D4B8" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#00D4B8" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="480" fill="url(#bgS1)"/>
+  <g stroke="#00D4B8" stroke-opacity="0.09" stroke-width="1">
+    <path d="M0 120H640M0 240H640M0 360H640M160 0V480M320 0V480M480 0V480"/>
+  </g>
+  <g transform="translate(320 250)">
+    <rect x="-92" y="-128" width="184" height="256" rx="26" fill="#28323E" stroke="#3D4A59" stroke-width="2"/>
+    <rect x="-92" y="-128" width="92" height="256" rx="26" fill="url(#litS1)"/>
+    <circle cx="0" cy="-58" r="34" fill="#0F1721" stroke="#00D4B8" stroke-width="2"/>
+    <circle cx="0" cy="-58" r="20" fill="none" stroke="#00D4B8" stroke-width="1.4" stroke-opacity="0.6"/>
+    <circle cx="0" cy="-58" r="8" fill="#00D4B8"/>
+    <g stroke="#8A94A6" stroke-width="2" stroke-linecap="round">
+      <path d="M-40 14h80"/>
+      <path d="M-40 34h80"/>
+      <path d="M-40 54h52"/>
+    </g>
+    <circle cx="0" cy="94" r="6" fill="#2ECC8F"/>
+    <text x="0" y="152" text-anchor="middle" font-family="Consolas, monospace" font-size="15" letter-spacing="3" fill="#8A94A6">S1</text>
+  </g>
+  <text x="48" y="424" font-family="Noto Sans SC, sans-serif" font-size="24" font-weight="600" fill="#F5F7FA">环境传感终端 S1</text>
+  <text x="48" y="450" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8A94A6">温湿度 / CO₂ / PM2.5 四合一</text>
+</svg>

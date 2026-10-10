@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>產品詳情 | 曜石智能科技</title>
+<meta name="description" content="曜石智能科技產品詳細規格：環境感測終端 S1、智能網關 G2、能耗管理套件 E3。">
+<link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<header class="site-header">
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies"></a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="展開導航"><span></span></button>
+    <nav class="nav" id="site-nav" aria-label="主導航">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="about.html">關於</a></li>
+        <li><a class="nav__link" href="products.html">產品</a></li>
+        <li><a class="nav__link" href="services.html">服務</a></li>
+        <li><a class="nav__link" href="support.html">支持</a></li>
+        <li><a class="nav__link" href="news.html">動態</a></li>
+        <li><a class="nav__link" href="contact.html">聯繫</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn--secondary" href="login.html">登入</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head grid-deco">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="麵包屑">
+        <a href="index.html">首頁</a><span>/</span><a href="products.html">產品</a><span>/</span><span data-crumb>產品詳情</span>
+      </nav>
+      <div class="row-between" style="align-items:flex-end;flex-wrap:wrap">
+        <div>
+          <span class="block-no" data-no>01 / PRODUCT</span>
+          <h1 class="h2 page-head__title" data-name>產品詳情</h1>
+          <p class="page-head__lead" data-tagline></p>
+        </div>
+        <nav class="mono" style="display:flex;gap:var(--s2);flex-wrap:wrap" aria-label="切換型號">
+          <a class="btn btn--secondary" href="product-detail.html?code=S1" data-switch="S1">S1</a>
+          <a class="btn btn--secondary" href="product-detail.html?code=G2" data-switch="G2">G2</a>
+          <a class="btn btn--secondary" href="product-detail.html?code=E3" data-switch="E3">E3</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-night">
+    <div class="container">
+      <div class="grid grid--sidebar">
+
+        <div>
+          <figure class="card__media" style="border-radius:var(--r-card);overflow:hidden;border:1px solid rgba(255,255,255,.08)">
+            <img id="pImg" src="assets/img/product-s1.svg" alt="" width="640" height="480">
+          </figure>
+
+          <h2 class="h3 mt-8 mb-4">技術參數</h2>
+          <div class="spec-list" id="pSpecs"></div>
+
+          <h2 class="h3 mt-8 mb-4">應用場景</h2>
+          <p class="body-muted" data-scenes></p>
+
+          <h2 class="h3 mt-8 mb-4">交付內容</h2>
+          <ul class="tick-list" data-boxes></ul>
+
+          <div class="notice notice--warn mt-8">
+            <span>
+              <strong>規格可能因批次更新。</strong><br>
+              下單前我們會以書面形式確認最終規格，並在合同中列明與本頁的差異。
+            </span>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card">
+            <div class="card__body">
+              <span class="eyebrow" data-code>MODEL</span>
+              <h2 class="h3 mt-3" data-shortname></h2>
+
+              <div class="row-between mt-6">
+                <span class="caption">單價</span>
+                <span class="price" data-price></span>
+              </div>
+              <div class="row-between mt-2">
+                <span class="caption">交期</span>
+                <span class="mono" data-lead></span>
+              </div>
+              <div class="row-between mt-2">
+                <span class="caption">標準質保</span>
+                <span class="mono">24 個月</span>
+              </div>
+
+              <div class="field mt-6">
+                <label class="field__label" for="qty">數量</label>
+                <div class="qty">
+                  <button type="button" class="qty__btn" id="minus" aria-label="減少數量">&minus;</button>
+                  <span class="qty__num" id="qtyNum">1</span>
+                  <button type="button" class="qty__btn" id="plus" aria-label="增加數量">+</button>
+                </div>
+              </div>
+
+              <div class="row-between mt-4">
+                <span class="caption">小計</span>
+                <strong class="mono" id="subtotal"></strong>
+              </div>
+
+              <button class="btn btn--primary btn--block mt-6" type="button" id="buyBtn">加入採購單</button>
+
+              <p class="form-note mt-4">
+                本示範不接入支付網關，不會索取任何支付資料。
+                點擊後僅在本機生成訂單記錄。
+              </p>
+
+              <hr class="hr mt-6">
+
+              <ul class="tick-list mt-6">
+                <li>滿 HK$5,000 免運費，未滿加收 HK$120</li>
+                <li>標準安裝已含於報價</li>
+                <li>支持 60 個月延長質保</li>
+              </ul>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 創新模組（僅 G2 / E3） ================= -->
+  <section class="section bg-gradient-blue-purple grid-deco grid-deco--purple" id="aiSection" hidden>
+    <div class="container">
+      <div class="section-head">
+        <span class="block-no">AI MODULE</span>
+        <h2 class="h2" data-ai-title></h2>
+        <p class="section-head__sub" data-ai-desc></p>
+      </div>
+
+      <div class="grid grid--3">
+        <div class="feature feature--purple" data-reveal>
+          <span class="feature__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="9"/></svg>
+          </span>
+          <h3 class="feature__title" data-ai-f1></h3>
+          <p class="feature__text" data-ai-f1d></p>
+        </div>
+        <div class="feature feature--purple" data-reveal>
+          <span class="feature__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18V6M4 6h12l-2 4 2 4H4"/></svg>
+          </span>
+          <h3 class="feature__title" data-ai-f2></h3>
+          <p class="feature__text" data-ai-f2d></p>
+        </div>
+        <div class="feature feature--purple" data-reveal>
+          <span class="feature__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M8 10h8M8 14h5"/></svg>
+          </span>
+          <h3 class="feature__title" data-ai-f3></h3>
+          <p class="feature__text" data-ai-f3d></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container cta-band__inner">
+      <div>
+        <h2 class="cta-band__title">需要批量採購或現場勘察？</h2>
+        <p class="cta-band__text">我們按點位數量與網絡環境給出配置建議。</p>
+      </div>
+      <a class="btn btn--primary" href="contact.html">聯繫我們</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44" loading="lazy">
+        <p class="footer__slogan">讓每台設備可靠連接</p>
+        <p class="footer__tagline">曜石智能科技 · 香港科學園</p>
+      </div>
+      <div>
+        <h3 class="footer__heading">產品</h3>
+        <ul class="footer__list">
+          <li><a href="products.html">環境感測終端 S1</a></li>
+          <li><a href="products.html">智能網關 G2</a></li>
+          <li><a href="products.html">能耗管理套件 E3</a></li>
+          <li><a href="services.html">服務方案</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">公司</h3>
+        <ul class="footer__list">
+          <li><a href="about.html">關於我們</a></li>
+          <li><a href="news.html">企業動態</a></li>
+          <li><a href="careers.html">加入我們</a></li>
+          <li><a href="sitemap.html">站點地圖</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">支持</h3>
+        <ul class="footer__list">
+          <li><a href="support.html">技術支持</a></li>
+          <li><a href="contact.html">聯繫我們</a></li>
+          <li><a href="login.html">客戶登入</a></li>
+          <li><a href="register.html">註冊會員</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> 曜石智能科技有限公司. All rights reserved.</span>
+      <span>香港科學園</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" role="status" aria-live="polite"></div>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/cart.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var PRODUCTS = {
+    S1: {
+      no: '01 / SENSOR',
+      name: '環境感測終端 S1',
+      short: 'S1 環境感測終端',
+      img: 'assets/img/product-s1.svg',
+      tagline: '四合一採集，壁掛即用。可獨立上報，亦可由 G2 統一納管。',
+      price: 1280,
+      lead: '7 個工作日',
+      specs: [
+        ['量測範圍', '-20 ~ 60°C/ 0 ~ 85% RH'],
+        ['感測項目', '溫濕度 / CO₂ / PM2.5'],
+        ['CO₂ 精度', '± 50 ppm'],
+        ['PM2.5 精度', '± 15 μg/m³'],
+        ['通訊', 'Wi-Fi 802.11 b/g/n'],
+        ['供電', 'USB-C 5V 或 PoE'],
+        ['防護等級', 'IP54'],
+        ['工作溫度', '-10 ~ 55°C'],
+        ['尺寸', '92 × 128 × 26 mm'],
+        ['保固', '24 個月']
+      ],
+      scenes: '工廠車間空氣質量監測、樓宇公共區域環境記錄、住宅客廳溫濕度觀測。壁掛於離地 1.5 m 高度，避開出風口與直射陽光。',
+      boxes: ['主機 × 1', '壁掛支架與螺絲包', 'USB-C 供電線', '快速安裝指南', '規格書與接線圖（繁中 / 英文）'],
+      ai: null
+    },
+    G2: {
+      no: '02 / GATEWAY',
+      name: '智能網關 G2',
+      short: 'G2 智能網關',
+      img: 'assets/img/product-g2.svg',
+      tagline: '8 台設備並發接入。斷網期間本地緩存 72 小時，恢復後按時間戳補傳。',
+      price: 3680,
+      lead: '10 個工作日',
+      specs: [
+        ['並發設備', '8 台終端'],
+        ['本地緩存', '72 小時'],
+        ['邊緣判斷延遲', '中位數 0.02s'],
+        ['上行接口', 'Ethernet 10/100'],
+        ['現場接口', 'RS-485 / 乾接點 × 2'],
+        ['接入方式', 'S1 專用配對協議'],
+        ['儲存', 'eMMC 8 GB'],
+        ['工作溫度', '-20 ~ 60°C'],
+        ['尺寸', '184 × 132 × 42 mm'],
+        ['保固', '24 個月']
+      ],
+      scenes: '廠區多迴路監測、樓宇中央監控室接入、跨樓層設備統一上報。建議安裝於配電箱附近，需預留散熱空間。',
+      boxes: ['主機 × 1', 'DIN 導軌安裝夾', 'AC 適配器', '接線端子包', '規格書與接線圖（繁中 / 英文）'],
+      ai: {
+        title: 'G2 異常檢測',
+        desc: '在網關本地運行輕量模型，比對設備歷史基線，讀數偏移時於本地推送告警，不等雲端往返。',
+        fs: [
+          ['本地推理', '模型部署在網關內，斷網時告警功能不受影響。'],
+          ['基線校正', '基線由用戶按季節手動校正，避免自動漂移。'],
+          ['版本可溯', '模型版本隨固件記錄留存，可回溯任一時間點的推理結果。']
+        ]
+      }
+    },
+    E3: {
+      no: '03 / ENERGY',
+      name: '能耗管理套件 E3',
+      short: 'E3 能耗管理套件',
+      img: 'assets/img/product-e3.svg',
+      tagline: '12 回路分時計價，按樓層與用途拆分賬單，報表可導出 CSV。',
+      price: 8900,
+      lead: '14 個工作日',
+      specs: [
+        ['回路數', '12 路單相'],
+        ['計量精度', '± 0.5%'],
+        ['分時計價', '8 時段'],
+        ['數據保留', '本地 36 個月'],
+        ['通訊', 'Ethernet / RS-485'],
+        ['報表導出', 'CSV / XLSX'],
+        ['校準週期', '建議 12 個月'],
+        ['工作溫度', '-20 ~ 55°C'],
+        ['尺寸', '260 × 180 × 68 mm'],
+        ['保固', '24 個月']
+      ],
+      scenes: '物業按樓層分攤電費、製造業按車間核算能耗、租戶混合用途物業的實際用量拆分。需由持牌電工完成回路接入。',
+      boxes: ['主機 × 1', '電流互感器 × 12', ' DIN 導軌安裝夾', '接線端子包', '規格書與接線圖（繁中 / 英文）'],
+      ai: {
+        title: 'E3 用量預測',
+        desc: '依歷史用量與生產排程推算下月區間，預測結果僅作規劃參考，不會自動調整設備策略。',
+        fs: [
+          ['分層建模', '按樓層與用途分別建模，不把差異抹平。'],
+          ['區間輸出', '給出區間與置信度，而非單一數字。'],
+          ['財務複核', '可導出 CSV 供財務複核，格式與現有報表對齊。']
+        ]
+      }
+    }
+  };
+
+  var code = (OBSIDIAN.qs('code') || 'S1').toUpperCase();
+  var p = PRODUCTS[code] || PRODUCTS.S1;
+
+  document.title = p.short + ' | 曜石智能科技';
+
+  function set(sel, val) {
+    var el = document.querySelector(sel);
+    if (el) el.textContent = val;
+  }
+
+  set('[data-crumb]', p.short);
+  set('[data-no]', p.no);
+  set('[data-name]', p.name);
+  set('[data-tagline]', p.tagline);
+  set('[data-code]', 'MODEL ' + code);
+  set('[data-shortname]', p.short);
+  set('[data-price]', 'HK$' + p.price.toLocaleString('en-HK'));
+  set('[data-lead]', p.lead + '工作日');
+  set('[data-scenes]', p.scenes);
+
+  var img = document.getElementById('pImg');
+  if (img) {
+    img.src = p.img;
+    img.alt = p.name + ' 產品渲染圖';
+  }
+
+  document.getElementById('pSpecs').innerHTML = p.specs
+    .map(function (r) {
+      return '<div class="spec-row"><span class="spec-row__key">' +
+        OBSIDIAN.esc(r[0]) + '</span><span class="spec-row__val">' +
+        OBSIDIAN.esc(r[1]) + '</span></div>';
+    })
+    .join('');
+
+  document.querySelector('[data-boxes]').innerHTML = p.boxes
+    .map(function (b) {
+      return '<li>' + OBSIDIAN.esc(b) + '</li>';
+    })
+    .join('');
+
+  /* 當前型號的切換鈕高亮 */
+  document.querySelectorAll('[data-switch]').forEach(function (a) {
+    if (a.getAttribute('data-switch') === code) {
+      a.classList.remove('btn--secondary');
+      a.classList.add('btn--primary');
+      a.setAttribute('aria-current', 'true');
+    }
+  });
+
+  /* 創新模組區塊 */
+  var ai = document.getElementById('aiSection');
+  if (p.ai) {
+    ai.hidden = false;
+    set('[data-ai-title]', p.ai.title);
+    set('[data-ai-desc]', p.ai.desc);
+    for (var i = 0; i < 3; i++) {
+      set('[data-ai-f' + (i + 1) + ']', p.ai.fs[i][0]);
+      set('[data-ai-f' + (i + 1) + 'd]', p.ai.fs[i][1]);
+    }
+  }
+
+  /* 數量與小計 */
+  var qty = 1;
+  var qtyNum = document.getElementById('qtyNum');
+  var subtotal = document.getElementById('subtotal');
+
+  function sync() {
+    qtyNum.textContent = String(qty);
+    subtotal.textContent = 'HK$' + (p.price * qty).toLocaleString('en-HK');
+  }
+
+  document.getElementById('minus').addEventListener('click', function () {
+    if (qty > 1) qty--;
+    sync();
+  });
+
+  document.getElementById('plus').addEventListener('click', function () {
+    if (qty < 99) qty++;
+    sync();
+  });
+
+  sync();
+
+  document.getElementById('buyBtn').addEventListener('click', function () {
+    OBSIDIAN_CART.add(code, qty);
+    OBSIDIAN_TOAST('已加入採購單：' + p.short + ' × ' + qty);
+    setTimeout(function () {
+      location.href = 'cart.html';
+    }, 900);
+  });
+})();
+</script>
+</body>
+</html>

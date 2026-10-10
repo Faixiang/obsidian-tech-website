@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="智能网关 G2 产品图">
+  <title>智能网关 G2</title>
+  <defs>
+    <linearGradient id="bgG2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1C2530"/>
+      <stop offset="1" stop-color="#0B1F3A"/>
+    </linearGradient>
+    <linearGradient id="litG2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00D4B8" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#00D4B8" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="480" fill="url(#bgG2)"/>
+  <g stroke="#00D4B8" stroke-opacity="0.09" stroke-width="1">
+    <path d="M0 120H640M0 240H640M0 360H640M160 0V480M320 0V480M480 0V480"/>
+  </g>
+  <g transform="translate(320 236)">
+    <rect x="-140" y="-86" width="280" height="172" rx="18" fill="#28323E" stroke="#3D4A59" stroke-width="2"/>
+    <rect x="-140" y="-86" width="140" height="172" rx="18" fill="url(#litG2)"/>
+    <g stroke="#8A94A6" stroke-width="2" stroke-linecap="round">
+      <path d="M-108 -44h60M-108 -20h60M-108 4h60"/>
+    </g>
+    <g stroke="#00D4B8" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="60" cy="-30" r="26"/>
+      <path d="M60 -46v16M60 2v16M42 -30h16M62 -30h16"/>
+    </g>
+    <g fill="#00D4B8">
+      <circle cx="60" cy="42" r="5"/>
+    </g>
+    <g fill="#2ECC8F">
+      <circle cx="-4" cy="42" r="5"/>
+      <circle cx="18" cy="42" r="5"/>
+    </g>
+    <g stroke="#8A94A6" stroke-width="2" stroke-linecap="round">
+      <path d="M48 42h-38M96 42h26"/>
+    </g>
+    <text x="0" y="128" text-anchor="middle" font-family="Consolas, monospace" font-size="15" letter-spacing="3" fill="#8A94A6">G2</text>
+  </g>
+  <text x="48" y="424" font-family="Noto Sans SC, sans-serif" font-size="24" font-weight="600" fill="#F5F7FA">智能网关 G2</text>
+  <text x="48" y="450" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8A94A6">8 设备并发 / 本地边缘存储</text>
+</svg>

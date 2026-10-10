@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>註冊成功 | 曜石智能科技</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<header class="site-header">
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies"></a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="展開導航"><span></span></button>
+    <nav class="nav" id="site-nav" aria-label="主導航">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="about.html">關於</a></li>
+        <li><a class="nav__link" href="products.html">產品</a></li>
+        <li><a class="nav__link" href="services.html">服務</a></li>
+        <li><a class="nav__link" href="support.html">支持</a></li>
+        <li><a class="nav__link" href="news.html">動態</a></li>
+        <li><a class="nav__link" href="contact.html">聯繫</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn--secondary" href="login.html">登入</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="面包屑"><a href="index.html">首頁</a><span>/</span><a href="register.html">會員註冊</a><span>/</span>註冊成功</nav>
+      <h1 class="h2 page-head__title">註冊已完成</h1>
+      <p class="page-head__lead">以下为你刚才提交的資料副本，請核对無误。資料僅保存在本機瀏覽器，未上传至任何服務器。</p>
+    </div>
+  </section>
+
+  <section class="section bg-cloud">
+    <div class="container">
+      <div class="grid grid--2">
+
+        <div class="card">
+          <div class="card__body">
+            <h2 class="h3 mb-6">你的註冊資料</h2>
+            <div class="table-scroll">
+              <table class="table">
+                <caption class="visually-hidden">註冊資料明細</caption>
+                <tbody id="regRows"></tbody>
+              </table>
+            </div>
+            <div class="notice notice--warn mt-6">
+              <span>
+                <strong>密碼不會在此显示。</strong><br>
+                真實系統中密碼必須经加盐哈希后儲存，服務器与頁面均無法还原原文。
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="h3 mb-6">下一步</h2>
+          <div class="flow">
+            <a class="btn btn--primary btn--block" href="login.html">用新帳號登入</a>
+            <a class="btn btn--secondary btn--block" href="products.html">浏览產品</a>
+            <a class="btn btn--ghost btn--block" href="index.html">返回首頁</a>
+          </div>
+
+          <div class="card mt-8">
+            <div class="card__body">
+              <h3 class="card__title">为什么要核对？</h3>
+              <p class="card__text">
+                本頁是註冊流程的<strong>資訊展示頁</strong>：表單頁负责收集，
+                本頁负责回顯，两者通过瀏覽器儲存传递數據。
+                真實系統里这一步由服務器回传並寫入數據库。
+              </p>
+            </div>
+          </div>
+
+          <div class="card mt-6">
+            <div class="card__body">
+              <h3 class="card__title">清空本機記錄</h3>
+              <p class="card__text">若在共用電腦示範，可手動清除這份資料。</p>
+              <button class="btn btn--ghost btn--block" type="button" id="clearBtn">清除瀏覽器內的註冊資料</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44" loading="lazy">
+        <p class="footer__slogan">讓每台設備可靠連接</p>
+        <p class="footer__tagline">曜石智能科技 · 香港科學園</p>
+      </div>
+      <div>
+        <h3 class="footer__heading">產品</h3>
+        <ul class="footer__list">
+          <li><a href="products.html">環境感測終端 S1</a></li>
+          <li><a href="products.html">智能網關 G2</a></li>
+          <li><a href="products.html">能耗管理套件 E3</a></li>
+          <li><a href="services.html">服務方案</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">公司</h3>
+        <ul class="footer__list">
+          <li><a href="about.html">關於我們</a></li>
+          <li><a href="news.html">企業動態</a></li>
+          <li><a href="careers.html">加入我們</a></li>
+          <li><a href="sitemap.html">站點地圖</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">支持</h3>
+        <ul class="footer__list">
+          <li><a href="support.html">技術支持</a></li>
+          <li><a href="contact.html">聯繫我們</a></li>
+          <li><a href="login.html">客戶登入</a></li>
+          <li><a href="register.html">註冊會員</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> 曜石智能科技有限公司. All rights reserved.</span>
+      <span>香港科學園</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var data = OBSIDIAN.getLastRegister();
+  var tbody = document.getElementById('regRows');
+
+  if (!data) {
+    tbody.innerHTML =
+      '<tr><td colspan="2"><div class="notice notice--warn">' +
+      '<span>未偵測到註冊記錄。請先前往<a href="register.html">註冊頁</a>填寫資料。</span></div></td></tr>';
+    return;
+  }
+
+  var rows = [
+    ['姓名', data.name],
+    ['电邮地址', data.email],
+    ['手机号码', data.phone],
+    ['客戶类型', data.custType],
+    ['註冊時間', OBSIDIAN.formatDate(data.registeredAt)],
+    ['會員编号', 'MB-' + String(data.email).length + String(Date.now()).slice(-5)]
+  ];
+
+  tbody.innerHTML = rows
+    .map(function (r) {
+      return (
+        '<tr><th scope="row">' + OBSIDIAN.esc(r[0]) + '</th>' +
+        '<td>' + OBSIDIAN.esc(r[1]) + '</td></tr>'
+      );
+    })
+    .join('');
+
+  document.getElementById('clearBtn').addEventListener('click', function () {
+    OBSIDIAN.clearLastRegister();
+    document.querySelector('.toast').textContent = '本機註冊資料已清除';
+    document.querySelector('.toast').classList.add('is-in');
+    setTimeout(function () {
+      document.querySelector('.toast').classList.remove('is-in');
+      location.reload();
+    }, 1200);
+  });
+})();
+</script>
+</body>
+</html>

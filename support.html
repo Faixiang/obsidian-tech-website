@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>技術支持 | 曜石智能科技</title>
+<meta name="description" content="曜石智能科技技術支持：常見問題、故障排除、固件與文檔下載、服務響應時效。">
+<link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容</a>
+
+<header class="site-header">
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies"></a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="展開導航"><span></span></button>
+    <nav class="nav" id="site-nav" aria-label="主導航">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="about.html">關於</a></li>
+        <li><a class="nav__link" href="products.html">產品</a></li>
+        <li><a class="nav__link" href="services.html">服務</a></li>
+        <li><a class="nav__link" href="support.html">支持</a></li>
+        <li><a class="nav__link" href="news.html">動態</a></li>
+        <li><a class="nav__link" href="contact.html">聯繫</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn--secondary" href="login.html">登入</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-head grid-deco">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="麵包屑"><a href="index.html">首頁</a><span>/</span>技術支持</nav>
+      <h1 class="h2 page-head__title">技術支持</h1>
+      <p class="page-head__lead">
+        先查常見問題，多數問題可在無需聯繫技術支援的情況下自行排除。
+        仍未解決時請聯繫我們，並附上設備編號與現象描述。
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= 常見問題 ================= -->
+  <section class="section bg-night">
+    <div class="container">
+      <div class="section-head">
+        <span class="block-no">01</span>
+        <h2 class="h2">常見問題</h2>
+        <p class="section-head__sub">依反饋頻率排序，最常見的六項。</p>
+      </div>
+
+      <div class="grid grid--2">
+        <article class="card" data-reveal>
+          <div class="card__body">
+            <span class="card__no">Q1</span>
+            <h3 class="card__title">S1 離線，但面板仍顯示上次讀數</h3>
+            <p class="card__text">
+              設備停止上報但本地仍有舊值，通常是網絡中斷而非設備故障。
+              檢查現場 Wi-Fi 信號強度與網關在線狀態。
+            </p>
+            <p class="caption mt-3">更新於 2026-08-14</p>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card__body">
+            <span class="card__no">Q2</span>
+            <h3 class="card__title">G2 緩存中的數據會不會重複上傳</h3>
+            <p class="card__text">
+              不會。每筆記錄帶設備編號與時間戳，補傳時按此兩者去重，
+              同一讀數只會入庫一次。
+            </p>
+            <p class="caption mt-3">更新於 2026-07-22</p>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card__body">
+            <span class="card__no">Q3</span>
+            <h3 class="card__title">E3 分時計價與電錶顯示不一致</h3>
+            <p class="card__text">
+              確認時區設定。E3 按本地時區劃分時段，
+              若系統時區與實際不符，切換時段邊界會偏移。
+            </p>
+            <p class="caption mt-3">更新於 2026-06-18</p>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card__body">
+            <span class="card__no">Q4</span>
+            <h3 class="card__title">固件可否跳級升級</h3>
+            <p class="card__text">
+              可以。升級路徑不設中間版本約束，
+              但跨越兩個大版本時建議先在測試環境驗證。
+            </p>
+            <p class="caption mt-3">更新於 2026-09-02</p>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card__body">
+            <span class="card__no">Q5</span>
+            <h3 class="card__title">雲端託管可隨時取消嗎</h3>
+            <p class="card__text">
+              可以，按月計費，不綁定長約。取消後設備仍會本地記錄數據，
+              但不再推送告警與郵件通知。
+            </p>
+            <p class="caption mt-3">更新於 2026-05-30</p>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card__body">
+            <span class="card__no">Q6</span>
+            <h3 class="card__title">人工校正 E3 計量偏差</h3>
+            <p class="card__text">
+              建議 12 個月校準一次。偏差超過 ±2% 時應校正，
+              校正記錄會留存於系統，可導出對賬。
+            </p>
+            <p class="caption mt-3">更新於 2026-09-11</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 故障排除 ================= -->
+  <section class="section bg-slate">
+    <div class="container">
+      <div class="section-head">
+        <span class="block-no">02</span>
+        <h2 class="h2">故障排除速查</h2>
+        <p class="section-head__sub">按現象定位，逐級排除。</p>
+      </div>
+
+      <div class="table-scroll">
+        <table class="table">
+          <caption class="visually-hidden">常見故障現象與排除步驟</caption>
+          <thead>
+            <tr>
+              <th scope="col">現象</th>
+              <th scope="col">可能原因</th>
+              <th scope="col">排查順序</th>
+              <th scope="col">仍無法解決</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">S1 全線離線</th>
+              <td>供電斷開 / Wi-Fi 失效 / 設備故障</td>
+              <td>①確認電源指示燈 ②檢查現場網絡 ③查 G2 在線列表</td>
+              <td>4 小時內到場</td>
+            </tr>
+            <tr>
+              <th scope="row">讀數明顯偏高</th>
+              <td>安裝位置靠近出風口</td>
+              <td>①核對安裝高度（1.5 m）②避開出風口與陽光直射</td>
+              <td>安排重新定位</td>
+            </tr>
+            <tr>
+              <th scope="row">G2 無法配對新終端</th>
+              <td>並發已滿 / 配對碼過期</td>
+              <td>①查並發數 ②重新生成配對碼（有效期 10 分鐘）</td>
+              <td>遠端協助處理</td>
+            </tr>
+            <tr>
+              <th scope="row">E3 報表與電錶不符</th>
+              <td>時區設定 / 互感器接線</td>
+              <td>①核對時區 ②核對互感器方向 ③查分時計價設定</td>
+              <td>1 個工作日內對賬</td>
+            </tr>
+            <tr>
+              <th scope="row">固件升級失敗</th>
+              <td>升級途中斷電 / 儲存空間不足</td>
+              <td>①確認供電穩定 ②清除舊版本後重試</td>
+              <td>安排到場處理</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="notice notice--info mt-8">
+        <span>
+          <strong>報修請提供三項資訊</strong><br>
+          設備編號（貼於機身標籤）、現象與首次出現時間、
+          現場是否有近期施工或網絡變更。
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 文檔下載 ================= -->
+  <section class="section bg-night">
+    <div class="container">
+      <div class="section-head">
+        <span class="block-no">03</span>
+        <h2 class="h2">文檔與韌體</h2>
+        <p class="section-head__sub">所有文檔長期有效，不設下架日期。</p>
+      </div>
+
+      <div class="table-scroll">
+        <table class="table">
+          <caption class="visually-hidden">可下載文檔與韌體清單</caption>
+          <thead>
+            <tr>
+              <th scope="col">項目</th>
+              <th scope="col">版本</th>
+              <th scope="col">更新日期</th>
+              <th scope="col">備註</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">S1 規格書</th>
+              <td class="mono">v2.1</td>
+              <td class="mono">2026-08-14</td>
+              <td>繁中 / 英文</td>
+            </tr>
+            <tr>
+              <th scope="row">S1 接線圖</th>
+              <td class="mono">v2.0</td>
+              <td class="mono">2026-08-14</td>
+              <td>PDF</td>
+            </tr>
+            <tr>
+              <th scope="row">G2 規格書</th>
+              <td class="mono">v3.0</td>
+              <td class="mono">2026-09-02</td>
+              <td>繁中 / 英文</td>
+            </tr>
+            <tr>
+              <th scope="row">E3 規格書</th>
+              <td class="mono">v2.4</td>
+              <td class="mono">2026-06-18</td>
+              <td>繁中 / 英文</td>
+            </tr>
+            <tr>
+              <th scope="row">S1 韌體</th>
+              <td class="mono">v2.4.1</td>
+              <td class="mono">2026-09-28</td>
+              <td>修正夜間自動基準偏移</td>
+            </tr>
+            <tr>
+              <th scope="row">G2 韌體</th>
+              <td class="mono">v3.2.0</td>
+              <td class="mono">2026-09-28</td>
+              <td>新增 AI 模組推理記錄</td>
+            </tr>
+            <tr>
+              <th scope="row">E3 韌體</th>
+              <td class="mono">v2.4.0</td>
+              <td class="mono">2026-06-18</td>
+              <td>修正時區切換後計價偏移</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="notice notice--warn mt-8">
+        <span>
+          <strong>韌體升級提示</strong><br>
+          本示範站點不提供實際下載。正式韌體包需簽名驗證後經支援渠道提供，
+          請勿從非官方來源下載。
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container cta-band__inner">
+      <div>
+        <h2 class="cta-band__title">排查後仍未解決？</h2>
+        <p class="cta-band__text">提供設備編號與現象，我們協助定位。</p>
+      </div>
+      <div style="display:flex;gap:var(--s3);flex-wrap:wrap">
+        <a class="btn btn--primary" href="contact.html">聯繫技術支援</a>
+        <a class="btn btn--secondary" href="services.html">查看服務時效</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44" loading="lazy">
+        <p class="footer__slogan">讓每台設備可靠連接</p>
+        <p class="footer__tagline">曜石智能科技 · 香港科學園</p>
+      </div>
+      <div>
+        <h3 class="footer__heading">產品</h3>
+        <ul class="footer__list">
+          <li><a href="products.html">環境感測終端 S1</a></li>
+          <li><a href="products.html">智能網關 G2</a></li>
+          <li><a href="products.html">能耗管理套件 E3</a></li>
+          <li><a href="services.html">服務方案</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">公司</h3>
+        <ul class="footer__list">
+          <li><a href="about.html">關於我們</a></li>
+          <li><a href="news.html">企業動態</a></li>
+          <li><a href="careers.html">加入我們</a></li>
+          <li><a href="sitemap.html">站點地圖</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__heading">支持</h3>
+        <ul class="footer__list">
+          <li><a href="support.html">技術支持</a></li>
+          <li><a href="contact.html">聯繫我們</a></li>
+          <li><a href="login.html">客戶登入</a></li>
+          <li><a href="register.html">註冊會員</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> 曜石智能科技有限公司. All rights reserved.</span>
+      <span>support@obsidian-tech.hk</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" role="status" aria-live="polite"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
