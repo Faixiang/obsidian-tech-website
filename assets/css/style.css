@@ -124,6 +124,12 @@
   --track-btn: 3px;           /* 按钮字距 */
   --track-nav: 3px;           /* 导航字距 */
   --track-tag: 3px;           /* 角标字距 */
+
+  /* --- 跑马灯速度（时长越长越慢） ---
+     三处 ticker 共用，调整此值即可统一变速 */
+  --ticker-ann: 90s;          /* 顶部公告条 */
+  --ticker-hero: 72s;         /* Hero 底部行情 */
+  --ticker-nb: 60s;           /* 新闻区行情 */
 }
 
 /* ==========================================================================
@@ -362,7 +368,7 @@ em, i, cite { font-style: normal; }
   display: flex;
   gap: var(--s12);
   white-space: nowrap;
-  animation: ticker 30s linear infinite;
+  animation: ticker var(--ticker-ann) linear infinite;
 }
 
 .ann-bar__track span { color: var(--text-dim); }
@@ -371,6 +377,13 @@ em, i, cite { font-style: normal; }
 @keyframes ticker {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+
+/* 悬停时暂停，方便阅读 */
+.ann-bar__track:hover,
+.hero-ticker-track:hover,
+.nb-ticker-track:hover {
+  animation-play-state: paused;
 }
 
 /* --- 主导航 61px --- */
@@ -621,6 +634,11 @@ body.nav-locked { overflow: hidden; }
   margin-bottom: var(--s4);
 }
 
+/* 窄屏解除强制断行，交回浏览器自动换行 */
+@media (max-width: 960px) {
+  .hero-title-zh br { display: none; }
+}
+
 .hero-title-en {
   font-family: var(--font-mono);
   font-size: var(--fs-small);
@@ -801,7 +819,7 @@ body.nav-locked { overflow: hidden; }
   font-family: var(--font-mono);
   font-size: var(--fs-tiny);
   color: var(--silver-dim);
-  animation: ticker 26s linear infinite;
+  animation: ticker var(--ticker-hero) linear infinite;
 }
 
 .hero-ticker-track b { color: var(--cyan); }
@@ -1044,7 +1062,7 @@ body.nav-locked { overflow: hidden; }
   font-family: var(--font-mono);
   font-size: var(--fs-micro);
   color: var(--silver-dim);
-  animation: ticker 22s linear infinite;
+  animation: ticker var(--ticker-nb) linear infinite;
 }
 
 .nb-ticker-track b { color: var(--gold); }
