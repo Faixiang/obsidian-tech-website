@@ -1,6 +1,6 @@
 # 曜石智能科技企業官網
 
-CIS222 Web Design and Development / CIS282 Web Development and Security
+CIS222 Web Design and Development
 Group Project — 企業官網 E-Commerce 型網站
 
 **虛擬公司**：曜石智能科技（OBSIDIAN Technologies）
