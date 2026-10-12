@@ -127,10 +127,11 @@
 
   /* --- 跑马灯速度（时长越长越慢） ---
      三处 ticker 共用，调整此值即可统一变速
-     实测：公告条约 7 px/s、新闻区约 7 px/s（慢但可辨） */
-  --ticker-ann: 340s;         /* 顶部公告条（10 条内容） */
-  --ticker-hero: 72s;         /* Hero 底部行情（4 条内容） */
-  --ticker-nb: 180s;          /* 新闻区行情（8 条内容） */
+     实测：公告条约 2.7 px/s、新闻区约 3.1 px/s
+     （近乎静止但仍可辨，符合「读得清」的需求） */
+  --ticker-ann: 900s;         /* 顶部公告条（20 条） */
+  --ticker-hero: 260s;         /* Hero 底部行情（4 条） */
+  --ticker-nb: 480s;          /* 新闻区行情（8 条） */
 }
 
 /* ==========================================================================
@@ -367,7 +368,7 @@ em, i, cite { font-style: normal; }
 
 .ann-bar__track {
   display: flex;
-  gap: var(--s12);
+  gap: 20px;
   white-space: nowrap;
   animation: ticker var(--ticker-ann) linear infinite;
 }
@@ -1057,7 +1058,7 @@ body.nav-locked { overflow: hidden; }
 
 .nb-ticker-track {
   display: flex;
-  gap: var(--s8);
+  gap: var(--s6);
   white-space: nowrap;
   padding-left: var(--s6);
   font-family: var(--font-mono);
