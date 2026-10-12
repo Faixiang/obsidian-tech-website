@@ -14,6 +14,21 @@
 <body>
 <a class="skip-link" href="#main">跳至主要內容</a>
 
+<canvas id="particles" aria-hidden="true"></canvas>
+
+<div class="ann-bar">
+  <div class="ann-bar__track">
+    <span><b>SYS</b> 全部設備在線 · 連接率 99.9%</span>
+    <span><b>NET</b> G3 網關環境可靠性測驗通過 · 720 小時無中斷</span>
+    <span><b>FW</b> S1 韌體 v2.4.1 已發布</span>
+    <span><b>OPS</b> 雲端託管服務正常運行</span>
+    <span><b>SYS</b> 全部設備在線 · 連接率 99.9%</span>
+    <span><b>NET</b> G3 網關環境可靠性測驗通過 · 720 小時無中斷</span>
+    <span><b>FW</b> S1 韌體 v2.4.1 已發布</span>
+    <span><b>OPS</b> 雲端託管服務正常運行</span>
+  </div>
+</div>
+
 <header class="site-header">
   <div class="scroll-progress" aria-hidden="true"></div>
   <div class="container site-header__inner">
@@ -35,11 +50,11 @@
 
 <main id="main">
 
-  <section class="page-head grid-deco">
+  <section class="page-header" style="padding-top:calc(var(--nav-total) + var(--s8))">
     <div class="container">
-      <nav class="breadcrumb" aria-label="麵包屑"><a href="index.html">首頁</a><span>/</span>企業動態</nav>
-      <h1 class="h2 page-head__title">企業動態</h1>
-      <p class="page-head__lead">
+      <nav class="more" aria-label="麵包屑"><a href="index.html">首頁</a><span>/</span>企業動態</nav>
+      <h1 class="h-page">企業動態</h1>
+      <p class="page-back" style="display:block;margin-top:0">
         產品發布、展會資訊、客戶合作與技術公告。
         涉及規格變更的通知會同步至<a href="support.html">技術支持</a>頁面。
       </p>
@@ -195,43 +210,42 @@
 </main>
 
 <footer class="site-footer">
-  <div class="container">
-    <div class="footer__grid">
-      <div class="footer__brand">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div class="ft-brand">
         <img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44" loading="lazy">
-        <p class="footer__slogan">讓每台設備可靠連接</p>
-        <p class="footer__tagline">曜石智能科技 · 香港科學園</p>
+        <p class="ft-slogan">讓每台設備可靠連接</p>
+        <p class="ft-desc">
+          曜石智能科技 · 2016 年成立於香港科學園<br>
+          專注工業與家用物聯網的感測、邊緣連接與用能管理。
+        </p>
       </div>
-      <div>
-        <h3 class="footer__heading">產品</h3>
-        <ul class="footer__list">
-          <li><a href="products.html">環境感測終端 S1</a></li>
-          <li><a href="products.html">智能網關 G2</a></li>
-          <li><a href="products.html">能耗管理套件 E3</a></li>
-          <li><a href="services.html">服務方案</a></li>
-        </ul>
+      <div class="ft-col">
+        <h4>產品</h4>
+        <a href="products.html">環境感測終端 S1</a>
+        <a href="products.html">智能網關 G2</a>
+        <a href="products.html">能耗管理套件 E3</a>
+        <a href="services.html">服務方案</a>
       </div>
-      <div>
-        <h3 class="footer__heading">公司</h3>
-        <ul class="footer__list">
-          <li><a href="about.html">關於我們</a></li>
-          <li><a href="news.html">企業動態</a></li>
-          <li><a href="careers.html">加入我們</a></li>
-          <li><a href="sitemap.html">站點地圖</a></li>
-        </ul>
+      <div class="ft-col">
+        <h4>公司</h4>
+        <a href="about.html">關於我們</a>
+        <a href="news.html">企業動態</a>
+        <a href="careers.html">加入我們</a>
+        <a href="sitemap.html">站點地圖</a>
       </div>
-      <div>
-        <h3 class="footer__heading">支持</h3>
-        <ul class="footer__list">
-          <li><a href="support.html">技術支持</a></li>
-          <li><a href="contact.html">聯繫我們</a></li>
-          <li><a href="login.html">客戶登入</a></li>
-          <li><a href="register.html">註冊會員</a></li>
-        </ul>
+      <div class="ft-col">
+        <h4>支持</h4>
+        <a href="support.html">技術支持</a>
+        <a href="contact.html">聯繫我們</a>
+        <a href="login.html">客戶登入</a>
+        <a href="register.html">註冊會員</a>
       </div>
     </div>
-    <div class="footer__bottom">
-      <span>© <span data-year>2026</span> 曜石智能科技有限公司. All rights reserved.</span>
+    <div class="ft-rule"></div>
+    <div class="ft-bottom">
+      <span>© <span data-year>2026</span> 曜石智能科技有限公司</span>
+      <span class="ft-final">OBSIDIAN TECHNOLOGIES · CIS222 GROUP PROJECT</span>
       <span>香港科學園</span>
     </div>
   </div>
