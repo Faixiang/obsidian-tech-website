@@ -135,8 +135,11 @@
      反算并写入 --ticker-*；下方 --ticker-* 仅为 JS 未运行时的兜底。
      每条轨道内容复制两份（副本 aria-hidden="true"）；当「轨道宽 − 一份
      内容宽」小于容器可见宽时，JS 自动补足副本（保持偶数份）以消除露白。
-     位移比例 --mq-shift（元素级，= −一份内容宽 ÷ 轨道宽，负值向左）同样
-     由 JS 写入，逐帧位移恒为一份内容宽，实现无缝，与副本份数无关。
+     位移量 --mq-shift（元素级，v1.3 起为「负的一份内容宽」像素值，负值
+     向左）同样由 JS 写入：以 px 为基准可避免 translateX(%) 把轨道
+     padding-left 一并计入被除数（旧实现每循环多走约 6px，闭合处瞬跳），
+     逐帧位移严格等于一份内容宽，循环闭合处零跳变，与副本份数 / 视口宽
+     均无关。
      三条轨道各自独立关键帧：marquee-ann / marquee-nb / marquee-hero。
      ====================================================================== */
   --mq-speed-ann: 12;          /* 顶部公告条 12 px/s（康陶基准 11.9） */
@@ -395,10 +398,11 @@ em, i, cite { font-style: normal; }
 .ann-bar__track span { color: var(--text-dim); }
 .ann-bar__track b { color: var(--cyan); font-weight: 700; }
 
-/* 三条跑马灯各自独立关键帧（禁止共用）。位移比例由 JS 写入元素级
-   --mq-shift（= 负的一份内容宽 ÷ 轨道宽 × 100%，负值即向左），逐帧位移
-   恰为一份内容宽，故循环回溯无跳变、速度与副本份数无关；-50% 为 JS
-   未运行时的兜底 */
+/* 三条跑马灯各自独立关键帧（禁止共用）。位移量由 JS 写入元素级
+   --mq-shift（v1.3：负的「一份内容宽」像素值，负值即向左），逐帧位移
+   严格等于一份内容宽 —— 基准为 px 而非 %，故不受轨道 padding-left 与
+   副本份数影响，循环闭合处零跳变、速度严格等于目标值；-50% 仅为 JS
+   未运行时的近似兜底 */
 @keyframes marquee-ann {
   0% { transform: translateX(0); }
   100% { transform: translateX(var(--mq-shift, -50%)); }
@@ -734,6 +738,9 @@ body.nav-locked { overflow: hidden; }
   position: relative;
   perspective: 1200px;
   aspect-ratio: 3 / 4;
+  /* 扫描线行程（v1.3）：JS 在 load / resize 后按本元素实际高度覆盖为 px，
+     使 holo-scan 真正从上扫到下；此处兜底值仅为 3/4 比例下的典型高度 */
+  --holo-scan-travel: 560px;
 }
 
 .holo-frame {
@@ -758,24 +765,25 @@ body.nav-locked { overflow: hidden; }
   50% { transform: translateY(-6px); }
 }
 
-/* 单条辉光线（v1.2：由两条收敛为一条，3s linear，仅 transform 驱动，
-   消除多条异相动画叠加产生的抖动） */
+/* 单条辉光线（v1.3：真扫描 —— 自上而下匀速扫过整个面板，行程由
+   --holo-scan-travel 提供；周期与 holo-float 统一为 8s 且同相位起止，
+   消除 3s/8s 异周期持续错相；仅 transform 驱动，不触发重排）
+   注：v1.2 遗留的第二个 .holo-glow-line 死元素已从 index.html 中删除，
+   原先仅为它存在的 nth-child 兜底规则一并移除 */
 .holo-glow-line {
   position: absolute;
   left: 0;
   right: 0;
+  top: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--cyan), transparent);
   opacity: 0.5;
-  animation: holo-scan 3s linear infinite;
+  animation: holo-scan 8s linear infinite;
 }
-
-.holo-glow-line:nth-child(1) { top: 25%; }
-.holo-glow-line:nth-child(2) { display: none; }   /* 收敛为单条扫描线 */
 
 @keyframes holo-scan {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(8px); }
+  50% { transform: translateY(var(--holo-scan-travel, 560px)); }
 }
 
 /* 侧边指标 */

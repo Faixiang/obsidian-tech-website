@@ -5,7 +5,8 @@ Group Project — 企業官網 E-Commerce 型網站
 
 **虛擬公司**：曜石智能科技（OBSIDIAN Technologies）
 **設計規範**：`曜石智能科技_品牌规范与项目方案_V1.1.1.md`
-**GitHub**：https://github.com/Faixiang/obsidian-tech-website （private）
+**GitHub**：https://github.com/Faixiang/obsidian-tech-website
+**線上展示（GitHub Pages）**：https://faixiang.github.io/obsidian-tech-website/
 **截止日期**：2026-12-20 23:59
 **課程要求**：≥ 15 個 HTML 頁面，覆蓋登入 / 會員註冊 / 產品展示 / 購買跳轉 / 聯繫我們 / 站點地圖
 
@@ -25,6 +26,8 @@ Group Project — 企業官網 E-Commerce 型網站
 ---
 
 ## 快速開始
+
+**線上版（免安裝，點開即看）**：https://faixiang.github.io/obsidian-tech-website/
 
 直接雙擊 `index.html` 即可瀏覽，無需伺服器、無需安裝依賴。
 

@@ -334,15 +334,20 @@
       if (!(m.one > 0)) return;
 
       var duration = m.one / item.speed;
-      var shift = m.track > 0 ? (m.one / m.track) * 100 : 50;
       var changed = padded || !item.lastDuration ||
         Math.abs(item.lastDuration - duration) > 0.01;
 
-      /* duration = 一份内容宽 ÷ 目标速度；
-         --mq-shift = 负的一份内容宽占轨道宽的百分比（向左位移）—— 逐帧
-         位移量恒等于一份内容宽，速度不随副本份数与视口宽度变化 */
+      /* duration = 一份内容宽 ÷ 目标速度（秒），实测速度严格等于目标值；
+         --mq-shift = 负的「一份内容宽」像素值（向左位移）—— 逐帧位移恒等
+         于一份内容宽，与轨道 padding-left / 副本份数 / 视口宽度均无关，
+         故循环闭合处零跳变。
+
+         v1.3 修正：旧实现写 `-(one / track * 100)%`，而 translateX(%) 的
+         基准是元素自身 border-box（轨道 padding-left:24px 被计入被除数），
+         实际循环位移 = 一份宽 + 约 6px，导致 nb（78s）/ hero（29.35s）
+         每周期在闭合处瞬跳约 6px、速度同源偏高 0.5%~0.95%。 */
       ctx.style.setProperty(item.varName, duration.toFixed(2) + 's');
-      item.el.style.setProperty('--mq-shift', (-shift).toFixed(6) + '%');
+      item.el.style.setProperty('--mq-shift', (-m.one).toFixed(2) + 'px');
       item.lastDuration = duration;
 
       if (changed) restart(item);
@@ -442,6 +447,36 @@
   })();
 
   window.OBSIDIAN_MARQUEE = OBSIDIAN_MARQUEE;
+
+  /* ======================================================================
+     全息展台扫描线行程（v1.3）
+     ----------------------------------------------------------------------
+     扫描线绝对定位于 .holo-showcase（该元素无 overflow:hidden，位移需
+     限制在面板高度内），故其扫描行程必须等于面板实际高度。这里把高度
+     写入 --holo-scan-travel，使 holo-scan 真正从上扫到下，而不是只摆动
+     8px。周期与 holo-float 统一为 8s、同相位起止，消除 3s/8s 异周期
+     持续错位带来的"抖动/呼吸不均"观感。
+     ====================================================================== */
+  (function holoScan() {
+    var showcase = document.querySelector('.holo-showcase');
+    if (!showcase) return;
+
+    function sync() {
+      var travel = showcase.getBoundingClientRect().height;
+      if (travel > 0) {
+        showcase.style.setProperty('--holo-scan-travel', travel.toFixed(2) + 'px');
+      }
+    }
+
+    function schedule() {
+      window.requestAnimationFrame(sync);
+    }
+
+    if (document.readyState === 'complete') sync();
+    else window.addEventListener('load', sync);
+    window.addEventListener('resize', schedule);
+    window.addEventListener('orientationchange', schedule);
+  })();
 
   /* ======================================================================
      新闻演播室：频道切换 + 实时时钟
