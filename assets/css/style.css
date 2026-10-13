@@ -238,7 +238,21 @@ em, i, cite { font-style: normal; }
   html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  /* v1.4：三条跑马灯轨道与全息展台在 reduce 下直接静态化，不再依赖
+     0.01ms 兜底 —— duration 被压到 0.01ms 而 iteration-count 为 infinite 时，
+     动画会以 0.01ms 周期高频循环（视觉上即闪烁失控），且 !important 会
+     覆盖 JS 反算写入的 --ticker-* duration。animation:none 彻底停掉动画，
+     transform:none 清除关键帧残留位移，保证静态且不偏移。 */
+  .ann-bar__track,
+  .hero-ticker-track,
+  .nb-ticker-track,
+  .holo-frame,
+  .holo-glow-line {
+    animation: none !important;
+    transform: none !important;
   }
   body::after, #particles { display: none; }
 }
