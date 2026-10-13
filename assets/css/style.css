@@ -125,13 +125,29 @@
   --track-nav: 3px;           /* 导航字距 */
   --track-tag: 3px;           /* 角标字距 */
 
-  /* --- 跑马灯速度（时长越长越慢） ---
-     三处 ticker 共用，调整此值即可统一变速
-     实测：公告条约 2.7 px/s、新闻区约 3.1 px/s
-     （近乎静止但仍可辨，符合「读得清」的需求） */
-  --ticker-ann: 900s;         /* 顶部公告条（20 条） */
-  --ticker-hero: 260s;         /* Hero 底部行情（4 条） */
-  --ticker-nb: 480s;          /* 新闻区行情（8 条） */
+  /* ======================================================================
+     跑马灯参数（v1.2：速度反算，不再手写 duration）
+     ----------------------------------------------------------------------
+     --mq-speed-*：目标滚动速度（px/s）。康陶实测基准：公告条 11.9、
+       新闻区行情 7.9、Hero 底部 43.2。
+     JS 在 window load 与 document.fonts.ready 之后按
+       「duration = 一份内容宽 ÷ 目标速度」
+     反算并写入 --ticker-*；下方 --ticker-* 仅为 JS 未运行时的兜底。
+     每条轨道内容复制两份（副本 aria-hidden="true"）；当「轨道宽 − 一份
+     内容宽」小于容器可见宽时，JS 自动补足副本（保持偶数份）以消除露白。
+     位移比例 --mq-shift（元素级，= −一份内容宽 ÷ 轨道宽，负值向左）同样
+     由 JS 写入，逐帧位移恒为一份内容宽，实现无缝，与副本份数无关。
+     三条轨道各自独立关键帧：marquee-ann / marquee-nb / marquee-hero。
+     ====================================================================== */
+  --mq-speed-ann: 12;          /* 顶部公告条 12 px/s（康陶基准 11.9） */
+  --mq-speed-nb: 8;            /* 新闻区行情 8 px/s（康陶基准 7.9） */
+  --mq-speed-hero: 40;         /* Hero 底部行情 40 px/s（康陶基准 43.2） */
+
+  /* 兜底值仅在 JS 未运行/失败时生效，按「HTML 原始轨道宽 × 50% ÷ 目标速度」
+     估算：482 = 5779 ÷ 12、39 = 309 ÷ 8、15 = 590 ÷ 40；JS 运行后精确覆盖 */
+  --ticker-ann: 482s;
+  --ticker-nb: 39s;
+  --ticker-hero: 15s;
 }
 
 /* ==========================================================================
@@ -368,17 +384,34 @@ em, i, cite { font-style: normal; }
 
 .ann-bar__track {
   display: flex;
+  flex: 0 0 auto;            /* 轨道不被容器拉伸/压缩 */
+  width: max-content;        /* 轨道宽 = 内容自然宽，杜绝被压扁后位移量失真 */
   gap: 20px;
   white-space: nowrap;
-  animation: ticker var(--ticker-ann) linear infinite;
+  animation: marquee-ann var(--ticker-ann) linear infinite;
+  will-change: transform;
 }
 
 .ann-bar__track span { color: var(--text-dim); }
 .ann-bar__track b { color: var(--cyan); font-weight: 700; }
 
-@keyframes ticker {
+/* 三条跑马灯各自独立关键帧（禁止共用）。位移比例由 JS 写入元素级
+   --mq-shift（= 负的一份内容宽 ÷ 轨道宽 × 100%，负值即向左），逐帧位移
+   恰为一份内容宽，故循环回溯无跳变、速度与副本份数无关；-50% 为 JS
+   未运行时的兜底 */
+@keyframes marquee-ann {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(var(--mq-shift, -50%)); }
+}
+
+@keyframes marquee-nb {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--mq-shift, -50%)); }
+}
+
+@keyframes marquee-hero {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--mq-shift, -50%)); }
 }
 
 /* 悬停时暂停，方便阅读 */
@@ -713,17 +746,20 @@ body.nav-locked { overflow: hidden; }
     radial-gradient(ellipse at 50% 30%, rgba(0, 212, 184, 0.1), transparent 60%),
     var(--void3);
   overflow: hidden;
-  animation: holo-float 6s ease-in-out infinite;
+  animation: holo-float 8s ease-in-out infinite;   /* v1.2：6s → 8s，降低抖动频率 */
+  will-change: transform;
 }
 
 .holo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
+/* Hero 展台浮沉：8s ease-in-out，位移幅度 ≤ 6px，仅 transform 驱动 */
 @keyframes holo-float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-6px); }
 }
 
-/* 两条辉光线 */
+/* 单条辉光线（v1.2：由两条收敛为一条，3s linear，仅 transform 驱动，
+   消除多条异相动画叠加产生的抖动） */
 .holo-glow-line {
   position: absolute;
   left: 0;
@@ -731,15 +767,15 @@ body.nav-locked { overflow: hidden; }
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--cyan), transparent);
   opacity: 0.5;
-  animation: holo-scan 4s ease-in-out infinite;
+  animation: holo-scan 3s linear infinite;
 }
 
 .holo-glow-line:nth-child(1) { top: 25%; }
-.holo-glow-line:nth-child(2) { top: 70%; animation-delay: 2s; }
+.holo-glow-line:nth-child(2) { display: none; }   /* 收敛为单条扫描线 */
 
 @keyframes holo-scan {
-  0%, 100% { opacity: 0.15; transform: translateY(0); }
-  50% { opacity: 0.6; transform: translateY(8px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
 }
 
 /* 侧边指标 */
@@ -815,13 +851,16 @@ body.nav-locked { overflow: hidden; }
 
 .hero-ticker-track {
   display: flex;
+  flex: 0 0 auto;            /* 轨道不被容器拉伸/压缩 */
+  width: max-content;        /* 轨道宽 = 内容自然宽 */
   gap: var(--s12);
   white-space: nowrap;
   padding-left: var(--s6);
   font-family: var(--font-mono);
   font-size: var(--fs-tiny);
   color: var(--silver-dim);
-  animation: ticker var(--ticker-hero) linear infinite;
+  animation: marquee-hero var(--ticker-hero) linear infinite;
+  will-change: transform;
 }
 
 .hero-ticker-track b { color: var(--cyan); }
@@ -1058,13 +1097,16 @@ body.nav-locked { overflow: hidden; }
 
 .nb-ticker-track {
   display: flex;
+  flex: 0 0 auto;            /* 轨道不被容器拉伸/压缩 */
+  width: max-content;        /* 轨道宽 = 内容自然宽 */
   gap: var(--s6);
   white-space: nowrap;
   padding-left: var(--s6);
   font-family: var(--font-mono);
   font-size: var(--fs-micro);
   color: var(--silver-dim);
-  animation: ticker var(--ticker-nb) linear infinite;
+  animation: marquee-nb var(--ticker-nb) linear infinite;
+  will-change: transform;
 }
 
 .nb-ticker-track b { color: var(--gold); }
@@ -1091,7 +1133,9 @@ body.nav-locked { overflow: hidden; }
   text-transform: uppercase;
   color: var(--text-dim);
   cursor: pointer;
-  transition: all 0.3s ease;
+  /* v1.2：transition: all → 仅可能变化的属性 */
+  transition: color 0.3s ease, border-color 0.3s ease,
+    background-color 0.3s ease;
 }
 
 .nb-ch:hover { color: var(--cyan); border-color: var(--cyan); }
@@ -1585,7 +1629,8 @@ body.nav-locked { overflow: hidden; }
   font-size: 15px;
   line-height: 1;
   cursor: pointer;
-  transition: all 0.3s ease;
+  /* v1.2：transition: all → 仅可能变化的属性 */
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 .qty__btn:hover { border-color: var(--cyan); color: var(--cyan); }
@@ -1632,7 +1677,8 @@ body.nav-locked { overflow: hidden; }
   color: var(--text-dim);
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.3s ease;
+  /* v1.2：transition: all → 仅可能变化的属性 */
+  transition: color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
 .tab-btn:hover { color: var(--cyan); }
@@ -1702,32 +1748,12 @@ body.nav-locked { overflow: hidden; }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }
 }
 
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 8px rgba(0, 212, 184, 0.4); }
-  50% { box-shadow: 0 0 18px rgba(0, 212, 184, 0.7); }
-}
-
-@keyframes slideLeft {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-@keyframes glitch {
-  0%, 92%, 100% { transform: translate(0); opacity: 1; }
-  93% { transform: translate(-2px, 1px); opacity: 0.8; }
-  95% { transform: translate(2px, -1px); opacity: 0.9; }
-  97% { transform: translate(-1px, 0); }
-}
+/* v1.2：已删除死关键帧 fadeIn / pulseGlow / slideLeft / glitch（全站无引用） */
 
 [data-reveal] {
   opacity: 0;

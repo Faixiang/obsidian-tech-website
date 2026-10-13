@@ -188,6 +188,82 @@ AIGC:
 | Hero 轮播/进度 | 间隔 4000ms；进度条 width 0→100%，transition 4000ms linear |
 | 粒子 | requestAnimationFrame，速度 ±0.125 |
 
+#### 9.5.1 三条滚动播报条专项硬参数（补丁 v1.1.2）
+
+> 补丁背景：康陶实测发现三条跑马灯共用同一个 `@keyframes ticker`，但元素宽与 duration 各不相同，折算速度相差 3.6 倍（11.93 / 7.86 / 43.15 px/s）；且 `.ann-ticker` 被容器 `flex:1` 拉伸后，`translateX(-50%)` 的基准变成「元素自身宽度」而非「内容宽度」，循环回溯时跳变；`.hero-ticker-track` 内容未复制两份，只走完一半即回溯。WorkBuddy 若照抄「固定 duration + translateX(-50%)」，速度会随视口宽度线性放大，即用户看到的「滑得飞快」。
+
+| 项 | 顶部公告条 | 新闻区行情跑马灯 | Hero 底部 ticker |
+|----|-----------|----------------|-----------------|
+| 容器（裁切） | `.ann-track` `overflow:hidden` | `.nb-ticker-wrap` `overflow:hidden` | `.hero-ticker` `overflow:hidden` |
+| 轨道元素 | `.ann-ticker` | `.nb-ticker-track` | `.hero-ticker-track` |
+| 目标速度（硬指标） | **12 px/s** | **8 px/s** | **40 px/s** |
+| 缓动 | linear | linear | linear |
+| 轨道 flex 约束 | `flex:0 0 auto; width:max-content`（**禁止 flex:1 / 被拉伸**） | 同左 | 同左 |
+| 内容份数 | **复制两份**（副本 `aria-hidden="true"`） | **复制两份** | **复制两份** |
+| 关键帧 | `translateX(0 → -50%)` | `translateX(0 → -50%)` | `translateX(0 → -50%)` |
+| 允许动画属性 | 仅 `transform` | 仅 `transform` | 仅 `transform` |
+
+**duration 反算公式（唯一准绳）**：
+
+```
+duration(s) = 一份内容宽（px） ÷ 目标速度（px/s）
+一份内容宽 = 轨道内全部条目自然宽度之和（不含复制出的第二份）
+```
+
+- 示例：Hero ticker 一份内容 1294px、目标 40px/s → `duration = 1294 ÷ 40 ≈ 32.4s`；
+- 实现方式：由脚本在 `document.fonts.ready` 之后测量一份内容自然宽，写入 CSS 变量（如 `--marquee-duration`），**禁止手写固定 duration**；
+- 若只能纯 CSS：允许手填 duration，但必须在验收时实测速度（3s 采样 `transform.m41` 差值 ÷ 3s），与目标值偏差 **≤ 10%**。
+
+**三条铁律**：
+
+1. **速度优先于 duration**：先定 px/s，再由内容宽反算 duration；
+2. **轨道禁止被拉伸**：轨道必须 `flex:0 0 auto; width:max-content`，禁止 `flex:1` / `width:100%` / `align-self:stretch`；
+3. **内容复制两份**：原文 + 副本并排，`translateX(-50%)` 才等于「一份内容宽」，循环才无缝。
+
+> 跑马灯领域**只允许** `transform: translateX`，禁止对 `top / left / width / height` 做动画。
+
+#### 9.5.2 轨道宽、关键帧命名与动态重算（补丁 v1.1.3）
+
+> 补丁背景：曜石站实测（HEAD `26ae078`）暴露四类新缺口——① 新闻跑马灯轨道 618px < 容器 1141px（0.54×），初始即露 523px 空白，滚满扩至 832px；Hero ticker 轨道 1156px < 容器 1265px（0.91×），滚动中右侧最多露 687px 空白；② 三条跑马灯仍共用**同一份** `@keyframes ticker`（全站仅一份，三处引用）；③ 新闻区切频道时 `main.js` 以 `ticker.innerHTML=` 重建内容，位移基准突变导致跳变；④ 存在 4 个死关键帧（`fadeIn` / `pulseGlow` / `slideLeft` / `glitch` 仅有定义无引用，其中 `slideLeft` 与 `ticker` 定义完全重复）与 3 处 `transition: all`。以下四项为 9.5.1 的强制补充。
+
+**约束一：轨道宽必须 ≥ 容器可见宽（防露白）**
+
+| 项 | 要求 |
+|----|------|
+| 判定式 | `track.scrollWidth ≥ wrap.clientWidth`（轨道宽 ≥ 容器可见宽） |
+| 当前站点反例 | 新闻跑马灯 618 / 1141 px（露白 523px）；Hero ticker 1156 / 1265 px（露白 687px） |
+| 兜底做法 | 单份内容宽不足容器宽时**增加条目**（或重复铺满至 ≥ 容器宽），确保复制两份后全程无空白；否则 `translateX(-50%)` 循环中点必然露白 |
+
+**约束二：三条跑马灯各自独立命名关键帧**
+
+- 命名固定三套：`.ann-ticker` → `marquee-ann`、`.nb-ticker-track` → `marquee-nb`、`.hero-ticker-track` → `marquee-hero`；
+- **严禁三处共用同一份 `@keyframes ticker`**（当前站点即反面案例：三处 `animation-name: ticker`）；三者关键帧原文可完全一样，但必须是三份独立定义，便于分别调参与排障；
+- 全站不得再出现名为 `ticker` 的通用关键帧。
+
+**约束三：JS 动态改写内容后必须重算 duration 并重置动画**
+
+- 触发场景：新闻区切频道（`ticker.innerHTML = ...`）、公告条目增减、Hero ticker 文案刷新；
+- 必须动作：重建内容（仍保持两份）→ 重新测量一份内容宽 → 重算 `duration = 一份内容宽 ÷ 目标速度` → 重置动画（先 `animation: none`，强制回流 `void el.offsetWidth`，再重新赋 `animation-name` 与 `duration`）；否则位移基准突变，重建瞬间出现跳变；
+- 参考实现：
+
+```js
+function rebuildTicker(track, html, speed) {
+  track.innerHTML = html + html;                 // 必须仍是两份
+  const half = track.scrollWidth / 2;            // 一份内容宽
+  track.style.animation = 'none';
+  void track.offsetWidth;                        // 强制回流，清掉旧位移
+  track.style.animationName = track.dataset.kf;  // 三套独立关键帧名之一
+  track.style.animationDuration = (half / speed).toFixed(2) + 's';
+  track.style.animationTimingFunction = 'linear';
+}
+```
+
+**约束四：清理死关键帧与 `transition: all`**
+
+- 死关键帧一律删除：`fadeIn` / `pulseGlow` / `slideLeft` / `glitch`（有定义无引用，`slideLeft` 与 `ticker` 重复）；
+- 所有 `transition: all` 改为具体属性（当前站点三处：`.nb-ch` / `.qty__btn` / `.tab-btn`，应写成 `transition: color .3s ease, border-color .3s ease, background-color .3s ease` 等显式列表）；
+- 每个 `animation-name` 必须有真实存在的 `@keyframes` 定义（康陶站引用未定义的 `pulse` 即反面教材）。
+
 ### 9.6 组件骨架（结构对齐）
 
 - Hero：左列（装饰条 → eyebrow → 主标题中/英 → tagline → 渐变分割线 → 描述 → 业务标签 → 双按钮）+ 右列（全息展台 perspective 1200px + 侧栏指标）+ 底部 ticker + 3 个角标；
@@ -195,6 +271,22 @@ AIGC:
 - 新闻区：电视演播室框架（顶栏频道+时钟 → 主内容 + 侧栏 → 行情跑马灯 → 频道切换）；
 - 数据区：左引用块（青色左边框）+ 右 8 指标卡；
 - 详情页：`.page-header`（返回 + 标签 + H1 + 描述）+ `.content`（4 指标盒 + 产品卡：图 + 编号徽标 + 中英名叠加 + 规格行）。
+
+#### 9.6.1 机制隔离：Hero 全息展台 ≠ 滚动播报条（补丁 v1.1.2）
+
+> 实测结论：康陶站 `.holo-showcase` 与三条滚动条**是两套互不复用的机制**——全息展台无任何横向位移关键帧，走 `holo-float`（3D `rotateY / rotateX / translateY` 浮沉，8s `ease-in-out`）+ `holo-scan`（扫描线）；跑马灯才走 `translateX` 的 `ticker` / `nb-ticker`。上一版 WorkBuddy 将 Hero 示意图与公告条、新闻跑马灯处理成同一「滚动组件」，是示意图抖动的主因。
+
+| 机制 | 归属元素 | 允许的关键帧 | 禁止 |
+|------|----------|--------------|------|
+| 横向跑马灯 | `.ann-ticker` / `.nb-ticker-track` / `.hero-ticker-track` | `marquee-x`（仅 `translateX 0 → -50%`，linear） | 禁止引用任何扫描线 / 浮沉 / 缩放关键帧 |
+| 全息展台 | `.holo-frame` / `.holo-scan`（及内部轮播、进度） | `holo-float`（3D 浮沉）、`holo-scan`（**transform 版**扫描线）、`subtle-zoom`、`slideLeft` | 禁止引用 `marquee-x`；禁止任何横向 `translateX` |
+| 进度填充 | `.hc-progress` / `.hc-dot::after` | `progressFill`（用 `transform: scaleX` 替代 `width`） | 禁止复用跑马灯关键帧 |
+
+**铁律**：
+
+- 严禁三条滚动条与全息展台共用同名 keyframes；跑马灯统一用 `marquee-x`，展台动画独立命名（`holo-*`）；
+- 全息展台内部**禁止出现任何 `top` / `width` 动画**，扫描线改用 `transform: translateY`、进度条改用 `transform: scaleX`，以消除抖动与掉帧；
+- `.hc-live-dot` 一类脉冲动画必须有真实存在的 keyframes（康陶站引用了未定义的 `pulse`，实际不生效，属反面教材，勿照抄）。
 
 ### 9.7 重设计提示词（可直接投喂 WorkBuddy）
 
@@ -215,6 +307,39 @@ AIGC:
 
 7) 约束：全站繁体中文 zh-Hant；16 页全部套用同一套参数；素材用内联 SVG，零外部图片；文字色变量由 contrast.py 生成。
 ```
+
+#### 9.7.1 提示词增补条目（补丁 v1.1.2 · 并入 9.7 提示词第 7 条之后）
+
+将以下两条追加为 9.7 提示词的第 8、9 条：
+
+```
+8) 滚动播报条三条，互相独立，也绝不与 Hero 全息展台共用组件或关键帧。速度固定：顶部公告条 12px/s、新闻区行情跑马灯 8px/s、Hero 底部 ticker 40px/s，均 linear。duration 禁止手写死值，必须按「duration = 一份内容宽(px) ÷ 目标速度(px/s)」反算：先在 document.fonts.ready 之后测量轨道条目的自然宽度，再把结果写入 CSS 变量。轨道元素必须 flex:0 0 auto + width:max-content，禁止被 flex 拉伸（禁止 flex:1 / width:100%）；内容必须复制两份（第二份 aria-hidden="true"），动画只对 transform: translateX 做 0 → -50%，保证无缝循环；实测速度与目标偏差须 ≤10%。
+
+9) Hero 右侧全息展台（.holo-showcase 及其所有子元素）与跑马灯彻底隔离：禁止引用跑马灯关键帧 marquee-x，禁止任何横向 translateX 位移动画；其动效仅限 3D 浮沉（holo-float，8s ease-in-out）与扫描线，且扫描线必须用 transform: translateY、进度条必须用 transform: scaleX 实现，全站禁止用 top / left / width / height 做动画。跑马灯与浮沉元素统一加 will-change: transform 以稳定合成层。
+```
+
+#### 9.7.2 提示词再增补条目（补丁 v1.1.3 · 并入 9.7 提示词第 9 条之后）
+
+将以下三条追加为 9.7 提示词的第 10、11、12 条：
+
+```
+10) 三条滚动条轨道宽必须 ≥ 容器可见宽（track.scrollWidth ≥ 容器 clientWidth），条目不足时增加条目补齐，滚动全程禁止出现任何露白；三条各自独立命名关键帧——marquee-ann / marquee-nb / marquee-hero，严禁三处共用同一份 @keyframes ticker，全站不得再出现通用名 ticker。
+
+11) 新闻区切频道、公告条目增减等任何由 JS 重建 ticker 内容的场景，必须在重建后重新测量一份内容宽、重算 duration 并重置动画（animation:none → 强制回流 void offsetWidth → 重新赋 animation-name 与 duration），否则位移基准突变会导致跳变；重建后内容仍须保持两份。
+
+12) 清理代码：删除死关键帧（fadeIn / pulseGlow / slideLeft / glitch 等有定义无引用者），所有 transition: all 改为具体属性（如 color / border-color / background-color / transform / opacity），每个 animation-name 必须存在真实的 @keyframes 定义。
+```
+
+#### 9.8.1 本轮补丁新增验收抽查点（补丁 v1.1.2 / v1.1.3）
+
+- 三条滚动条实测速度：3s 采样 `transform.m41` 差值 ÷ 3s，与 12 / 8 / 40 px/s 偏差须 ≤ 10%；
+- 轨道元素宽度等于一份内容自然宽（未被 flex 拉伸），复制两份后 `scrollWidth = 2 × 一份内容宽`；
+- 循环衔接处无跳变（`translateX(-50%)` 恰好等于一份内容宽）；
+- 全息展台内部零 `top` / `width` 动画、零横向 `translateX`；
+- 关键帧无跨机制共用、无未定义引用（不出现康陶站那种引用 `pulse` 而实际不生效的情况）。
+- **无露白（v1.1.3）**：三条滚动条轨道宽 ≥ 容器可见宽（`track.scrollWidth ≥ wrap.clientWidth`），滚动全程不出现空白。反例：当前站点新闻跑马灯轨道 618px < 容器 1141px（初始即露 523px）、Hero ticker 轨道 1156px < 容器 1265px（露 687px）；
+- **关键帧独立命名（v1.1.3）**：ann / nb / hero 三套各自独立（`marquee-ann` / `marquee-nb` / `marquee-hero`），全站不存在三处共用同一 `@keyframes ticker` 的情况，且不再出现通用名 `ticker`；
+- **动态改写后重算（v1.1.3）**：JS 重建 ticker 内容（如切频道）后必须重算 duration 并重置动画（`animation:none` → 强制回流 `void offsetWidth` → 重新赋 `animation-name` / `duration`）；切频道后实测速度仍须落在 12 / 8 / 40 px/s ±10%，且重建瞬间无跳变。
 
 ### 9.8 使用与验收
 

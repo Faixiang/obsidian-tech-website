@@ -178,6 +178,272 @@
   });
 
   /* ======================================================================
+     跑马灯速度反算（报告 §5 / 计划书 §9.5）
+     ----------------------------------------------------------------------
+     轨道已由 CSS 固定为 flex:0 0 auto + width:max-content，宽度不再随
+     视口伸缩，故「duration = 一份内容宽 ÷ 目标速度」与视口无关。
+     内容复制两份（副本 aria-hidden="true"），逐帧位移量恒为一份内容宽
+     （--mq-shift 由 JS 反算为负百分比，向左位移），循环回溯无跳变；
+     「轨道宽 − 一份内容宽」小于容器可见宽时自动补足副本（保持偶数份）。
+     目标速度唯一来源：CSS 变量 --mq-speed-*（12 / 8 / 40 px/s）。
+     ====================================================================== */
+  var OBSIDIAN_MARQUEE = (function marquee() {
+    var ctx = document.documentElement;
+    var items = [];
+    var rafId = 0;
+    var booted = false;
+
+    /* 三条轨道：选择器 + duration 变量名 + 目标速度变量名 */
+    var SPECS = [
+      {
+        sels: ['[data-nb-ticker]', '.nb-ticker-track'],
+        varName: '--ticker-nb', speedVar: '--mq-speed-nb', speedFallback: 8
+      },
+      {
+        sels: ['[data-hero-ticker]', '.hero-ticker-track'],
+        varName: '--ticker-hero', speedVar: '--mq-speed-hero', speedFallback: 40
+      },
+      {
+        sels: ['.ann-bar__track'],
+        varName: '--ticker-ann', speedVar: '--mq-speed-ann', speedFallback: 12
+      }
+    ];
+
+    function pick(spec) {
+      for (var i = 0; i < spec.sels.length; i++) {
+        var el = document.querySelector(spec.sels[i]);
+        if (el && el !== document.body && el !== document.documentElement) return el;
+      }
+      return null;
+    }
+
+    function specOf(el) {
+      for (var i = 0; i < SPECS.length; i++) {
+        for (var j = 0; j < SPECS[i].sels.length; j++) {
+          if (el.matches && el.matches(SPECS[i].sels[j])) return SPECS[i];
+        }
+      }
+      return null;
+    }
+
+    function speedOf(spec) {
+      var v = parseFloat(
+        window.getComputedStyle(ctx).getPropertyValue(spec.speedVar)
+      );
+      return v > 0 ? v : spec.speedFallback;
+    }
+
+    /* 建结构：原内容包进 .mq-frame → 再复制一份 aria-hidden 的副本 */
+    function build(el, spec) {
+      if (!el || el.dataset.mqReady === '1') return null;
+
+      var kids = Array.prototype.slice.call(el.children);
+      if (!kids.length) return null;
+
+      var cs = window.getComputedStyle(el);
+      var gapPx = parseFloat(cs.columnGap) || 0;
+
+      /* ① 轨道不被拉伸/压缩，只按内容自然宽排版；间距改为逐项 margin
+            （含每份末尾那一项），使复制后的接缝间距与其他间距一致；
+            首缩进保留在轨道自身 padding-left，不进入「一份内容宽」丈量，
+            避免接缝处出现双倍间距 */
+      el.style.flex = '0 0 auto';
+      el.style.width = 'max-content';
+      el.style.gap = '0px';
+
+      kids.forEach(function (k) {
+        if (gapPx) k.style.marginRight = gapPx + 'px';
+      });
+
+      var frame = document.createElement('div');
+      frame.className = 'mq-frame';
+      frame.style.cssText =
+        'display:flex;flex:0 0 auto;width:max-content;align-items:center;';
+      kids.forEach(function (k) { frame.appendChild(k); });
+
+      var clone = frame.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+
+      var inner = document.createElement('div');
+      inner.className = 'mq-inner';
+      inner.style.cssText =
+        'display:flex;flex:0 0 auto;width:max-content;align-items:center;';
+      inner.appendChild(frame);
+      inner.appendChild(clone);
+      el.appendChild(inner);
+
+      el.dataset.mqReady = '1';
+
+      var item = {
+        el: el, frame: frame, inner: inner,
+        varName: spec.varName, speed: speedOf(spec)
+      };
+      el.__mqItem = item;
+      return item;
+    }
+
+    /* 丈量：临时把容器压到 1px，分别读「一份内容宽」与轨道实际宽 */
+    function measure(item) {
+      var el = item.el;
+      var host = el.parentNode;
+      var prevWidth = host.style.width;
+      var prevAnim = el.style.animation;
+
+      el.style.animation = 'none';
+      host.style.width = '1px';
+
+      var one = item.frame.getBoundingClientRect().width;
+      var track = item.inner.getBoundingClientRect().width;
+
+      host.style.width = prevWidth;
+      el.style.animation = prevAnim;
+
+      return { one: one, track: track };
+    }
+
+    /* ③ 位移量恒为一份内容宽，故无缝条件是
+          「轨道宽 − 一份内容宽 ≥ 容器可见宽」；不满足时补足副本
+          （每次补 2 份，保持偶数份），避免循环末段右侧露白 */
+    function padUp(item, m) {
+      var visible = item.el.parentNode.clientWidth || 0;
+      var padded = false;
+      var guard = 0;
+
+      while (m.one > 0 && (m.track - m.one) < visible && guard < 12) {
+        for (var k = 0; k < 2; k++) {
+          var extra = item.frame.cloneNode(true);
+          extra.setAttribute('aria-hidden', 'true');
+          item.inner.appendChild(extra);
+          m.track += m.one;
+        }
+        padded = true;
+        guard++;
+      }
+      return padded;
+    }
+
+    /* ④ 重置动画：flash 一次使新的 duration 立即生效，位移基准归零 */
+    function restart(item) {
+      var el = item.el;
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+    }
+
+    function apply(item, m, padded) {
+      if (!(m.one > 0)) return;
+
+      var duration = m.one / item.speed;
+      var shift = m.track > 0 ? (m.one / m.track) * 100 : 50;
+      var changed = padded || !item.lastDuration ||
+        Math.abs(item.lastDuration - duration) > 0.01;
+
+      /* duration = 一份内容宽 ÷ 目标速度；
+         --mq-shift = 负的一份内容宽占轨道宽的百分比（向左位移）—— 逐帧
+         位移量恒等于一份内容宽，速度不随副本份数与视口宽度变化 */
+      ctx.style.setProperty(item.varName, duration.toFixed(2) + 's');
+      item.el.style.setProperty('--mq-shift', (-shift).toFixed(6) + '%');
+      item.lastDuration = duration;
+
+      if (changed) restart(item);
+    }
+
+    function refreshItem(item) {
+      var m = measure(item);
+      var padded = padUp(item, m);
+      apply(item, m, padded);
+    }
+
+    function runAll() {
+      if (!items.length || document.hidden) return;
+      items.forEach(refreshItem);
+    }
+
+    function schedule() {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(function () {
+        rafId = 0;
+        runAll();
+      });
+    }
+
+    function init() {
+      if (booted || reduceMotion) return;
+      booted = true;
+
+      SPECS.forEach(function (spec) {
+        var el = pick(spec);
+        if (!el) return;
+        var item = build(el, spec);
+        if (item) items.push(item);
+      });
+
+      runAll();
+    }
+
+    /* 内容被动态改写后：重建结构 → 重算 duration → 重置动画 */
+    function refresh(el, html) {
+      if (!el) return;
+
+      if (el.__mqItem) {
+        var idx = items.indexOf(el.__mqItem);
+        if (idx >= 0) items.splice(idx, 1);
+        el.__mqItem = null;
+      }
+      delete el.dataset.mqReady;
+
+      if (typeof html === 'string') el.innerHTML = html;
+
+      /* 内联样式还原，避免与重新包装后的取值叠加 */
+      el.style.flex = '0 0 auto';
+      el.style.width = 'max-content';
+      el.style.gap = '';
+      el.style.paddingLeft = '';
+
+      var spec = specOf(el);
+      var item = spec ? build(el, spec) : null;
+      if (item) {
+        items.push(item);
+        refreshItem(item);
+      }
+    }
+
+    function boot() {
+      init();
+      schedule();
+      window.addEventListener('resize', schedule);
+      window.addEventListener('orientationchange', schedule);
+    }
+
+    function onLoad(fn) {
+      if (document.readyState === 'complete') fn();
+      else window.addEventListener('load', fn);
+    }
+
+    /* 时机：load 之后 + 字体就绪之后各算一次，读数最准 */
+    onLoad(function () {
+      boot();
+      if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+        document.fonts.ready.then(function () {
+          if (booted) schedule();
+          else boot();
+        });
+      }
+    });
+
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) schedule();
+    });
+
+    return {
+      refresh: refresh,
+      recalc: schedule
+    };
+  })();
+
+  window.OBSIDIAN_MARQUEE = OBSIDIAN_MARQUEE;
+
+  /* ======================================================================
      新闻演播室：频道切换 + 实时时钟
      ====================================================================== */
   (function newsDesk() {
@@ -202,7 +468,14 @@
         if (channel) channel.textContent = payload.label;
         if (leadTitle) leadTitle.textContent = payload.lead.title;
         if (leadDesc) leadDesc.textContent = payload.lead.desc;
-        if (ticker) ticker.innerHTML = payload.ticker;
+        if (ticker) {
+          /* 内容改写后重算 duration 并重置动画（计划书 §9.5.2） */
+          if (OBSIDIAN_MARQUEE && OBSIDIAN_MARQUEE.refresh) {
+            OBSIDIAN_MARQUEE.refresh(ticker, payload.ticker);
+          } else {
+            ticker.innerHTML = payload.ticker;
+          }
+        }
 
         /* 報告 §6.4：每頻道獨立列表 */
         var list = document.getElementById('nbList');
