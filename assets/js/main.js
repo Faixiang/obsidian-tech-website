@@ -15,10 +15,16 @@
 
   /* ======================================================================
      粒子背景（报告 §4/§5）
+     ----------------------------------------------------------------------
+     注：此为康陶复刻版粒子层（70 颗 + 连线）。
+     全站主菜单视觉层上线后，由 obsidianBg() 统一接管背景，
+     本层仅在 body 无 .obsidian-bg 时启用，避免双层叠加与 rAF 超预算。
      ====================================================================== */
   (function particles() {
     var canvas = document.getElementById('particles');
     if (!canvas || reduceMotion) return;
+    /* 新背景层已注入则跳过，避免两个粒子系统同时运行 */
+    if (document.querySelector('.obsidian-bg')) return;
 
     var ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -622,4 +628,169 @@
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());
   });
+})();
+/* ==========================================================================
+   全站主菜单式視覺層 · 背景注入
+   --------------------------------------------------------------------------
+   由本模組單點注入 .obsidian-bg，不逐頁改 HTML。
+   效能硬約束：
+     - 單例 canvas，devicePixelRatio 上限 2
+     - 幀率節流 24fps
+     - 持續運行的 rAF 迴圈僅 1 個（粒子），與舊粒子層互斥
+     - visibilitychange 隱藏時暫停
+     - prefers-reduced-motion 下停掉所有位移，僅留靜態紋理
+   ========================================================================== */
+
+(function obsidianBg() {
+  'use strict';
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* --- 參數（依交付要求） --- */
+  var PARTICLE_COUNT = 24;      /* ≤ 40 */
+  var PARTICLE_MAX_R = 1;       /* 直徑 ≤ 2px → 半徑 ≤ 1 */
+  var PARTICLE_MAX_V = 6;       /* 速度 ≤ 8 px/s */
+  var FPS = 24;                 /* ≤ 30fps */
+  var FRAME_MS = 1000 / FPS;
+  var DPR_CAP = 2;
+
+  /* 單例：已存在則不重複注入 */
+  if (document.querySelector('.obsidian-bg')) return;
+
+  var bg = document.createElement('div');
+  bg.className = 'obsidian-bg';
+  bg.setAttribute('aria-hidden', 'true');
+
+  /* a. 霧狀光暈 ×3 */
+  bg.innerHTML =
+    '<div class="obsidian-bg__glow obsidian-bg__glow--a"></div>' +
+    '<div class="obsidian-bg__glow obsidian-bg__glow--b"></div>' +
+    '<div class="obsidian-bg__glow obsidian-bg__glow--c"></div>' +
+    '<div class="obsidian-bg__grid"></div>' +
+    '<canvas class="obsidian-bg__canvas"></canvas>' +
+    '<div class="obsidian-bg__noise"></div>' +
+    '<div class="obsidian-bg__vignette"></div>';
+
+  document.body.insertBefore(bg, document.body.firstChild);
+
+  var canvas = bg.querySelector('.obsidian-bg__canvas');
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  var pts = [];
+  var w = 0, h = 0;
+
+  function sizeCanvas() {
+    var dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function initParticles() {
+    pts = [];
+    for (var i = 0; i < PARTICLE_COUNT; i++) {
+      pts.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 2 * PARTICLE_MAX_V,
+        vy: (Math.random() - 0.5) * 2 * PARTICLE_MAX_V,
+        r: Math.random() * PARTICLE_MAX_R * 0.6 + 0.3
+      });
+    }
+  }
+
+  sizeCanvas();
+  initParticles();
+
+  /* --- 降級：僅靜態紋理，不啟動 rAF --- */
+  if (reduce) {
+    ctx.clearRect(0, 0, w, h);
+    /* 靜態點綴：只畫一次，不動 */
+    for (var k = 0; k < pts.length; k++) {
+      var p = pts[k];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,212,184,0.35)';
+      ctx.fill();
+    }
+    return;
+  }
+
+  /* --- 24fps 節流 + 單一 rAF 迴圈 --- */
+  var last = 0;
+  var running = true;
+  var rafId = null;
+
+  function frame(ts) {
+    rafId = window.requestAnimationFrame(frame);
+
+    if (!running) return;
+    if (ts - last < FRAME_MS) return;
+    last = ts;
+
+    ctx.clearRect(0, 0, w, h);
+
+    for (var i = 0; i < pts.length; i++) {
+      var q = pts[i];
+      q.x += q.vx / FPS;
+      q.y += q.vy / FPS;
+
+      if (q.x < 0) q.x = w;
+      else if (q.x > w) q.x = 0;
+      if (q.y < 0) q.y = h;
+      else if (q.y > h) q.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(q.x, q.y, q.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,212,184,0.5)';
+      ctx.fill();
+    }
+  }
+
+  rafId = window.requestAnimationFrame(frame);
+
+  /* --- 可見性暫停 --- */
+  document.addEventListener('visibilitychange', function () {
+    running = !document.hidden;
+    if (running) last = 0;
+  });
+
+  /* --- 視窗改變（防抖重繪） --- */
+  var rt;
+  window.addEventListener('resize', function () {
+    clearTimeout(rt);
+    rt = setTimeout(function () {
+      sizeCanvas();
+      initParticles();
+    }, 200);
+  });
+})();
+
+/* ==========================================================================
+   全站版本小字（統一注入，不逐頁改 HTML）
+   ========================================================================== */
+
+(function versionStamp() {
+  'use strict';
+
+  if (document.querySelector('.mn-version')) return;
+
+  var v = 'v1.1.1 / © 2026 OBSIDIAN';
+  var el = document.createElement('div');
+  el.className = 'mn-version';
+  el.textContent = v;
+
+  var foot = document.querySelector('.site-footer .ft-inner') ||
+             document.querySelector('.site-footer');
+
+  if (foot && foot.parentNode) {
+    foot.parentNode.insertBefore(el, foot);
+  } else {
+    document.body.appendChild(el);
+  }
 })();

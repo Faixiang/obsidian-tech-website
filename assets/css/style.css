@@ -2307,3 +2307,711 @@ body.nav-locked { overflow: hidden; }
 
 /* 滚动进度条已改为 body::after 扫描线，此处仅保留兼容占位 */
 .scroll-progress { display: none; }
+
+/* ==========================================================================
+   全站主菜单式視覺層（Cyberpunk 結構 · 曜石配色）
+   --------------------------------------------------------------------------
+   由 assets/js/main.js 單點注入 .obsidian-bg，不逐頁改 HTML。
+   所有色值調用 :root 既有變數，不寫死新色。
+   ========================================================================== */
+
+/* ---------- 背景容器 ---------- */
+.obsidian-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: #0A0A0A;
+}
+
+/* ---------- a. 極緩霧狀光暈漂移（週期 24s，位移 ≤6px） ---------- */
+.obsidian-bg__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.obsidian-bg__glow--a {
+  top: -12vh;
+  left: -8vw;
+  width: 46vw;
+  height: 46vh;
+  background: radial-gradient(circle, rgba(0, 212, 184, 0.13), transparent 68%);
+  animation: mnGlowA 24s ease-in-out infinite;
+}
+
+.obsidian-bg__glow--b {
+  bottom: -14vh;
+  right: -10vw;
+  width: 52vw;
+  height: 52vh;
+  background: radial-gradient(circle, rgba(0, 212, 184, 0.08), transparent 70%);
+  animation: mnGlowB 28s ease-in-out infinite;
+}
+
+.obsidian-bg__glow--c {
+  top: 32vh;
+  left: 42vw;
+  width: 30vw;
+  height: 34vh;
+  background: radial-gradient(circle, rgba(123, 47, 255, 0.07), transparent 72%);
+  animation: mnGlowC 32s ease-in-out infinite;
+}
+
+@keyframes mnGlowA {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(6px, -5px, 0); }
+}
+
+@keyframes mnGlowB {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-6px, 4px, 0); }
+}
+
+@keyframes mnGlowC {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(4px, 6px, 0); }
+}
+
+/* ---------- b. 極慢網格下移（週期 28s） ---------- */
+.obsidian-bg__grid {
+  position: absolute;
+  inset: -80px 0 0;
+  background-image:
+    linear-gradient(rgba(0, 212, 184, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 184, 0.035) 1px, transparent 1px);
+  background-size: 80px 80px;
+  animation: mnGrid 28s linear infinite;
+}
+
+@keyframes mnGrid {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, 80px, 0); }
+}
+
+/* ---------- c. 粒子層（canvas 由 JS 注入） ---------- */
+.obsidian-bg__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.55;
+}
+
+/* ---------- d. 輕微噪點 ---------- */
+.obsidian-bg__noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- 四角暈影 ---------- */
+.obsidian-bg__vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    inset 0 0 180px 40px rgba(0, 0, 0, 0.62),
+    inset 0 0 60px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   主菜单式標題區（內容頁通用）
+   ========================================================================== */
+
+.mn-header {
+  position: relative;
+  z-index: 1;
+  padding-top: calc(var(--nav-total) + 72px);
+  padding-bottom: var(--s12);
+  padding-inline: var(--gutter-x);
+  text-align: center;
+}
+
+.mn-title {
+  margin: 0;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #F5F5F5;
+  text-shadow: 0 0 34px rgba(0, 212, 184, 0.24);
+}
+
+.mn-rule {
+  width: 96px;
+  height: 1px;
+  margin: var(--s6) auto 0;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+.mn-subtitle {
+  margin: var(--s6) auto 0;
+  max-width: 46em;
+  font-size: var(--fs-body);
+  line-height: 2;
+  color: rgba(245, 245, 245, 0.66);
+}
+
+/* 內容區半透明遮罩，確保正文對比度 ≥ 4.5:1 */
+.mn-body {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   首頁主菜單式入口
+   ========================================================================== */
+
+.mn-hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: var(--nav-total);
+}
+
+.mn-hero__inner {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--s16);
+  align-items: center;
+}
+
+/* 左上品牌檔案區 */
+.mn-brand { grid-column: 1; }
+
+.mn-brand__logo {
+  height: 30px;
+  width: auto;
+  margin-bottom: var(--s8);
+}
+
+.mn-brand__title {
+  margin: 0;
+  font-size: clamp(2.5rem, 6.5vw, 5rem);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #F5F5F5;
+  text-shadow: 0 0 40px rgba(0, 212, 184, 0.3);
+}
+
+.mn-brand__status {
+  margin: var(--s6) 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: rgba(0, 212, 184, 0.72);
+}
+
+/* 左側豎排選項 */
+.mn-nav {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  align-self: center;
+}
+
+.mn-item {
+  position: relative;
+  display: block;
+  padding: var(--s3) 0 var(--s3) var(--s6);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 245, 0.72);
+  border-left: 2px solid rgba(255, 255, 255, 0.14);
+  transition: color 0.35s ease, transform 0.35s ease,
+    border-color 0.35s ease;
+}
+
+/* 懸停：文字轉主題色 + 左側 3px 指示條 + 位移 4px
+   不加卡片、不加背景塊、不放大 */
+.mn-item::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--cyan);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.35s ease;
+}
+
+.mn-item:hover,
+.mn-item:focus-visible {
+  color: var(--cyan);
+  transform: translateX(4px);
+  text-decoration: none;
+}
+
+.mn-item:hover::before,
+.mn-item:focus-visible::before { transform: scaleY(1); }
+
+.mn-item.is-active { color: var(--cyan); border-left-color: var(--cyan); }
+
+/* 右側視覺 */
+.mn-hero__visual {
+  position: relative;
+  z-index: 1;
+}
+
+.mn-hero__visual img {
+  width: 100%;
+  border-radius: var(--r-card);
+  box-shadow: 0 0 48px rgba(0, 212, 184, 0.12);
+}
+
+@media (max-width: 1200px) {
+  .mn-hero__inner { grid-template-columns: 1fr 240px; }
+}
+
+@media (max-width: 960px) {
+  .mn-hero__inner { grid-template-columns: 1fr; }
+  /* 豎排選項收進既有漢堡菜單 */
+  .mn-nav { display: none; }
+  .mn-hero__visual { display: none; }
+  .mn-brand__title { font-size: clamp(2rem, 9vw, 3rem); }
+}
+
+@media (max-width: 768px) {
+  .mn-title { font-size: clamp(1.75rem, 7vw, 2.5rem); }
+  .mn-brand__title { font-size: clamp(1.75rem, 8vw, 2.5rem); }
+  .mn-brand__status { font-size: 11px; letter-spacing: 0.16em; }
+}
+
+/* ==========================================================================
+   全站版本小字
+   ========================================================================== */
+
+.mn-version {
+  position: relative;
+  z-index: 1;
+  padding: var(--s4) var(--gutter-x);
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: rgba(245, 245, 245, 0.5);
+}
+
+/* ==========================================================================
+   降級：prefers-reduced-motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .obsidian-bg__glow,
+  .obsidian-bg__grid {
+    animation: none !important;
+    transform: none !important;
+  }
+  .mn-item,
+  .mn-item::before {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   首頁：既有 Hero 折疊為簡介條
+   （主菜單已承擔首屏，此處壓縮內距避免雙重巨幅標題）
+   ========================================================================== */
+
+.mn-hero + .hero .hero-left {
+  padding-block: var(--s12) var(--s8);
+}
+
+.mn-hero + .hero .hero-title-zh {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  letter-spacing: 0.02em;
+  text-shadow: none;
+}
+
+.mn-hero + .hero .hero-desc {
+  margin-bottom: var(--s6);
+}
+
+.mn-hero + .hero .hero-sectors {
+  margin-bottom: var(--s6);
+}
+
+@media (max-width: 960px) {
+  .mn-hero { min-height: auto; padding-block: var(--s12); }
+}
+
+/* ==========================================================================
+   內容頁標題區：統一套用主菜單質感
+   --------------------------------------------------------------------------
+   兩種既有結構同時支持，不改 HTML：
+     A. .page-head > .page-head__title（部分頁）
+     B. .page-header > .h-page（其餘頁）
+   ========================================================================== */
+
+/* --- A. page-head 型 --- */
+.page-head {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.42);
+  border-bottom: 1px solid rgba(0, 212, 184, 0.18);
+  padding-top: calc(var(--nav-total) + 56px);
+  padding-bottom: var(--s12);
+}
+
+.page-head__title {
+  margin: var(--s4) 0 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #F5F5F5;
+  text-shadow: 0 0 30px rgba(0, 212, 184, 0.22);
+}
+
+/* --- B. page-header 型 --- */
+.page-header {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.42);
+  border-bottom: 1px solid rgba(0, 212, 184, 0.18);
+}
+
+.page-header h1,
+.page-header .h-page {
+  margin: var(--s4) 0 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #F5F5F5;
+  text-shadow: 0 0 30px rgba(0, 212, 184, 0.22);
+}
+
+/* 標題下一行副標 */
+.page-head__lead,
+.page-header p {
+  margin-top: var(--s6);
+  max-width: 46em;
+  font-size: var(--fs-body);
+  line-height: 2;
+  color: rgba(245, 245, 245, 0.68);
+}
+
+/* 標題下方細分割線 */
+.page-head::after,
+.page-header::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: 1px;
+  margin-top: var(--s6);
+  background: linear-gradient(90deg, var(--cyan), transparent);
+}
+
+/* 內容區半透明遮罩，確保正文對比度 ≥ 4.5:1 */
+.page-head + .section,
+.page-header + .content,
+.page-header + .section {
+  position: relative;
+  z-index: 1;
+}
+
+/* ≤768px 標題 ≤2.5rem */
+@media (max-width: 768px) {
+  .page-head__title,
+  .page-header h1,
+  .page-header .h-page,
+  .mn-title {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+}
+
+/* ==========================================================================
+   改版修正：首屏與折疊區的邊界處理
+   ========================================================================== */
+
+/* --- 主菜單首屏：預留導航高度，選項不被壓住 --- */
+.mn-hero {
+  padding-top: calc(var(--nav-total) + var(--s12));
+  padding-bottom: var(--s12);
+}
+
+.mn-nav {
+  align-self: center;
+  padding-top: var(--nav-total);
+}
+
+/* --- 首屏下的簡介條：再次壓縮 --- */
+.mn-hero + .hero {
+  padding-top: var(--s12) !important;
+  padding-bottom: var(--s8) !important;
+}
+
+.mn-hero + .hero .hero-left {
+  padding-block: 0 !important;
+}
+
+/* 首屏已承擔主標題，簡介條的重複標題在窄屏隱藏 */
+@media (max-width: 1400px) {
+  .mn-hero + .hero .hero-title-zh,
+  .mn-hero + .hero .hero-title-en,
+  .mn-hero + .hero .hero-tagline,
+  .mn-hero + .hero .hero-rule,
+  .mn-hero + .hero .hero-sectors {
+    display: none;
+  }
+  .mn-hero + .hero .hero-desc {
+    margin-bottom: 0;
+    font-size: 15px;
+  }
+}
+
+/* --- 背景層：提高光暈可見度 --- */
+.obsidian-bg {
+  background: #08080A;
+}
+
+.obsidian-bg__glow {
+  opacity: 0.75;
+}
+
+.obsidian-bg__glow--a {
+  background: radial-gradient(circle, rgba(0, 212, 184, 0.22), transparent 68%);
+}
+
+.obsidian-bg__glow--b {
+  background: radial-gradient(circle, rgba(0, 212, 184, 0.14), transparent 70%);
+}
+
+.obsidian-bg__glow--c {
+  background: radial-gradient(circle, rgba(123, 47, 255, 0.13), transparent 72%);
+}
+
+.obsidian-bg__grid {
+  background-image:
+    linear-gradient(rgba(0, 212, 184, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 184, 0.055) 1px, transparent 1px);
+}
+
+/* --- 390px：主菜單間距收緊 --- */
+@media (max-width: 768px) {
+  .mn-hero {
+    padding-top: calc(var(--nav-total) + var(--s8));
+    padding-bottom: var(--s8);
+  }
+  .mn-brand__logo { margin-bottom: var(--s4); }
+  .mn-brand__status { margin-top: var(--s4); }
+}
+
+/* ==========================================================================
+   改版修正：首屏與折疊區的邊界處理
+   ========================================================================== */
+
+/* --- 主菜單首屏：預留導航高度，選項不被壓住 --- */
+.mn-hero {
+  padding-top: calc(var(--nav-total) + var(--s12));
+  padding-bottom: var(--s12);
+}
+
+.mn-nav {
+  align-self: center;
+  padding-top: var(--nav-total);
+}
+
+/* --- 首屏下的簡介條：再次壓縮 --- */
+.mn-hero + .hero {
+  padding-top: var(--s12) !important;
+  padding-bottom: var(--s8) !important;
+}
+
+.mn-hero + .hero .hero-left {
+  padding-block: 0 !important;
+}
+
+/* 首屏已承擔主標題，簡介條的重複標題在窄屏隱藏 */
+@media (max-width: 1400px) {
+  .mn-hero + .hero .hero-title-zh,
+  .mn-hero + .hero .hero-title-en,
+  .mn-hero + .hero .hero-tagline,
+  .mn-hero + .hero .hero-rule,
+  .mn-hero + .hero .hero-sectors {
+    display: none;
+  }
+  .mn-hero + .hero .hero-desc {
+    margin-bottom: 0;
+    font-size: 15px;
+  }
+}
+
+/* --- 背景層：提高光暈可見度 --- */
+.obsidian-bg {
+  background: #08080A;
+}
+
+.obsidian-bg__glow {
+  opacity: 0.75;
+}
+
+.obsidian-bg__glow--a {
+  background: radial-gradient(circle, rgba(0, 212, 184, 0.22), transparent 68%);
+}
+
+.obsidian-bg__glow--b {
+  background: radial-gradient(circle, rgba(0, 212, 184, 0.14), transparent 70%);
+}
+
+.obsidian-bg__glow--c {
+  background: radial-gradient(circle, rgba(123, 47, 255, 0.13), transparent 72%);
+}
+
+.obsidian-bg__grid {
+  background-image:
+    linear-gradient(rgba(0, 212, 184, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 184, 0.055) 1px, transparent 1px);
+}
+
+/* --- 390px：主菜單間距收緊 --- */
+@media (max-width: 768px) {
+  .mn-hero {
+    padding-top: calc(var(--nav-total) + var(--s8));
+    padding-bottom: var(--s8);
+  }
+  .mn-brand__logo { margin-bottom: var(--s4); }
+  .mn-brand__status { margin-top: var(--s4); }
+}
+
+/* --- 首屏高度收斂，確保主菜單完整落在視口內 --- */
+.mn-hero {
+  min-height: calc(100vh - var(--nav-total) - var(--s16));
+}
+
+.mn-hero__inner {
+  grid-template-columns: 1fr 260px;
+  gap: var(--s12);
+}
+
+.mn-brand__title {
+  font-size: clamp(2.25rem, 5.4vw, 4.25rem);
+}
+
+.mn-hero__visual {
+  max-width: 340px;
+  margin-inline: auto;
+}
+
+@media (max-width: 768px) {
+  .mn-hero { min-height: auto; }
+}
+
+/* --- 首屏高度收斂，確保主菜單完整落在視口內 --- */
+.mn-hero {
+  min-height: calc(100vh - var(--nav-total) - var(--s16));
+}
+
+.mn-hero__inner {
+  grid-template-columns: 1fr 260px;
+  gap: var(--s12);
+}
+
+.mn-brand__title {
+  font-size: clamp(2.25rem, 5.4vw, 4.25rem);
+}
+
+.mn-hero__visual {
+  max-width: 340px;
+  margin-inline: auto;
+}
+
+@media (max-width: 768px) {
+  .mn-hero { min-height: auto; }
+}
+
+/* --- 窄屏：主菜單已承擔首屏，下方簡介條整段收起 --- */
+@media (max-width: 960px) {
+  .mn-hero + .hero {
+    display: none;
+  }
+}
+
+/* --- 寬屏：簡介條改為單欄全寬，避免文字被右列擠壓 --- */
+@media (min-width: 961px) {
+  .mn-hero + .hero .hero__inner {
+    grid-template-columns: 1fr;
+  }
+  .mn-hero + .hero .hero-right {
+    display: none;
+  }
+  .mn-hero + .hero .hero-ticker {
+    display: none;
+  }
+}
+
+/* --- 窄屏：主菜單已承擔首屏，下方簡介條整段收起 --- */
+@media (max-width: 960px) {
+  .mn-hero + .hero {
+    display: none;
+  }
+}
+
+/* --- 寬屏：簡介條改為單欄全寬，避免文字被右列擠壓 --- */
+@media (min-width: 961px) {
+  .mn-hero + .hero .hero__inner {
+    grid-template-columns: 1fr;
+  }
+  .mn-hero + .hero .hero-right {
+    display: none;
+  }
+  .mn-hero + .hero .hero-ticker {
+    display: none;
+  }
+}
+
+/* --- 內容頁標題區與內容區對齊（統一左內距） --- */
+.page-header,
+.page-head {
+  padding-inline: var(--gutter-x) !important;
+}
+
+.page-header h1,
+.page-header .h-page,
+.page-head__title {
+  max-width: 100%;
+}
+
+/* --- 公告條：內容重複時左半遮罩淡出，避免左右鏡像 --- */
+.ann-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 100%;
+  background: linear-gradient(90deg, var(--void) 30%, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ann-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 100%;
+  background: linear-gradient(270deg, var(--void) 30%, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
