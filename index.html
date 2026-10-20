@@ -81,7 +81,34 @@
 <main id="main">
 
   <!-- ================= HERO（報告 §6.2 非對稱 1fr / 420px） ================= -->
-  <section class="hero bg-gradient">
+  <!-- ================= 主菜单式入口（新增层，不改动下方既有 Hero 结构） ================= -->
+  <section class="mn-hero">
+    <div class="container mn-hero__inner">
+
+      <div class="mn-brand">
+        <img class="mn-brand__logo" src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44">
+        <h1 class="mn-brand__title">讓每台設備可靠連接</h1>
+        <p class="mn-brand__status">SYS ONLINE · 50,000 NODES · 99.9% LINK</p>
+      </div>
+
+      <nav class="mn-nav" aria-label="主菜單導航">
+        <a class="mn-item" href="about.html">關於</a>
+        <a class="mn-item" href="products.html">產品</a>
+        <a class="mn-item" href="services.html">服務</a>
+        <a class="mn-item" href="support.html">支持</a>
+        <a class="mn-item" href="news.html">動態</a>
+        <a class="mn-item" href="contact.html">聯繫</a>
+      </nav>
+
+      <div class="mn-hero__visual">
+        <img src="assets/img/network.svg" alt="曜石網關G2 連接四台終端的設備拓撲示意圖" width="800" height="600">
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 既有 Hero 折疊為緊湊簡介條，保留全部結構與文案 -->
+  <section class="hero bg-gradient" style="min-height:auto;padding-top:var(--s20);padding-bottom:var(--s12)">
     <span class="hero-corner" aria-hidden="true"></span>
     <span class="hero-corner" aria-hidden="true"></span>
     <span class="hero-corner" aria-hidden="true"></span>
@@ -90,7 +117,7 @@
       <div class="hero-left">
         <div class="hero-accent" aria-hidden="true"></div>
         <p class="hero-eyebrow">IoT Hardware &amp; Edge Gateway</p>
-        <h1 class="hero-title-zh">讓每台設備<br>可靠連接</h1>
+        <h2 class="hero-title-zh">讓每台設備<br>可靠連接</h2>
         <p class="hero-title-en">OBSIDIAN Technologies</p>
         <p class="hero-tagline">可靠，從每一台設備開始</p>
         <div class="hero-rule" aria-hidden="true"></div>
