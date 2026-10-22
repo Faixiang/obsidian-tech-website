@@ -1,7 +1,7 @@
 /* ==========================================================================
-   曜石智能科技 · 购物车与訂單模擬
-   职责：加入购物车、數量增减、金额合计、结算、訂單寫入
-   說明：课程要求「无真實购买」，此处仅在瀏覽器内模擬交易流程。
+   曜石智能科技 · 購物車與訂單模擬
+   職責：加入購物車、數量增減、金額合計、結算、訂單寫入
+   說明：課程要求「無真實購買」，此處僅在瀏覽器內模擬交易流程。
    ========================================================================== */
 
 (function (OBSIDIAN) {
@@ -28,7 +28,7 @@
       code: 'E3',
       name: '能耗管理套件 E3',
       price: 8900,
-      spec: '12 回路 / 分時計價 / 報表導出',
+      spec: '12 迴路 / 分時計價 / 報表導出',
       lead: '14 個工作日'
     }
   };
@@ -111,7 +111,7 @@
     }, 0);
   }
 
-  /** 满5000 免运费，否则 120 */
+  /** 滿5000 免運費，否則 120 */
   function shipping() {
     var sub = subtotal();
     if (sub === 0 || sub >= 5000) return 0;
@@ -122,7 +122,7 @@
     return subtotal() + shipping();
   }
 
-  /* ---------- 渲染购物车頁 ---------- */
+  /* ---------- 渲染購物車頁 ---------- */
   function render() {
     var list = cart();
 
@@ -167,7 +167,7 @@
           '<div class="qty">' +
           '<button type="button" class="qty__btn" data-dec="' +
           OBSIDIAN.esc(i.code) +
-          '" aria-label="减少數量">&minus;</button>' +
+          '" aria-label="減少數量">&minus;</button>' +
           '<span class="qty__num">' +
           i.qty +
           '</span>' +
@@ -194,11 +194,11 @@
     var elTotal = document.querySelector('[data-sum-total]');
 
     if (elSub) elSub.textContent = OBSIDIAN.money(sub);
-    if (elShip) elShip.textContent = ship ? OBSIDIAN.money(ship) : '免运费';
+    if (elShip) elShip.textContent = ship ? OBSIDIAN.money(ship) : '免運費';
     if (elTotal) elTotal.textContent = OBSIDIAN.money(total());
   }
 
-  /* ---------- 事件绑定 ---------- */
+  /* ---------- 事件綁定 ---------- */
   document.addEventListener('click', function (e) {
     var inc = e.target.closest('[data-inc]');
     var dec = e.target.closest('[data-dec]');
@@ -227,7 +227,7 @@
     }
   });
 
-  /* ---------- 结算 ---------- */
+  /* ---------- 結算 ---------- */
   document.addEventListener('submit', function (e) {
     var form = e.target.closest('[data-checkout]');
     if (!form) return;
@@ -261,7 +261,7 @@
     location.href = 'order-confirm.html';
   });
 
-  /* ---------- 购买按钮（详情頁跳轉） ---------- */
+  /* ---------- 購買按鈕（詳情頁跳轉） ---------- */
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-buy]');
     if (!btn) return;

@@ -1,9 +1,9 @@
 /* ==========================================================================
-   曜石智能科技 · 会话与表單校驗
-   职责：登入/註冊（localStorage 模擬，無伺服器）、
-        註冊資訊与訂單數據读写、表單校驗、登入態渲染
-   說明：课程要求「無伺服器儲存」，此处用 localStorage 承接跳轉數據。
-        真實產品環境必須改為後端 + 雜湊儲存，见 docs/报告大纲.md 安全章节。
+   曜石智能科技 · 會話與表單校驗
+   職責：登入/註冊（localStorage 模擬，無伺服器）、
+        註冊資訊與訂單數據讀寫、表單校驗、登入態渲染
+   說明：課程要求「無伺服器儲存」，此處用 localStorage 承接跳轉數據。
+        真實產品環境必須改為後端 + 雜湊儲存，見 docs/報告大綱.md 安全章節。
    ========================================================================== */
 
 var OBSIDIAN = (function () {
@@ -14,7 +14,7 @@ var OBSIDIAN = (function () {
   var KEY_REG = 'obsidian.lastRegister';
   var KEY_ORDER = 'obsidian.lastOrder';
 
-  /* ---------- 儲存读写（localStorage 不可用時降級為記憶體） ---------- */
+  /* ---------- 儲存讀寫（localStorage 不可用時降級為記憶體） ---------- */
   var memory = {};
 
   function read(key, fallback) {
@@ -33,7 +33,7 @@ var OBSIDIAN = (function () {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (err) {
-      /* 隱私模式或配额满：記憶體態仍可支撑当次演示 */
+      /* 隱私模式或配額滿：記憶體態仍可支撐當次演示 */
     }
   }
 
@@ -70,17 +70,17 @@ var OBSIDIAN = (function () {
   };
 
   var MESSAGES = {
-    required: '此项為必填',
+    required: '此項為必填',
     email: '請輸入有效的電郵地址',
-    phone: '請輸入8 位數字的香港手機号码',
+    phone: '請輸入8 位數字的香港手機號碼',
     minLen: '長度不足',
-    match: '兩次输入不一致'
+    match: '兩次輸入不一致'
   };
 
   /**
    * 校驗單個字段
    * @param {HTMLInputElement} el
-   * @param {Object} data 同表單其余字段值，用于 match 规则
+   * @param {Object} data 同表單其餘字段值，用於 match 規則
    * @returns {boolean}
    */
   function validateField(el, data) {
@@ -115,7 +115,7 @@ var OBSIDIAN = (function () {
       var name = rule.split('|')[i].split(':')[0];
       if (MESSAGES[name]) return MESSAGES[name];
     }
-    return '输入無效';
+    return '輸入無效';
   }
 
   /** 校驗整個表單，返回 {ok, data} */
@@ -141,7 +141,7 @@ var OBSIDIAN = (function () {
     return { ok: ok, data: data };
   }
 
-  /** 失焦時即時校驗（跳过未触碰字段） */
+  /** 失焦時即時校驗（跳過未觸碰字段） */
   function liveValidate(form) {
     form.querySelectorAll('[data-rule]').forEach(function (el) {
       el.addEventListener('blur', function () {
@@ -150,7 +150,7 @@ var OBSIDIAN = (function () {
     });
   }
 
-  /* ---------- 会话 ---------- */
+  /* ---------- 會話 ---------- */
   function login(role, name) {
     write(KEY_SESSION, { role: role, name: name, at: Date.now() });
   }
@@ -163,7 +163,7 @@ var OBSIDIAN = (function () {
     remove(KEY_SESSION);
   }
 
-  /* ---------- 会员 ---------- */
+  /* ---------- 會員 ---------- */
   function members() {
     return read(KEY_MEMBER, []);
   }
@@ -235,7 +235,7 @@ var OBSIDIAN = (function () {
     );
   }
 
-  /** 生成訂單号：OB-YYYYMMDD-XXXX */
+  /** 生成訂單號：OB-YYYYMMDD-XXXX */
   function orderNo() {
     var d = new Date();
 
@@ -250,7 +250,7 @@ var OBSIDIAN = (function () {
     return 'OB-' + stamp + '-' + tail;
   }
 
-  /** HTML 转义，防止用戶输入注入頁面 */
+  /** HTML 轉義，防止用戶輸入注入頁面 */
   function esc(str) {
     return String(str == null ? '' : str)
       .replace(/&/g, '&amp;')
@@ -260,7 +260,7 @@ var OBSIDIAN = (function () {
       .replace(/'/g, '&#39;');
   }
 
-  /** 從 URL query 取参數 */
+  /** 從 URL query 取參數 */
   function qs(key) {
     var m = new RegExp('[?&]' + key + '=([^&#]*)').exec(
       location.search

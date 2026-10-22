@@ -63,7 +63,7 @@
 <main id="main">
   <section class="page-head">
     <div class="container">
-      <nav class="more" aria-label="面包屑"><a href="index.html">首頁</a><span>/</span><a href="register.html">會員註冊</a><span>/</span>註冊成功</nav>
+      <nav class="more" aria-label="麵包屑"><a href="index.html">首頁</a><span>/</span><a href="register.html">會員註冊</a><span>/</span>註冊成功</nav>
       <h1 class="h-page">註冊已完成</h1>
       <p class="page-back" style="display:block;margin-top:0">以下為你剛才提交的資料副本，請核對無誤。資料僅保存在本機瀏覽器，未上傳至任何服務器。</p>
     </div>
@@ -85,7 +85,7 @@
             <div class="notice notice--warn mt-6">
               <span>
                 <strong>密碼不會在此顯示。</strong><br>
-                真實系統中密碼必須經加鹽雜湊後儲存，服務器与頁面均無法還原原文。
+                真實系統中密碼必須經加鹽雜湊後儲存，服務器與頁面均無法還原原文。
               </span>
             </div>
           </div>
@@ -95,7 +95,7 @@
           <h2 class="h3 mb-6">下一步</h2>
           <div class="flow">
             <a class="btn btn--primary btn--block" href="login.html">用新帳號登入</a>
-            <a class="btn btn--secondary btn--block" href="products.html">浏览產品</a>
+            <a class="btn btn--secondary btn--block" href="products.html">瀏覽產品</a>
             <a class="btn btn--ghost btn--block" href="index.html">返回首頁</a>
           </div>
 
@@ -129,7 +129,7 @@
     <div class="ft-top">
       <div class="ft-brand">
         <img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44" loading="lazy">
-        <p class="ft-slogan">讓每台設備可靠連接</p>
+        <p class="ft-slogan">讓每臺設備可靠連接</p>
         <p class="ft-desc">
           曜石智能科技 · 2016 年成立於香港科學園<br>
           專注工業與家用物聯網的感測、邊緣連接與用能管理。
@@ -187,10 +187,10 @@
   var rows = [
     ['姓名', data.name],
     ['電郵地址', data.email],
-    ['手機号码', data.phone],
+    ['手機號碼', data.phone],
     ['客戶類型', data.custType],
     ['註冊時間', OBSIDIAN.formatDate(data.registeredAt)],
-    ['會員编号', 'MB-' + String(data.email).length + String(Date.now()).slice(-5)]
+    ['會員編號', 'MB-' + String(data.email).length + String(Date.now()).slice(-5)]
   ];
 
   tbody.innerHTML = rows

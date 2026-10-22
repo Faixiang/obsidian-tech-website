@@ -1,11 +1,11 @@
 /* ==========================================================================
-   曜石智能科技 · 全站通用脚本
+   曜石智能科技 · 全站通用腳本
    --------------------------------------------------------------------------
-   质感参數依據：康陶集团官網_视觉与交互复刻设计参數报告.md §5
-     - 粒子：N=70，速度 (Math.random()-0.5)*0.25，5 色池，rAF驱動
-     - 过渡：统一 ease，卡片 0.4s
-     - 锚點：拦截 a[href^="#"] → scrollIntoView({behavior:'smooth'})
-     - 時钟：日期固定 + 實時時分，每分钟刷新
+   質感參數依據：康陶集團官網_視覺與交互復刻設計參數報告.md §5
+     - 粒子：N=70，速度 (Math.random()-0.5)*0.25，5 色池，rAF驅動
+     - 過渡：統一 ease，卡片 0.4s
+     - 錨點：攔截 a[href^="#"] → scrollIntoView({behavior:'smooth'})
+     - 時鍾：日期固定 + 實時時分，每分鐘刷新
    ========================================================================== */
 
 (function () {
@@ -14,28 +14,28 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ======================================================================
-     粒子背景（报告 §4/§5）
+     粒子背景（報告 §4/§5）
      ----------------------------------------------------------------------
-     注：此為康陶复刻版粒子層（70 颗 + 连線）。
-     全站主菜单视觉層上線後，由 obsidianBg() 统一接管背景，
-     本層仅在 body 无 .obsidian-bg 時启用，避免双層叠加与 rAF 超预算。
+     注：此為康陶復刻版粒子層（70 顆 + 連線）。
+     全站主菜單視覺層上線後，由 obsidianBg() 統一接管背景，
+     本層僅在 body 無 .obsidian-bg 時啟用，避免雙層疊加與 rAF 超預算。
      ====================================================================== */
   (function particles() {
     var canvas = document.getElementById('particles');
     if (!canvas || reduceMotion) return;
-    /* 新背景層已注入则跳过，避免两個粒子系統同時运行 */
+    /* 新背景層已注入則跳過，避免兩個粒子系統同時運行 */
     if (document.querySelector('.obsidian-bg')) return;
 
     var ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    /* 报告 §5：顏色池 5 色 */
+    /* 報告 §5：顏色池 5 色 */
     var COLORS = [
       [0, 212, 184],   /* 青 */
       [0, 160, 200],   /* 深青 */
       [123, 47, 255],  /* 紫 */
       [200, 168, 75],  /* 金 */
-      [255, 45, 85]    /* 红 */
+      [255, 45, 85]    /* 紅 */
     ];
 
     var N = 70;
@@ -53,7 +53,7 @@
         pts.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          /* 报告 §5：速度 ±0.125 */
+          /* 報告 §5：速度 ±0.125 */
           vx: (Math.random() - 0.5) * 0.25,
           vy: (Math.random() - 0.5) * 0.25,
           r: Math.random() * 1.6 + 0.4,
@@ -71,7 +71,7 @@
         p.x += p.vx;
         p.y += p.vy;
 
-        /* 邊界回弹 */
+        /* 邊界回彈 */
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
@@ -80,7 +80,7 @@
         ctx.fillStyle = 'rgba(' + p.c[0] + ',' + p.c[1] + ',' + p.c[2] + ',0.7)';
         ctx.fill();
 
-        /* 近距离连線 */
+        /* 近距離連線 */
         for (var j = i + 1; j < pts.length; j++) {
           var q = pts[j];
           var dx = p.x - q.x;
@@ -112,7 +112,7 @@
   })();
 
   /* ======================================================================
-     移動端导航（双固定条 → 展開占位 nav-total）
+     移動端導航（雙固定條 → 展開佔位 nav-total）
      ====================================================================== */
   var toggle = document.querySelector('.nav__toggle');
   var nav = document.getElementById('site-nav');
@@ -151,7 +151,7 @@
   }
 
   /* ======================================================================
-     当前頁导航高亮
+     當前頁導航高亮
      ====================================================================== */
   var here = location.pathname.split('/').pop() || 'index.html';
 
@@ -164,7 +164,7 @@
   });
 
   /* ======================================================================
-     锚點平滑滚動（报告 §5：拦截預設行為 → scrollIntoView）
+     錨點平滑滾動（報告 §5：攔截預設行為 → scrollIntoView）
      ====================================================================== */
   document.addEventListener('click', function (e) {
     var link = e.target.closest('a[href^="#"]');
@@ -184,14 +184,14 @@
   });
 
   /* ======================================================================
-     跑马灯速度反算（报告 §5 / 计划书 §9.5）
+     跑馬燈速度反算（報告 §5 / 計劃書 §9.5）
      ----------------------------------------------------------------------
-     轨道已由 CSS 固定為 flex:0 0 auto + width:max-content，寬度不再随
-     视口伸缩，故「duration = 一份内容宽 ÷ 目標速度」与视口无關。
-     内容复制两份（副本 aria-hidden="true"），逐帧位移量恒為一份内容宽
-     （--mq-shift 由 JS 反算為负百分比，向左位移），循环回溯无跳變；
-     「轨道宽 − 一份内容宽」小于容器可见宽時自動补足副本（保持偶數份）。
-     目標速度唯一来源：CSS 變量 --mq-speed-*（12 / 8 / 40 px/s）。
+     軌道已由 CSS 固定為 flex:0 0 auto + width:max-content，寬度不再隨
+     視口伸縮，故「duration = 一份內容寬 ÷ 目標速度」與視口無關。
+     內容複製兩份（副本 aria-hidden="true"），逐幀位移量恆為一份內容寬
+     （--mq-shift 由 JS 反算為負百分比，向左位移），循環回溯無跳變；
+     「軌道寬 − 一份內容寬」小於容器可見寬時自動補足副本（保持偶數份）。
+     目標速度唯一來源：CSS 變量 --mq-speed-*（12 / 8 / 40 px/s）。
      ====================================================================== */
   var OBSIDIAN_MARQUEE = (function marquee() {
     var ctx = document.documentElement;
@@ -199,7 +199,7 @@
     var rafId = 0;
     var booted = false;
 
-    /* 三条轨道：选择器 + duration 變量名 + 目標速度變量名 */
+    /* 三條軌道：選擇器 + duration 變量名 + 目標速度變量名 */
     var SPECS = [
       {
         sels: ['[data-nb-ticker]', '.nb-ticker-track'],
@@ -239,7 +239,7 @@
       return v > 0 ? v : spec.speedFallback;
     }
 
-    /* 建结構：原内容包进 .mq-frame → 再复制一份 aria-hidden 的副本 */
+    /* 建結構：原內容包進 .mq-frame → 再複製一份 aria-hidden 的副本 */
     function build(el, spec) {
       if (!el || el.dataset.mqReady === '1') return null;
 
@@ -249,10 +249,10 @@
       var cs = window.getComputedStyle(el);
       var gapPx = parseFloat(cs.columnGap) || 0;
 
-      /* ① 轨道不被拉伸/压缩，只按内容自然宽排版；間距改為逐项 margin
-            （含每份末尾那一项），使复制後的接缝間距与其他間距一致；
-            首缩进保留在轨道自身 padding-left，不进入「一份内容宽」丈量，
-            避免接缝处出現双倍間距 */
+      /* ① 軌道不被拉伸/壓縮，只按內容自然寬排版；間距改為逐項 margin
+            （含每份末尾那一項），使複製後的接縫間距與其他間距一致；
+            首縮進保留在軌道自身 padding-left，不進入「一份內容寬」丈量，
+            避免接縫處出現雙倍間距 */
       el.style.flex = '0 0 auto';
       el.style.width = 'max-content';
       el.style.gap = '0px';
@@ -288,7 +288,7 @@
       return item;
     }
 
-    /* 丈量：临時把容器压到 1px，分别读「一份内容宽」与轨道實際宽 */
+    /* 丈量：臨時把容器壓到 1px，分別讀「一份內容寬」與軌道實際寬 */
     function measure(item) {
       var el = item.el;
       var host = el.parentNode;
@@ -307,9 +307,9 @@
       return { one: one, track: track };
     }
 
-    /* ③ 位移量恒為一份内容宽，故无缝条件是
-          「轨道宽 − 一份内容宽 ≥ 容器可见宽」；不满足時补足副本
-          （每次补 2 份，保持偶數份），避免循环末段右侧露白 */
+    /* ③ 位移量恆為一份內容寬，故無縫條件是
+          「軌道寬 − 一份內容寬 ≥ 容器可見寬」；不滿足時補足副本
+          （每次補 2 份，保持偶數份），避免循環末段右側露白 */
     function padUp(item, m) {
       var visible = item.el.parentNode.clientWidth || 0;
       var padded = false;
@@ -328,7 +328,7 @@
       return padded;
     }
 
-    /* ④ 重置動画：flash 一次使新的 duration 立即生效，位移基准归零 */
+    /* ④ 重置動畫：flash 一次使新的 duration 立即生效，位移基準歸零 */
     function restart(item) {
       var el = item.el;
       el.style.animation = 'none';
@@ -343,15 +343,15 @@
       var changed = padded || !item.lastDuration ||
         Math.abs(item.lastDuration - duration) > 0.01;
 
-      /* duration = 一份内容宽 ÷ 目標速度（秒），實测速度严格等于目標值；
-         --mq-shift = 负的「一份内容宽」像素值（向左位移）—— 逐帧位移恒等
-         于一份内容宽，与轨道 padding-left / 副本份數 / 视口寬度均无關，
-         故循环闭合处零跳變。
+      /* duration = 一份內容寬 ÷ 目標速度（秒），實測速度嚴格等於目標值；
+         --mq-shift = 負的「一份內容寬」像素值（向左位移）—— 逐幀位移恆等
+         於一份內容寬，與軌道 padding-left / 副本份數 / 視口寬度均無關，
+         故循環閉合處零跳變。
 
-         v1.3 修正：旧實現写 `-(one / track * 100)%`，而 translateX(%) 的
-         基准是元素自身 border-box（轨道 padding-left:24px 被计入被除數），
-         實際循环位移 = 一份宽 + 约 6px，导致 nb（78s）/ hero（29.35s）
-         每周期在闭合处瞬跳约 6px、速度同源偏高 0.5%~0.95%。 */
+         v1.3 修正：舊實現寫 `-(one / track * 100)%`，而 translateX(%) 的
+         基準是元素自身 border-box（軌道 padding-left:24px 被計入被除數），
+         實際循環位移 = 一份寬 + 約 6px，導致 nb（78s）/ hero（29.35s）
+         每週期在閉合處瞬跳約 6px、速度同源偏高 0.5%~0.95%。 */
       ctx.style.setProperty(item.varName, duration.toFixed(2) + 's');
       item.el.style.setProperty('--mq-shift', (-m.one).toFixed(2) + 'px');
       item.lastDuration = duration;
@@ -392,7 +392,7 @@
       runAll();
     }
 
-    /* 内容被動態改写後：重建结構 → 重算 duration → 重置動画 */
+    /* 內容被動態改寫後：重建結構 → 重算 duration → 重置動畫 */
     function refresh(el, html) {
       if (!el) return;
 
@@ -405,7 +405,7 @@
 
       if (typeof html === 'string') el.innerHTML = html;
 
-      /* 内聯样式還原，避免与重新包装後的取值叠加 */
+      /* 內聯樣式還原，避免與重新包裝後的取值疊加 */
       el.style.flex = '0 0 auto';
       el.style.width = 'max-content';
       el.style.gap = '';
@@ -431,7 +431,7 @@
       else window.addEventListener('load', fn);
     }
 
-    /* 時機：load 之後 + 字体就绪之後各算一次，读數最准 */
+    /* 時機：load 之後 + 字體就緒之後各算一次，讀數最準 */
     onLoad(function () {
       boot();
       if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
@@ -455,13 +455,13 @@
   window.OBSIDIAN_MARQUEE = OBSIDIAN_MARQUEE;
 
   /* ======================================================================
-     全息展台掃描線行程（v1.3）
+     全息展臺掃描線行程（v1.3）
      ----------------------------------------------------------------------
-     掃描線绝对定位于 .holo-showcase（该元素无 overflow:hidden，位移需
-     限制在面板高度内），故其掃描行程必須等于面板實際高度。這里把高度
-     寫入 --holo-scan-travel，使 holo-scan 真正從上扫到下，而不是只摆動
-     8px。周期与 holo-float 统一為 8s、同相位起止，消除 3s/8s 异周期
-     持續错位带来的"抖動/呼吸不均"观感。
+     掃描線絕對定位於 .holo-showcase（該元素無 overflow:hidden，位移需
+     限制在面板高度內），故其掃描行程必須等於面板實際高度。這裡把高度
+     寫入 --holo-scan-travel，使 holo-scan 真正從上掃到下，而不是隻擺動
+     8px。週期與 holo-float 統一為 8s、同相位起止，消除 3s/8s 異週期
+     持續錯位帶來的"抖動/呼吸不均"觀感。
      ====================================================================== */
   (function holoScan() {
     var showcase = document.querySelector('.holo-showcase');
@@ -485,7 +485,7 @@
   })();
 
   /* ======================================================================
-     新闻演播室：频道切換 + 實時時钟
+     新聞演播室：頻道切換 + 實時時鍾
      ====================================================================== */
   (function newsDesk() {
     var wrap = document.querySelector('[data-nb-channels]');
@@ -510,7 +510,7 @@
         if (leadTitle) leadTitle.textContent = payload.lead.title;
         if (leadDesc) leadDesc.textContent = payload.lead.desc;
         if (ticker) {
-          /* 内容改写後重算 duration 并重置動画（计划书 §9.5.2） */
+          /* 內容改寫後重算 duration 並重置動畫（計劃書 §9.5.2） */
           if (OBSIDIAN_MARQUEE && OBSIDIAN_MARQUEE.refresh) {
             OBSIDIAN_MARQUEE.refresh(ticker, payload.ticker);
           } else {
@@ -529,7 +529,7 @@
       });
     });
 
-    /* 時钟：日期固定 + 實時時分，每分钟刷新（报告 §2/§5） */
+    /* 時鍾：日期固定 + 實時時分，每分鐘刷新（報告 §2/§5） */
     var clock = document.querySelector('[data-nb-ts]');
     if (!clock) return;
 
@@ -571,7 +571,7 @@
   });
 
   /* ======================================================================
-     进场動画（报告 §5：fadeUp，逐個延迟）
+     進場動畫（報告 §5：fadeUp，逐個延遲）
      ====================================================================== */
   (function reveal() {
     var items = document.querySelectorAll('[data-reveal]');
@@ -623,14 +623,14 @@
   });
 
   /* ======================================================================
-     頁脚年份
+     頁腳年份
      ====================================================================== */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());
   });
 })();
 /* ==========================================================================
-   全站主菜单式視覺層 · 背景注入
+   全站主菜單式視覺層 · 背景注入
    --------------------------------------------------------------------------
    由本模組單點注入 .obsidian-bg，不逐頁改 HTML。
    效能硬約束：

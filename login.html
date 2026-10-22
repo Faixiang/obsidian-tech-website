@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>員工 / 客戶登入 | 曜石智能科技</title>
-<meta name="description" content="曜石智能科技員工与客戶登入入口。">
+<meta name="description" content="曜石智能科技員工與客戶登入入口。">
 <link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,7 +63,7 @@
 <main id="main">
   <section class="page-head">
     <div class="container">
-      <nav class="more" aria-label="面包屑"><a href="index.html">首頁</a><span>/</span>登入</nav>
+      <nav class="more" aria-label="麵包屑"><a href="index.html">首頁</a><span>/</span>登入</nav>
       <h1 class="h-page">員工 / 客戶登入</h1>
       <p class="page-back" style="display:block;margin-top:0">兩類身份共用此入口，登入後按角色進入對應工作區。示範環境不校驗真實憑證。</p>
     </div>
@@ -75,8 +75,8 @@
 
         <div class="card">
           <div class="card__body">
-            <h2 class="h3">选择登入身份</h2>
-            <p class="caption">不同身份可见的功能不同。</p>
+            <h2 class="h3">選擇登入身份</h2>
+            <p class="caption">不同身份可見的功能不同。</p>
 
             <form class="form mt-4" id="loginForm" novalidate>
               <fieldset style="border:0;padding:0;margin:0">
@@ -84,7 +84,7 @@
                 <div class="grid grid--2" style="gap:var(--s3)">
                   <label class="notice notice--info" style="cursor:pointer;align-items:center;gap:var(--s2)">
                     <input type="radio" name="role" value="員工" checked style="width:16px;height:16px;accent-color:var(--cyan-dark)">
-                    <span><strong>員工</strong><br><span class="caption">工号 + 内部電郵</span></span>
+                    <span><strong>員工</strong><br><span class="caption">工號 + 內部電郵</span></span>
                   </label>
                   <label class="notice notice--info" style="cursor:pointer;align-items:center;gap:var(--s2)">
                     <input type="radio" name="role" value="客戶" style="width:16px;height:16px;accent-color:var(--cyan-dark)">
@@ -95,7 +95,7 @@
 
               <div class="field">
                 <label class="field__label" for="account">帳號 <span class="req">*</span></label>
-                <input class="input" type="text" id="account" name="account" data-rule="required|minLen:2" placeholder="員工請輸入工号" autocomplete="username">
+                <input class="input" type="text" id="account" name="account" data-rule="required|minLen:2" placeholder="員工請輸入工號" autocomplete="username">
                 <span class="field__hint caption" id="accHint">員工使用公司電郵，例如 emp001@obsidian-tech.hk</span>
                 <span class="field__error caption"></span>
               </div>
@@ -114,7 +114,7 @@
               <button class="btn btn--primary btn--block" type="submit">登入</button>
 
               <p class="form-note">
-                示範說明：任意帳號与不少于 6 位的密碼即可登入。本頁不做真實凭證校驗，
+                示範說明：任意帳號與不少於 6 位的密碼即可登入。本頁不做真實憑證校驗，
                 真實系統須在後端校驗並使用 HTTPS 傳輸、數據庫加鹽雜湊儲存密碼。
               </p>
             </form>
@@ -129,10 +129,10 @@
               <span class="badge badge--cyan">員工</span>
               <h3 class="card__title mt-4">內部工作區</h3>
               <ul class="card__text flow">
-                <li>· 待处理工单与設備告警</li>
-                <li>· 库存与在途設備查询</li>
-                <li>· 客戶檔案（脱敏视圖）</li>
-                <li>· 内部文檔与固件版本</li>
+                <li>· 待處理工單與設備告警</li>
+                <li>· 庫存與在途設備查詢</li>
+                <li>· 客戶檔案（脫敏視圖）</li>
+                <li>· 內部文檔與固件版本</li>
               </ul>
             </div>
           </div>
@@ -142,18 +142,18 @@
               <span class="badge badge--success">客戶</span>
               <h3 class="card__title mt-4">客戶中心</h3>
               <ul class="card__text flow">
-                <li>· 我的設備与保修狀態</li>
-                <li>· 历史訂單与发票</li>
-                <li>· 技術支持工单</li>
-                <li>· 固件与文檔下載</li>
+                <li>· 我的設備與保修狀態</li>
+                <li>· 歷史訂單與發票</li>
+                <li>· 技術支持工單</li>
+                <li>· 固件與文檔下載</li>
               </ul>
             </div>
           </div>
 
           <div class="card">
             <div class="card__body">
-              <h3 class="card__title">还没有帳號？</h3>
-              <p class="card__text">註冊後可查看設備檔案与保修期限。</p>
+              <h3 class="card__title">還沒有帳號？</h3>
+              <p class="card__text">註冊後可查看設備檔案與保修期限。</p>
               <a class="btn btn--secondary btn--block" href="register.html">前往註冊</a>
             </div>
           </div>
@@ -169,7 +169,7 @@
     <div class="ft-top">
       <div class="ft-brand">
         <img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44" loading="lazy">
-        <p class="ft-slogan">讓每台設備可靠連接</p>
+        <p class="ft-slogan">讓每臺設備可靠連接</p>
         <p class="ft-desc">
           曜石智能科技 · 2016 年成立於香港科學園<br>
           專注工業與家用物聯網的感測、邊緣連接與用能管理。

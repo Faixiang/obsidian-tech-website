@@ -63,7 +63,7 @@
 <main id="main">
   <section class="page-head">
     <div class="container">
-      <nav class="more" aria-label="面包屑"><a href="index.html">首頁</a><span>/</span><a href="cart.html">購物車</a><span>/</span>訂單確認</nav>
+      <nav class="more" aria-label="麵包屑"><a href="index.html">首頁</a><span>/</span><a href="cart.html">購物車</a><span>/</span>訂單確認</nav>
       <h1 class="h-page">訂單已記錄</h1>
       <p class="page-back" style="display:block;margin-top:0">以下為訂單副本。本示範未進行任何真實交易或扣款，記錄僅保存在你的瀏覽器內。</p>
     </div>
@@ -85,8 +85,8 @@
                 <caption class="visually-hidden">訂單商品明細</caption>
                 <thead>
                   <tr>
-                    <th scope="col">型号</th>
-                    <th scope="col">名称</th>
+                    <th scope="col">型號</th>
+                    <th scope="col">名稱</th>
                     <th scope="col">單價</th>
                     <th scope="col">數量</th>
                     <th scope="col">小計</th>
@@ -129,7 +129,7 @@
             <span>
               <strong>下一步會發生什麼？</strong><br>
               真實流程中，此處會等待支付網關回調確認，再由後端寫入訂單庫並觸發出貨。
-              本示範省略支付环节，僅保留資訊回顯。
+              本示範省略支付環節，僅保留資訊回顯。
             </span>
           </div>
 
@@ -149,7 +149,7 @@
     <div class="ft-top">
       <div class="ft-brand">
         <img src="assets/img/logo.svg" alt="曜石智能科技 OBSIDIAN Technologies" width="260" height="44" loading="lazy">
-        <p class="ft-slogan">讓每台設備可靠連接</p>
+        <p class="ft-slogan">讓每臺設備可靠連接</p>
         <p class="ft-desc">
           曜石智能科技 · 2016 年成立於香港科學園<br>
           專注工業與家用物聯網的感測、邊緣連接與用能管理。
@@ -199,7 +199,7 @@
   if (!o) {
     document.getElementById('orderRows').innerHTML =
       '<tr><td colspan="5"><div class="notice notice--warn">' +
-      '<span>未偵測到訂單記錄。請先前往<a href="products.html">產品頁</a>选购。</span>' +
+      '<span>未偵測到訂單記錄。請先前往<a href="products.html">產品頁</a>選購。</span>' +
       '</div></td></tr>';
     return;
   }
@@ -229,7 +229,7 @@
     ['收件人', o.customer.name],
     ['電郵', o.customer.email],
     ['電話', o.customer.phone],
-    ['送货地址', o.customer.address]
+    ['送貨地址', o.customer.address]
   ];
 
   if (o.customer.note) cust.push(['備註', o.customer.note]);
