@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>購物車 | 曜石智能科技</title>
-<meta name="description" content="曜石智能科技產品購物車，可调整數量並提交模拟訂單。">
+<meta name="description" content="曜石智能科技產品購物車，可調整數量並提交模擬訂單。">
 <link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,7 +44,19 @@
         <li><a class="nav__link" href="contact.html">聯繫</a></li>
       </ul>
     </nav>
-    <a class="btn btn--secondary" href="login.html">登入</a>
+<div class="hdr-actions">
+      <a class="hdr-cart" href="cart.html" aria-label="採購單">
+        <span class="hdr-cart__icon" aria-hidden="true"></span>
+        <span class="hdr-cart__count" data-cart-count hidden>0</span>
+      </a>
+
+      <a class="btn btn--secondary" href="login.html" data-guest-box>登入</a>
+
+      <div class="hdr-user" data-session-box hidden>
+        <span class="hdr-user__name" data-session-name></span>
+        <button class="hdr-user__out" type="button" data-logout>登出</button>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -95,7 +107,7 @@
           <div data-cart-empty class="card">
             <div class="card__body text-center">
               <h2 class="h3">購物車是空的</h2>
-              <p class="card__text">你还没有加入任何设备。</p>
+              <p class="card__text">你还没有加入任何設備。</p>
               <a class="btn btn--primary mt-4" href="products.html">前往產品頁</a>
             </div>
           </div>
@@ -123,7 +135,7 @@
                 </div>
 
                 <div class="field">
-                  <label class="field__label" for="cemail">电邮 <span class="req">*</span></label>
+                  <label class="field__label" for="cemail">電郵 <span class="req">*</span></label>
                   <input class="input" type="email" id="cemail" name="email" data-rule="required|email" autocomplete="email">
                   <span class="field__error caption"></span>
                 </div>
@@ -136,17 +148,17 @@
 
                 <div class="field">
                   <label class="field__label" for="caddr">送货地址 <span class="req">*</span></label>
-                  <textarea class="textarea" id="caddr" name="address" data-rule="required|minLen:6" placeholder="区域、街道、楼栋与单位"></textarea>
+                  <textarea class="textarea" id="caddr" name="address" data-rule="required|minLen:6" placeholder="區域、街道、楼栋与单位"></textarea>
                   <span class="field__error caption"></span>
                 </div>
 
                 <div class="field">
                   <label class="field__label" for="cnote">備註</label>
-                  <textarea class="textarea" id="cnote" name="note" placeholder="送货时段、楼层限制等" style="min-height:90px"></textarea>
+                  <textarea class="textarea" id="cnote" name="note" placeholder="送货時段、楼層限制等" style="min-height:90px"></textarea>
                 </div>
 
-                <button class="btn btn--primary btn--block" type="submit">提交訂單（模拟）</button>
-                <p class="form-note">不會跳转至任何支付頁面，也不會扣款。</p>
+                <button class="btn btn--primary btn--block" type="submit">提交訂單（模擬）</button>
+                <p class="form-note">不會跳轉至任何支付頁面，也不會扣款。</p>
               </form>
             </div>
           </div>

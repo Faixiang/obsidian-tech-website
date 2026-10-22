@@ -1,9 +1,9 @@
 /* ==========================================================================
-   曜石智能科技 · 会话与表单校验
-   职责：登录/注册（localStorage 模拟，无服务器）、
-        注册信息与订单数据读写、表单校验、登录态渲染
-   说明：课程要求「无服务器存储」，此处用 localStorage 承接跳转数据。
-        真实产品环境必须改为后端 + 哈希存储，见 docs/报告大纲.md 安全章节。
+   曜石智能科技 · 会话与表單校驗
+   职责：登入/註冊（localStorage 模擬，無伺服器）、
+        註冊資訊与訂單數據读写、表單校驗、登入態渲染
+   說明：课程要求「無伺服器儲存」，此处用 localStorage 承接跳轉數據。
+        真實產品環境必須改為後端 + 雜湊儲存，见 docs/报告大纲.md 安全章节。
    ========================================================================== */
 
 var OBSIDIAN = (function () {
@@ -14,7 +14,7 @@ var OBSIDIAN = (function () {
   var KEY_REG = 'obsidian.lastRegister';
   var KEY_ORDER = 'obsidian.lastOrder';
 
-  /* ---------- 存储读写（localStorage 不可用时降级为内存） ---------- */
+  /* ---------- 儲存读写（localStorage 不可用時降級為記憶體） ---------- */
   var memory = {};
 
   function read(key, fallback) {
@@ -33,7 +33,7 @@ var OBSIDIAN = (function () {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (err) {
-      /* 隐私模式或配额满：内存态仍可支撑当次演示 */
+      /* 隱私模式或配额满：記憶體態仍可支撑当次演示 */
     }
   }
 
@@ -46,7 +46,7 @@ var OBSIDIAN = (function () {
     }
   }
 
-  /* ---------- 校验 ---------- */
+  /* ---------- 校驗 ---------- */
   var RULES = {
     required: function (v) {
       return v.trim().length > 0;
@@ -70,17 +70,17 @@ var OBSIDIAN = (function () {
   };
 
   var MESSAGES = {
-    required: '此项为必填',
-    email: '请输入有效的电邮地址',
-    phone: '请输入8 位数字的香港手机号码',
-    minLen: '长度不足',
-    match: '两次输入不一致'
+    required: '此项為必填',
+    email: '請輸入有效的電郵地址',
+    phone: '請輸入8 位數字的香港手機号码',
+    minLen: '長度不足',
+    match: '兩次输入不一致'
   };
 
   /**
-   * 校验单个字段
+   * 校驗單個字段
    * @param {HTMLInputElement} el
-   * @param {Object} data 同表单其余字段值，用于 match 规则
+   * @param {Object} data 同表單其余字段值，用于 match 规则
    * @returns {boolean}
    */
   function validateField(el, data) {
@@ -115,10 +115,10 @@ var OBSIDIAN = (function () {
       var name = rule.split('|')[i].split(':')[0];
       if (MESSAGES[name]) return MESSAGES[name];
     }
-    return '输入无效';
+    return '输入無效';
   }
 
-  /** 校验整个表单，返回 {ok, data} */
+  /** 校驗整個表單，返回 {ok, data} */
   function validateForm(form) {
     var fields = form.querySelectorAll('[data-rule]');
     var data = {};
@@ -141,7 +141,7 @@ var OBSIDIAN = (function () {
     return { ok: ok, data: data };
   }
 
-  /** 失焦时即时校验（跳过未触碰字段） */
+  /** 失焦時即時校驗（跳过未触碰字段） */
   function liveValidate(form) {
     form.querySelectorAll('[data-rule]').forEach(function (el) {
       el.addEventListener('blur', function () {
@@ -183,7 +183,7 @@ var OBSIDIAN = (function () {
     );
   }
 
-  /* ---------- 跨页数据 ---------- */
+  /* ---------- 跨頁數據 ---------- */
   function setLastRegister(data) {
     write(KEY_REG, data);
   }
@@ -235,7 +235,7 @@ var OBSIDIAN = (function () {
     );
   }
 
-  /** 生成订单号：OB-YYYYMMDD-XXXX */
+  /** 生成訂單号：OB-YYYYMMDD-XXXX */
   function orderNo() {
     var d = new Date();
 
@@ -250,7 +250,7 @@ var OBSIDIAN = (function () {
     return 'OB-' + stamp + '-' + tail;
   }
 
-  /** HTML 转义，防止用户输入注入页面 */
+  /** HTML 转义，防止用戶输入注入頁面 */
   function esc(str) {
     return String(str == null ? '' : str)
       .replace(/&/g, '&amp;')
@@ -260,7 +260,7 @@ var OBSIDIAN = (function () {
       .replace(/'/g, '&#39;');
   }
 
-  /** 从 URL query 取参数 */
+  /** 從 URL query 取参數 */
   function qs(key) {
     var m = new RegExp('[?&]' + key + '=([^&#]*)').exec(
       location.search
@@ -268,11 +268,11 @@ var OBSIDIAN = (function () {
     return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : null;
   }
 
-  /* ---------- 登录态渲染 ---------- */
+  /* ---------- 登入態渲染 ---------- */
   function renderSession() {
     var s = session();
     document.querySelectorAll('[data-session-name]').forEach(function (el) {
-      el.textContent = s ? s.name : '访客';
+      el.textContent = s ? s.name : '訪客';
     });
 
     document.querySelectorAll('[data-session-box]').forEach(function (el) {

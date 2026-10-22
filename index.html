@@ -74,14 +74,26 @@
       </ul>
     </nav>
 
-    <a class="btn btn--secondary" href="login.html">登入</a>
+<div class="hdr-actions">
+      <a class="hdr-cart" href="cart.html" aria-label="採購單">
+        <span class="hdr-cart__icon" aria-hidden="true"></span>
+        <span class="hdr-cart__count" data-cart-count hidden>0</span>
+      </a>
+
+      <a class="btn btn--secondary" href="login.html" data-guest-box>登入</a>
+
+      <div class="hdr-user" data-session-box hidden>
+        <span class="hdr-user__name" data-session-name></span>
+        <button class="hdr-user__out" type="button" data-logout>登出</button>
+      </div>
+    </div>
   </div>
 </header>
 
 <main id="main">
 
   <!-- ================= HERO（報告 §6.2 非對稱 1fr / 420px） ================= -->
-  <!-- ================= 主菜单式入口（新增层，不改动下方既有 Hero 结构） ================= -->
+  <!-- ================= 主菜单式入口（新增層，不改動下方既有 Hero 结構） ================= -->
   <section class="mn-hero">
     <div class="container mn-hero__inner">
 

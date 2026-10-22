@@ -44,7 +44,19 @@
         <li><a class="nav__link" href="contact.html">聯繫</a></li>
       </ul>
     </nav>
-    <a class="btn btn--secondary" href="login.html">登入</a>
+<div class="hdr-actions">
+      <a class="hdr-cart" href="cart.html" aria-label="採購單">
+        <span class="hdr-cart__icon" aria-hidden="true"></span>
+        <span class="hdr-cart__count" data-cart-count hidden>0</span>
+      </a>
+
+      <a class="btn btn--secondary" href="login.html" data-guest-box>登入</a>
+
+      <div class="hdr-user" data-session-box hidden>
+        <span class="hdr-user__name" data-session-name></span>
+        <button class="hdr-user__out" type="button" data-logout>登出</button>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -215,7 +227,7 @@
   var cust = [
     ['下單時間', OBSIDIAN.formatDate(o.placedAt)],
     ['收件人', o.customer.name],
-    ['电邮', o.customer.email],
+    ['電郵', o.customer.email],
     ['電話', o.customer.phone],
     ['送货地址', o.customer.address]
   ];

@@ -3313,3 +3313,153 @@ body.nav-locked { overflow: hidden; }
     transform: none;
   }
 }
+
+/* ==========================================================================
+   導航功能區（T-02）
+   --------------------------------------------------------------------------
+   購物車入口 + 角標 + 登入身分
+   顏色一律取用 :root 既有變數，不硬編碼。
+   ========================================================================== */
+
+/* --- 右側功能區 --- */
+.hdr-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  margin-left: var(--s6);
+  flex-shrink: 0;
+}
+
+/* --- 購物車入口 --- */
+.hdr-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  color: var(--silver);
+  border-radius: var(--r-btn);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.hdr-cart:hover {
+  color: var(--cyan);
+  background: rgba(0, 212, 184, 0.1);
+  text-decoration: none;
+}
+
+/* CSS 繪製的購物車圖示（不引入外部圖片） */
+.hdr-cart__icon {
+  position: relative;
+  display: block;
+  width: 15px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+}
+
+.hdr-cart__icon::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 2px;
+  width: 7px;
+  height: 5px;
+  border: 2px solid currentColor;
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+}
+
+.hdr-cart__icon::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 1px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 9px 0 0 currentColor;
+}
+
+/* --- 角標 --- */
+.hdr-cart__count {
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--void);
+  background: var(--cyan);
+  border-radius: var(--r-pill);
+}
+
+.hdr-cart__count[hidden] { display: none; }
+
+/* 登入按鈕是 .btn（display:inline-flex），
+   需顯式覆蓋 [hidden] 的 UA 樣式，否則登入後仍會顯示 */
+.hdr-actions [hidden] { display: none; }
+
+/* --- 會員身分 --- */
+.hdr-user {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.hdr-user[hidden] { display: none; }
+
+.hdr-user__name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--cyan);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hdr-user__out {
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: var(--fs-tiny);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--silver);
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: var(--r-btn);
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.hdr-user__out:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: rgba(0, 212, 184, 0.1);
+}
+
+/* --- 響應式：不得讓 header 換行或溢出 --- */
+@media (max-width: 960px) {
+  .hdr-actions { margin-left: var(--s4); }
+}
+
+@media (max-width: 560px) {
+  .hdr-actions { gap: var(--s2); }
+  .hdr-user__name { display: none; }
+  .hdr-user__out { padding: 5px 9px; }
+  .hdr-cart { width: 30px; height: 30px; }
+}

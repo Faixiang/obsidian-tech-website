@@ -1,7 +1,7 @@
 /* ==========================================================================
-   曜石智能科技 · 购物车与订单模拟
-   职责：加入购物车、数量增减、金额合计、结算、订单写入
-   说明：课程要求「无真实购买」，此处仅在浏览器内模拟交易流程。
+   曜石智能科技 · 购物车与訂單模擬
+   职责：加入购物车、數量增减、金额合计、结算、訂單寫入
+   說明：课程要求「无真實购买」，此处仅在瀏覽器内模擬交易流程。
    ========================================================================== */
 
 (function (OBSIDIAN) {
@@ -122,7 +122,7 @@
     return subtotal() + shipping();
   }
 
-  /* ---------- 渲染购物车页 ---------- */
+  /* ---------- 渲染购物车頁 ---------- */
   function render() {
     var list = cart();
 
@@ -167,13 +167,13 @@
           '<div class="qty">' +
           '<button type="button" class="qty__btn" data-dec="' +
           OBSIDIAN.esc(i.code) +
-          '" aria-label="减少数量">&minus;</button>' +
+          '" aria-label="减少數量">&minus;</button>' +
           '<span class="qty__num">' +
           i.qty +
           '</span>' +
           '<button type="button" class="qty__btn" data-inc="' +
           OBSIDIAN.esc(i.code) +
-          '" aria-label="增加数量">+</button>' +
+          '" aria-label="增加數量">+</button>' +
           '</div></td>' +
           '<td class="mono">' +
           OBSIDIAN.money(i.price * i.qty) +
@@ -261,7 +261,7 @@
     location.href = 'order-confirm.html';
   });
 
-  /* ---------- 购买按钮（详情页跳转） ---------- */
+  /* ---------- 购买按钮（详情頁跳轉） ---------- */
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-buy]');
     if (!btn) return;

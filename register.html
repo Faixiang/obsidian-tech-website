@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>會員註冊 | 曜石智能科技</title>
-<meta name="description" content="註冊曜石智能科技會員，查看设备檔案与保修状态。">
+<meta name="description" content="註冊曜石智能科技會員，查看設備檔案与保修狀態。">
 <link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,7 +44,19 @@
         <li><a class="nav__link" href="contact.html">聯繫</a></li>
       </ul>
     </nav>
-    <a class="btn btn--secondary" href="login.html">登入</a>
+<div class="hdr-actions">
+      <a class="hdr-cart" href="cart.html" aria-label="採購單">
+        <span class="hdr-cart__icon" aria-hidden="true"></span>
+        <span class="hdr-cart__count" data-cart-count hidden>0</span>
+      </a>
+
+      <a class="btn btn--secondary" href="login.html" data-guest-box>登入</a>
+
+      <div class="hdr-user" data-session-box hidden>
+        <span class="hdr-user__name" data-session-name></span>
+        <button class="hdr-user__out" type="button" data-logout>登出</button>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -74,20 +86,20 @@
               </div>
 
               <div class="field">
-                <label class="field__label" for="email">电邮地址 <span class="req">*</span></label>
+                <label class="field__label" for="email">電郵地址 <span class="req">*</span></label>
                 <input class="input" type="email" id="email" name="email" data-rule="required|email" placeholder="name@example.com" autocomplete="email">
                 <span class="field__error caption"></span>
               </div>
 
               <div class="field">
-                <label class="field__label" for="phone">手机号码 <span class="req">*</span></label>
+                <label class="field__label" for="phone">手機号码 <span class="req">*</span></label>
                 <input class="input" type="tel" id="phone" name="phone" data-rule="required|phone" placeholder="8 位數字" autocomplete="tel-national">
                 <span class="field__hint caption">香港号码，例：12345678</span>
                 <span class="field__error caption"></span>
               </div>
 
               <div class="field">
-                <label class="field__label" for="custType">客戶类型 <span class="req">*</span></label>
+                <label class="field__label" for="custType">客戶類型 <span class="req">*</span></label>
                 <select class="select" id="custType" name="custType" data-rule="required">
                   <option value="">請选择</option>
                   <option value="個人客戶">個人客戶</option>
@@ -100,7 +112,7 @@
               <div class="field">
                 <label class="field__label" for="pwd">设定密碼 <span class="req">*</span></label>
                 <input class="input" type="password" id="pwd" name="pwd" data-rule="required|minLen:8" placeholder="至少 8 個字符" autocomplete="new-password">
-                <span class="field__hint caption">真實產品中密碼须加盐哈希儲存，不可明文保存。</span>
+                <span class="field__hint caption">真實產品中密碼须加鹽雜湊儲存，不可明文保存。</span>
                 <span class="field__error caption"></span>
               </div>
 
@@ -122,7 +134,7 @@
 
               <p class="form-note">
                 示範說明：本頁面為課程作業的靜態原型，提交後資料僅存入瀏覽器
-                localStorage，不會上傳至任何服務器，亦不會真實创建帳號。
+                localStorage，不會上傳至任何服務器，亦不會真實創建帳號。
               </p>
             </form>
           </div>
@@ -133,14 +145,14 @@
           <ul class="flow">
             <li class="notice notice--info">
               <span>
-                <strong>设备檔案</strong><br>
+                <strong>設備檔案</strong><br>
                 按序列号登记你购买的 S1 / G2 / E3，查看保修剩余期限。
               </span>
             </li>
             <li class="notice notice--info">
               <span>
                 <strong>訂單記錄</strong><br>
-                历史訂單与发票状态集中查阅，支持重新下載报价单。
+                历史訂單与发票狀態集中查阅，支持重新下載报价单。
               </span>
             </li>
             <li class="notice notice--info">
@@ -235,7 +247,7 @@
     if (OBSIDIAN.findMember(d.email)) {
       var emailBox = document.getElementById('email').closest('.field');
       emailBox.classList.add('is-error');
-      emailBox.querySelector('.field__error').textContent = '該电邮已註冊，請直接登入';
+      emailBox.querySelector('.field__error').textContent = '該電郵已註冊，請直接登入';
       document.getElementById('email').focus();
       return;
     }

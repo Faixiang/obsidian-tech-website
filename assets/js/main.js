@@ -1,11 +1,11 @@
 /* ==========================================================================
    曜石智能科技 · 全站通用脚本
    --------------------------------------------------------------------------
-   质感参数依据：康陶集团官网_视觉与交互复刻设计参数报告.md §5
-     - 粒子：N=70，速度 (Math.random()-0.5)*0.25，5 色池，rAF驱动
+   质感参數依據：康陶集团官網_视觉与交互复刻设计参數报告.md §5
+     - 粒子：N=70，速度 (Math.random()-0.5)*0.25，5 色池，rAF驱動
      - 过渡：统一 ease，卡片 0.4s
-     - 锚点：拦截 a[href^="#"] → scrollIntoView({behavior:'smooth'})
-     - 时钟：日期固定 + 实时时分，每分钟刷新
+     - 锚點：拦截 a[href^="#"] → scrollIntoView({behavior:'smooth'})
+     - 時钟：日期固定 + 實時時分，每分钟刷新
    ========================================================================== */
 
 (function () {
@@ -16,20 +16,20 @@
   /* ======================================================================
      粒子背景（报告 §4/§5）
      ----------------------------------------------------------------------
-     注：此为康陶复刻版粒子层（70 颗 + 连线）。
-     全站主菜单视觉层上线后，由 obsidianBg() 统一接管背景，
-     本层仅在 body 无 .obsidian-bg 时启用，避免双层叠加与 rAF 超预算。
+     注：此為康陶复刻版粒子層（70 颗 + 连線）。
+     全站主菜单视觉層上線後，由 obsidianBg() 统一接管背景，
+     本層仅在 body 无 .obsidian-bg 時启用，避免双層叠加与 rAF 超预算。
      ====================================================================== */
   (function particles() {
     var canvas = document.getElementById('particles');
     if (!canvas || reduceMotion) return;
-    /* 新背景层已注入则跳过，避免两个粒子系统同时运行 */
+    /* 新背景層已注入则跳过，避免两個粒子系統同時运行 */
     if (document.querySelector('.obsidian-bg')) return;
 
     var ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    /* 报告 §5：颜色池 5 色 */
+    /* 报告 §5：顏色池 5 色 */
     var COLORS = [
       [0, 212, 184],   /* 青 */
       [0, 160, 200],   /* 深青 */
@@ -71,7 +71,7 @@
         p.x += p.vx;
         p.y += p.vy;
 
-        /* 边界回弹 */
+        /* 邊界回弹 */
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
@@ -80,7 +80,7 @@
         ctx.fillStyle = 'rgba(' + p.c[0] + ',' + p.c[1] + ',' + p.c[2] + ',0.7)';
         ctx.fill();
 
-        /* 近距离连线 */
+        /* 近距离连線 */
         for (var j = i + 1; j < pts.length; j++) {
           var q = pts[j];
           var dx = p.x - q.x;
@@ -112,7 +112,7 @@
   })();
 
   /* ======================================================================
-     移动端导航（双固定条 → 展开占位 nav-total）
+     移動端导航（双固定条 → 展開占位 nav-total）
      ====================================================================== */
   var toggle = document.querySelector('.nav__toggle');
   var nav = document.getElementById('site-nav');
@@ -151,7 +151,7 @@
   }
 
   /* ======================================================================
-     当前页导航高亮
+     当前頁导航高亮
      ====================================================================== */
   var here = location.pathname.split('/').pop() || 'index.html';
 
@@ -164,7 +164,7 @@
   });
 
   /* ======================================================================
-     锚点平滑滚动（报告 §5：拦截默认行为 → scrollIntoView）
+     锚點平滑滚動（报告 §5：拦截預設行為 → scrollIntoView）
      ====================================================================== */
   document.addEventListener('click', function (e) {
     var link = e.target.closest('a[href^="#"]');
@@ -179,19 +179,19 @@
     e.preventDefault();
     target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
 
-    /* 同步 hash 但不跳动 */
+    /* 同步 hash 但不跳動 */
     if (history.replaceState) history.replaceState(null, '', id);
   });
 
   /* ======================================================================
      跑马灯速度反算（报告 §5 / 计划书 §9.5）
      ----------------------------------------------------------------------
-     轨道已由 CSS 固定为 flex:0 0 auto + width:max-content，宽度不再随
-     视口伸缩，故「duration = 一份内容宽 ÷ 目标速度」与视口无关。
-     内容复制两份（副本 aria-hidden="true"），逐帧位移量恒为一份内容宽
-     （--mq-shift 由 JS 反算为负百分比，向左位移），循环回溯无跳变；
-     「轨道宽 − 一份内容宽」小于容器可见宽时自动补足副本（保持偶数份）。
-     目标速度唯一来源：CSS 变量 --mq-speed-*（12 / 8 / 40 px/s）。
+     轨道已由 CSS 固定為 flex:0 0 auto + width:max-content，寬度不再随
+     视口伸缩，故「duration = 一份内容宽 ÷ 目標速度」与视口无關。
+     内容复制两份（副本 aria-hidden="true"），逐帧位移量恒為一份内容宽
+     （--mq-shift 由 JS 反算為负百分比，向左位移），循环回溯无跳變；
+     「轨道宽 − 一份内容宽」小于容器可见宽時自動补足副本（保持偶數份）。
+     目標速度唯一来源：CSS 變量 --mq-speed-*（12 / 8 / 40 px/s）。
      ====================================================================== */
   var OBSIDIAN_MARQUEE = (function marquee() {
     var ctx = document.documentElement;
@@ -199,7 +199,7 @@
     var rafId = 0;
     var booted = false;
 
-    /* 三条轨道：选择器 + duration 变量名 + 目标速度变量名 */
+    /* 三条轨道：选择器 + duration 變量名 + 目標速度變量名 */
     var SPECS = [
       {
         sels: ['[data-nb-ticker]', '.nb-ticker-track'],
@@ -239,7 +239,7 @@
       return v > 0 ? v : spec.speedFallback;
     }
 
-    /* 建结构：原内容包进 .mq-frame → 再复制一份 aria-hidden 的副本 */
+    /* 建结構：原内容包进 .mq-frame → 再复制一份 aria-hidden 的副本 */
     function build(el, spec) {
       if (!el || el.dataset.mqReady === '1') return null;
 
@@ -249,10 +249,10 @@
       var cs = window.getComputedStyle(el);
       var gapPx = parseFloat(cs.columnGap) || 0;
 
-      /* ① 轨道不被拉伸/压缩，只按内容自然宽排版；间距改为逐项 margin
-            （含每份末尾那一项），使复制后的接缝间距与其他间距一致；
+      /* ① 轨道不被拉伸/压缩，只按内容自然宽排版；間距改為逐项 margin
+            （含每份末尾那一项），使复制後的接缝間距与其他間距一致；
             首缩进保留在轨道自身 padding-left，不进入「一份内容宽」丈量，
-            避免接缝处出现双倍间距 */
+            避免接缝处出現双倍間距 */
       el.style.flex = '0 0 auto';
       el.style.width = 'max-content';
       el.style.gap = '0px';
@@ -288,7 +288,7 @@
       return item;
     }
 
-    /* 丈量：临时把容器压到 1px，分别读「一份内容宽」与轨道实际宽 */
+    /* 丈量：临時把容器压到 1px，分别读「一份内容宽」与轨道實際宽 */
     function measure(item) {
       var el = item.el;
       var host = el.parentNode;
@@ -307,9 +307,9 @@
       return { one: one, track: track };
     }
 
-    /* ③ 位移量恒为一份内容宽，故无缝条件是
-          「轨道宽 − 一份内容宽 ≥ 容器可见宽」；不满足时补足副本
-          （每次补 2 份，保持偶数份），避免循环末段右侧露白 */
+    /* ③ 位移量恒為一份内容宽，故无缝条件是
+          「轨道宽 − 一份内容宽 ≥ 容器可见宽」；不满足時补足副本
+          （每次补 2 份，保持偶數份），避免循环末段右侧露白 */
     function padUp(item, m) {
       var visible = item.el.parentNode.clientWidth || 0;
       var padded = false;
@@ -328,7 +328,7 @@
       return padded;
     }
 
-    /* ④ 重置动画：flash 一次使新的 duration 立即生效，位移基准归零 */
+    /* ④ 重置動画：flash 一次使新的 duration 立即生效，位移基准归零 */
     function restart(item) {
       var el = item.el;
       el.style.animation = 'none';
@@ -343,14 +343,14 @@
       var changed = padded || !item.lastDuration ||
         Math.abs(item.lastDuration - duration) > 0.01;
 
-      /* duration = 一份内容宽 ÷ 目标速度（秒），实测速度严格等于目标值；
+      /* duration = 一份内容宽 ÷ 目標速度（秒），實测速度严格等于目標值；
          --mq-shift = 负的「一份内容宽」像素值（向左位移）—— 逐帧位移恒等
-         于一份内容宽，与轨道 padding-left / 副本份数 / 视口宽度均无关，
-         故循环闭合处零跳变。
+         于一份内容宽，与轨道 padding-left / 副本份數 / 视口寬度均无關，
+         故循环闭合处零跳變。
 
-         v1.3 修正：旧实现写 `-(one / track * 100)%`，而 translateX(%) 的
-         基准是元素自身 border-box（轨道 padding-left:24px 被计入被除数），
-         实际循环位移 = 一份宽 + 约 6px，导致 nb（78s）/ hero（29.35s）
+         v1.3 修正：旧實現写 `-(one / track * 100)%`，而 translateX(%) 的
+         基准是元素自身 border-box（轨道 padding-left:24px 被计入被除數），
+         實際循环位移 = 一份宽 + 约 6px，导致 nb（78s）/ hero（29.35s）
          每周期在闭合处瞬跳约 6px、速度同源偏高 0.5%~0.95%。 */
       ctx.style.setProperty(item.varName, duration.toFixed(2) + 's');
       item.el.style.setProperty('--mq-shift', (-m.one).toFixed(2) + 'px');
@@ -392,7 +392,7 @@
       runAll();
     }
 
-    /* 内容被动态改写后：重建结构 → 重算 duration → 重置动画 */
+    /* 内容被動態改写後：重建结構 → 重算 duration → 重置動画 */
     function refresh(el, html) {
       if (!el) return;
 
@@ -405,7 +405,7 @@
 
       if (typeof html === 'string') el.innerHTML = html;
 
-      /* 内联样式还原，避免与重新包装后的取值叠加 */
+      /* 内聯样式還原，避免与重新包装後的取值叠加 */
       el.style.flex = '0 0 auto';
       el.style.width = 'max-content';
       el.style.gap = '';
@@ -431,7 +431,7 @@
       else window.addEventListener('load', fn);
     }
 
-    /* 时机：load 之后 + 字体就绪之后各算一次，读数最准 */
+    /* 時機：load 之後 + 字体就绪之後各算一次，读數最准 */
     onLoad(function () {
       boot();
       if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
@@ -455,13 +455,13 @@
   window.OBSIDIAN_MARQUEE = OBSIDIAN_MARQUEE;
 
   /* ======================================================================
-     全息展台扫描线行程（v1.3）
+     全息展台掃描線行程（v1.3）
      ----------------------------------------------------------------------
-     扫描线绝对定位于 .holo-showcase（该元素无 overflow:hidden，位移需
-     限制在面板高度内），故其扫描行程必须等于面板实际高度。这里把高度
-     写入 --holo-scan-travel，使 holo-scan 真正从上扫到下，而不是只摆动
-     8px。周期与 holo-float 统一为 8s、同相位起止，消除 3s/8s 异周期
-     持续错位带来的"抖动/呼吸不均"观感。
+     掃描線绝对定位于 .holo-showcase（该元素无 overflow:hidden，位移需
+     限制在面板高度内），故其掃描行程必須等于面板實際高度。這里把高度
+     寫入 --holo-scan-travel，使 holo-scan 真正從上扫到下，而不是只摆動
+     8px。周期与 holo-float 统一為 8s、同相位起止，消除 3s/8s 异周期
+     持續错位带来的"抖動/呼吸不均"观感。
      ====================================================================== */
   (function holoScan() {
     var showcase = document.querySelector('.holo-showcase');
@@ -485,7 +485,7 @@
   })();
 
   /* ======================================================================
-     新闻演播室：频道切换 + 实时时钟
+     新闻演播室：频道切換 + 實時時钟
      ====================================================================== */
   (function newsDesk() {
     var wrap = document.querySelector('[data-nb-channels]');
@@ -510,7 +510,7 @@
         if (leadTitle) leadTitle.textContent = payload.lead.title;
         if (leadDesc) leadDesc.textContent = payload.lead.desc;
         if (ticker) {
-          /* 内容改写后重算 duration 并重置动画（计划书 §9.5.2） */
+          /* 内容改写後重算 duration 并重置動画（计划书 §9.5.2） */
           if (OBSIDIAN_MARQUEE && OBSIDIAN_MARQUEE.refresh) {
             OBSIDIAN_MARQUEE.refresh(ticker, payload.ticker);
           } else {
@@ -529,7 +529,7 @@
       });
     });
 
-    /* 时钟：日期固定 + 实时时分，每分钟刷新（报告 §2/§5） */
+    /* 時钟：日期固定 + 實時時分，每分钟刷新（报告 §2/§5） */
     var clock = document.querySelector('[data-nb-ts]');
     if (!clock) return;
 
@@ -547,7 +547,7 @@
   })();
 
   /* ======================================================================
-     通用 Tab 切换（联系我们）
+     通用 Tab 切換（聯系我們）
      ====================================================================== */
   document.querySelectorAll('[data-tabs]').forEach(function (group) {
     var btns = group.querySelectorAll('[data-tab]');
@@ -571,7 +571,7 @@
   });
 
   /* ======================================================================
-     进场动画（报告 §5：fadeUp，逐个延迟）
+     进场動画（报告 §5：fadeUp，逐個延迟）
      ====================================================================== */
   (function reveal() {
     var items = document.querySelectorAll('[data-reveal]');
@@ -623,7 +623,7 @@
   });
 
   /* ======================================================================
-     页脚年份
+     頁脚年份
      ====================================================================== */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());
@@ -918,4 +918,114 @@
 
   render();
   start();
+})();
+
+/* ==========================================================================
+   導航功能區（T-02）
+   --------------------------------------------------------------------------
+   購物車入口（角標件數）與登入身分（會員名 / 登出）
+   直接讀寫 localStorage，不依賴 cart.js / auth.js，
+   故無需在 16 頁新增 <script> 標籤。
+   儲存格式：
+     obsidian.cart    → 陣列，每項含 { code, qty, ... }
+     obsidian.session → 物件 { role, name, at }，未登入時不存在
+   ========================================================================== */
+
+(function headerActions() {
+  'use strict';
+
+  var KEY_CART = 'obsidian.cart';
+  var KEY_SESSION = 'obsidian.session';
+
+  /* 安全解析：資料損壞時視為空，不讓整頁腳本中斷 */
+  function readJSON(key, fallback) {
+    try {
+      var raw = window.localStorage.getItem(key);
+      if (!raw) return fallback;
+      var val = JSON.parse(raw);
+      return val === null || val === undefined ? fallback : val;
+    } catch (err) {
+      return fallback;
+    }
+  }
+
+  /* --- 購物車角標 --- */
+  function renderCart() {
+    var items = readJSON(KEY_CART, []);
+    var qty = 0;
+
+    if (Object.prototype.toString.call(items) === '[object Array]') {
+      for (var i = 0; i < items.length; i++) {
+        var n = parseInt(items[i] && items[i].qty, 10);
+        if (!isNaN(n) && n > 0) qty += n;
+      }
+    }
+
+    var badges = document.querySelectorAll('[data-cart-count]');
+    for (var j = 0; j < badges.length; j++) {
+      var el = badges[j];
+      if (qty > 0) {
+        el.textContent = String(qty);
+        el.removeAttribute('hidden');
+      } else {
+        el.textContent = '0';
+        el.setAttribute('hidden', '');
+      }
+    }
+  }
+
+  /* --- 登入身分 --- */
+  function renderIdentity() {
+    var s = readJSON(KEY_SESSION, null);
+    var logged = !!(s && s.name);
+
+    var guestBoxes = document.querySelectorAll('[data-guest-box]');
+    for (var i = 0; i < guestBoxes.length; i++) {
+      if (logged) {
+        guestBoxes[i].setAttribute('hidden', '');
+      } else {
+        guestBoxes[i].removeAttribute('hidden');
+      }
+    }
+
+    var sessionBoxes = document.querySelectorAll('[data-session-box]');
+    for (var j = 0; j < sessionBoxes.length; j++) {
+      if (logged) {
+        sessionBoxes[j].removeAttribute('hidden');
+      } else {
+        sessionBoxes[j].setAttribute('hidden', '');
+      }
+    }
+
+    var names = document.querySelectorAll('[data-session-name]');
+    for (var k = 0; k < names.length; k++) {
+      names[k].textContent = logged ? s.name : '';
+    }
+  }
+
+  function renderAll() {
+    renderCart();
+    renderIdentity();
+  }
+
+  /* --- 跨頁籤同步 --- */
+  window.addEventListener('storage', function (e) {
+    if (!e.key) return;
+    if (e.key === KEY_CART || e.key === KEY_SESSION) renderAll();
+  });
+
+  /* --- 登出 --- */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-logout]');
+    if (!btn) return;
+
+    try {
+      window.localStorage.removeItem(KEY_SESSION);
+    } catch (err) {
+      /* 儲存不可用時仍以重新整理回到未登入狀態 */
+    }
+    location.reload();
+  });
+
+  renderAll();
 })();

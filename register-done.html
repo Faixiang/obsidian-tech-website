@@ -44,7 +44,19 @@
         <li><a class="nav__link" href="contact.html">聯繫</a></li>
       </ul>
     </nav>
-    <a class="btn btn--secondary" href="login.html">登入</a>
+<div class="hdr-actions">
+      <a class="hdr-cart" href="cart.html" aria-label="採購單">
+        <span class="hdr-cart__icon" aria-hidden="true"></span>
+        <span class="hdr-cart__count" data-cart-count hidden>0</span>
+      </a>
+
+      <a class="btn btn--secondary" href="login.html" data-guest-box>登入</a>
+
+      <div class="hdr-user" data-session-box hidden>
+        <span class="hdr-user__name" data-session-name></span>
+        <button class="hdr-user__out" type="button" data-logout>登出</button>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -72,8 +84,8 @@
             </div>
             <div class="notice notice--warn mt-6">
               <span>
-                <strong>密碼不會在此显示。</strong><br>
-                真實系統中密碼必須經加鹽哈希後儲存，服務器与頁面均無法还原原文。
+                <strong>密碼不會在此顯示。</strong><br>
+                真實系統中密碼必須經加鹽雜湊後儲存，服務器与頁面均無法還原原文。
               </span>
             </div>
           </div>
@@ -174,9 +186,9 @@
 
   var rows = [
     ['姓名', data.name],
-    ['电邮地址', data.email],
-    ['手机号码', data.phone],
-    ['客戶类型', data.custType],
+    ['電郵地址', data.email],
+    ['手機号码', data.phone],
+    ['客戶類型', data.custType],
     ['註冊時間', OBSIDIAN.formatDate(data.registeredAt)],
     ['會員编号', 'MB-' + String(data.email).length + String(Date.now()).slice(-5)]
   ];
