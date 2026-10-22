@@ -5,6 +5,7 @@ build/
 
 # AI 助手本地記憶（不進倉庫）
 .workbuddy/
+.workbuddy-ai/
 
 # 系统与编辑器
 .DS_Store
