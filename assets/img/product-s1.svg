@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="环境传感终端 S1 产品图">
-  <title>环境传感终端 S1</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="環境感測終端 S1 产品图">
+  <title>環境感測終端 S1</title>
   <defs>
     <linearGradient id="bgS1" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#1C2530"/>
@@ -28,6 +28,6 @@
     <circle cx="0" cy="94" r="6" fill="#2ECC8F"/>
     <text x="0" y="152" text-anchor="middle" font-family="Consolas, monospace" font-size="15" letter-spacing="3" fill="#8A94A6">S1</text>
   </g>
-  <text x="48" y="424" font-family="Noto Sans SC, sans-serif" font-size="24" font-weight="600" fill="#F5F7FA">环境传感终端 S1</text>
-  <text x="48" y="450" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8A94A6">温湿度 / CO₂ / PM2.5 四合一</text>
+  <text x="48" y="424" font-family="Noto Sans SC, sans-serif" font-size="24" font-weight="600" fill="#F5F7FA">環境感測終端 S1</text>
+  <text x="48" y="450" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8A94A6">溫濕度 / CO₂ / PM2.5 四合一</text>
 </svg>

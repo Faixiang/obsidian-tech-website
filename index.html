@@ -101,7 +101,30 @@
       </nav>
 
       <div class="mn-hero__visual">
-        <img src="assets/img/network.svg" alt="曜石網關G2 連接四台終端的設備拓撲示意圖" width="800" height="600">
+        <div class="slider" data-slider>
+          <div class="slider__viewport">
+            <div class="slider__track" data-slider-track>
+              <figure class="slider__slide">
+                <img src="assets/img/product-s1.svg" alt="環境感測終端 S1" width="640" height="480">
+              </figure>
+              <figure class="slider__slide">
+                <img src="assets/img/product-g2.svg" alt="智能網關 G2" width="640" height="480">
+              </figure>
+              <figure class="slider__slide">
+                <img src="assets/img/product-e3.svg" alt="能耗管理套件 E3" width="640" height="480">
+              </figure>
+            </div>
+          </div>
+
+          <button class="slider__nav slider__nav--prev" type="button" aria-label="上一張" data-slider-prev></button>
+          <button class="slider__nav slider__nav--next" type="button" aria-label="下一張" data-slider-next></button>
+
+          <div class="slider__dots" role="tablist" aria-label="輪播切換" data-slider-dots>
+            <button class="slider__dot is-active" type="button" role="tab" aria-selected="true" aria-label="第 1 張"></button>
+            <button class="slider__dot" type="button" role="tab" aria-selected="false" aria-label="第 2 張"></button>
+            <button class="slider__dot" type="button" role="tab" aria-selected="false" aria-label="第 3 張"></button>
+          </div>
+        </div>
       </div>
 
     </div>

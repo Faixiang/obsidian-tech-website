@@ -3015,3 +3015,301 @@ body.nav-locked { overflow: hidden; }
   pointer-events: none;
   z-index: 1;
 }
+
+/* ==========================================================================
+   T-01 新增組件：Accordion / Hero Slider / Card Image Hover
+   2026-10-23 · 決策層規格 docs/提示詞_T01_三項JS組件.md
+   僅使用既有 :root 變數，無硬編碼色值
+   ========================================================================== */
+
+/* --- 1. Accordion（support.html 常見問題） --------------------------------- */
+.acc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.acc__item {
+  background: var(--void3);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.acc__item:hover,
+.acc__item.is-open {
+  border-color: var(--cyan);
+}
+
+.acc__h {
+  margin: 0;
+}
+
+.acc__trigger {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s4);
+  width: 100%;
+  padding: var(--s4) var(--s6);
+  background: transparent;
+  border: 0;
+  color: var(--white);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.acc__trigger:hover {
+  background: rgba(0, 212, 184, 0.04);
+}
+
+.acc__trigger:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: -2px;
+}
+
+.acc__no {
+  flex: 0 0 auto;
+  padding-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cyan);
+}
+
+.acc__title {
+  flex: 1 1 auto;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.acc__icon {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  margin-top: 10px;
+  border-right: 2px solid var(--cyan);
+  border-bottom: 2px solid var(--cyan);
+  transform: rotate(45deg);
+  transition: transform 0.3s ease;
+}
+
+.acc__item.is-open .acc__icon {
+  transform: rotate(225deg);
+}
+
+.acc__panel {
+  padding: 0 var(--s6) var(--s6);
+}
+
+.acc__panel[hidden] {
+  display: none;
+}
+
+.acc__text {
+  color: var(--silver);
+  line-height: 1.9;
+  margin-bottom: var(--s3);
+}
+
+.acc__panel .caption {
+  font-size: 12px;
+  color: var(--on-void-steel);
+}
+
+/* --- 2. Hero Slider（index.html 首屏右側） ---------------------------------- */
+.slider {
+  position: relative;
+}
+
+.slider__viewport {
+  overflow: hidden;
+  border-radius: var(--r-card);
+}
+
+.slider__track {
+  display: flex;
+  transition: transform 0.6s ease;
+  will-change: transform;
+}
+
+.slider__slide {
+  flex: 0 0 100%;
+  margin: 0;
+  position: relative;
+}
+
+.slider__slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-card);
+}
+
+.slider__cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--s3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  background: linear-gradient(0deg, rgba(2, 2, 10, 0.88), transparent);
+}
+
+.slider__nav {
+  position: absolute;
+  top: 50%;
+  margin-top: -16px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border2);
+  border-radius: 50%;
+  background: rgba(2, 2, 10, 0.72);
+  color: var(--cyan);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, border-color 0.3s ease;
+}
+
+.slider:hover .slider__nav,
+.slider__nav:focus-visible {
+  opacity: 1;
+}
+
+.slider__nav:hover,
+.slider__nav:focus-visible {
+  border-color: var(--cyan);
+}
+
+.slider__nav--prev {
+  left: var(--s2);
+}
+
+.slider__nav--next {
+  right: var(--s2);
+}
+
+.slider__nav::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translate(-40%, -50%) rotate(45deg);
+}
+
+.slider__nav--next::before {
+  transform: translate(-60%, -50%) rotate(-135deg);
+}
+
+.slider__dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--s2);
+  margin-top: var(--s3);
+}
+
+.slider__dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 1px solid var(--silver-dim);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.slider__dot.is-active {
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+
+/* --- 3. Card Image Hover（products.html 產品卡） ---------------------------- */
+.card__media {
+  position: relative;
+}
+
+.card__media img {
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.card:hover .card__media img,
+.card__media:hover img {
+  transform: scale(1.06);
+  filter: brightness(1.08);
+}
+
+.card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-radius: var(--r-card);
+  pointer-events: none;
+  transition: border-color 0.4s ease;
+}
+
+.card:hover .card__media::after,
+.card__media:hover::after {
+  border-color: var(--cyan);
+}
+
+/* --- 4. 首屏輪播佈局適配（品牌與輪播同欄堆疊，主菜單跨兩列） ------------------ */
+.mn-hero__inner {
+  grid-template-rows: auto auto;
+  align-items: start;
+}
+
+.mn-brand {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.mn-hero__visual {
+  grid-column: 1;
+  grid-row: 2;
+  max-width: 480px;
+  margin-inline: 0;
+}
+
+.mn-nav {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+@media (max-width: 1200px) {
+  .mn-hero__visual { max-width: 380px; }
+}
+
+/* --- 5. 減弱動效：三項組件全部靜止 ------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .acc__item,
+  .acc__trigger,
+  .acc__icon,
+  .slider__track,
+  .slider__nav,
+  .slider__dot,
+  .card__media img,
+  .card__media::after {
+    transition: none !important;
+  }
+
+  .card:hover .card__media img,
+  .card__media:hover img {
+    transform: none;
+  }
+}

@@ -70,78 +70,108 @@
         <p class="section-head__sub">依反饋頻率排序，最常見的六項。</p>
       </div>
 
-      <div class="grid grid--2">
-        <article class="card" data-reveal>
-          <div class="card__body">
-            <span class="card__no">Q1</span>
-            <h3 class="card__title">S1 離線，但面板仍顯示上次讀數</h3>
-            <p class="card__text">
+      <div class="acc" data-accordion>
+        <div class="acc__item">
+          <h3 class="acc__h">
+            <button class="acc__trigger" type="button" id="acc-btn-1" aria-expanded="false" aria-controls="acc-panel-1">
+              <span class="acc__no">Q1</span>
+              <span class="acc__title">S1 離線，但面板仍顯示上次讀數</span>
+              <span class="acc__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="acc__panel" id="acc-panel-1" role="region" aria-labelledby="acc-btn-1" hidden>
+            <p class="acc__text">
               設備停止上報但本地仍有舊值，通常是網絡中斷而非設備故障。
               檢查現場 Wi-Fi 信號強度與網關在線狀態。
             </p>
-            <p class="caption mt-3">更新於 2026-08-14</p>
+            <p class="caption">更新於 2026-08-14</p>
           </div>
-        </article>
+        </div>
 
-        <article class="card" data-reveal>
-          <div class="card__body">
-            <span class="card__no">Q2</span>
-            <h3 class="card__title">G2 緩存中的數據會不會重複上傳</h3>
-            <p class="card__text">
+        <div class="acc__item">
+          <h3 class="acc__h">
+            <button class="acc__trigger" type="button" id="acc-btn-2" aria-expanded="false" aria-controls="acc-panel-2">
+              <span class="acc__no">Q2</span>
+              <span class="acc__title">G2 緩存中的數據會不會重複上傳</span>
+              <span class="acc__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="acc__panel" id="acc-panel-2" role="region" aria-labelledby="acc-btn-2" hidden>
+            <p class="acc__text">
               不會。每筆記錄帶設備編號與時間戳，補傳時按此兩者去重，
               同一讀數只會入庫一次。
             </p>
-            <p class="caption mt-3">更新於 2026-07-22</p>
+            <p class="caption">更新於 2026-07-22</p>
           </div>
-        </article>
+        </div>
 
-        <article class="card" data-reveal>
-          <div class="card__body">
-            <span class="card__no">Q3</span>
-            <h3 class="card__title">E3 分時計價與電錶顯示不一致</h3>
-            <p class="card__text">
+        <div class="acc__item">
+          <h3 class="acc__h">
+            <button class="acc__trigger" type="button" id="acc-btn-3" aria-expanded="false" aria-controls="acc-panel-3">
+              <span class="acc__no">Q3</span>
+              <span class="acc__title">E3 分時計價與電錶顯示不一致</span>
+              <span class="acc__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="acc__panel" id="acc-panel-3" role="region" aria-labelledby="acc-btn-3" hidden>
+            <p class="acc__text">
               確認時區設定。E3 按本地時區劃分時段，
               若系統時區與實際不符，切換時段邊界會偏移。
             </p>
-            <p class="caption mt-3">更新於 2026-06-18</p>
+            <p class="caption">更新於 2026-06-18</p>
           </div>
-        </article>
+        </div>
 
-        <article class="card" data-reveal>
-          <div class="card__body">
-            <span class="card__no">Q4</span>
-            <h3 class="card__title">固件可否跳級升級</h3>
-            <p class="card__text">
+        <div class="acc__item">
+          <h3 class="acc__h">
+            <button class="acc__trigger" type="button" id="acc-btn-4" aria-expanded="false" aria-controls="acc-panel-4">
+              <span class="acc__no">Q4</span>
+              <span class="acc__title">固件可否跳級升級</span>
+              <span class="acc__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="acc__panel" id="acc-panel-4" role="region" aria-labelledby="acc-btn-4" hidden>
+            <p class="acc__text">
               可以。升級路徑不設中間版本約束，
               但跨越兩個大版本時建議先在測試環境驗證。
             </p>
-            <p class="caption mt-3">更新於 2026-09-02</p>
+            <p class="caption">更新於 2026-09-02</p>
           </div>
-        </article>
+        </div>
 
-        <article class="card" data-reveal>
-          <div class="card__body">
-            <span class="card__no">Q5</span>
-            <h3 class="card__title">雲端託管可隨時取消嗎</h3>
-            <p class="card__text">
+        <div class="acc__item">
+          <h3 class="acc__h">
+            <button class="acc__trigger" type="button" id="acc-btn-5" aria-expanded="false" aria-controls="acc-panel-5">
+              <span class="acc__no">Q5</span>
+              <span class="acc__title">雲端託管可隨時取消嗎</span>
+              <span class="acc__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="acc__panel" id="acc-panel-5" role="region" aria-labelledby="acc-btn-5" hidden>
+            <p class="acc__text">
               可以，按月計費，不綁定長約。取消後設備仍會本地記錄數據，
               但不再推送告警與郵件通知。
             </p>
-            <p class="caption mt-3">更新於 2026-05-30</p>
+            <p class="caption">更新於 2026-05-30</p>
           </div>
-        </article>
+        </div>
 
-        <article class="card" data-reveal>
-          <div class="card__body">
-            <span class="card__no">Q6</span>
-            <h3 class="card__title">人工校正 E3 計量偏差</h3>
-            <p class="card__text">
+        <div class="acc__item">
+          <h3 class="acc__h">
+            <button class="acc__trigger" type="button" id="acc-btn-6" aria-expanded="false" aria-controls="acc-panel-6">
+              <span class="acc__no">Q6</span>
+              <span class="acc__title">人工校正 E3 計量偏差</span>
+              <span class="acc__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="acc__panel" id="acc-panel-6" role="region" aria-labelledby="acc-btn-6" hidden>
+            <p class="acc__text">
               建議 12 個月校準一次。偏差超過 ±2% 時應校正，
               校正記錄會留存於系統，可導出對賬。
             </p>
-            <p class="caption mt-3">更新於 2026-09-11</p>
+            <p class="caption">更新於 2026-09-11</p>
           </div>
-        </article>
+        </div>
       </div>
     </div>
   </section>

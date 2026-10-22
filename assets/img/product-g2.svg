@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="智能网关 G2 产品图">
-  <title>智能网关 G2</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="智能網關 G2 产品图">
+  <title>智能網關 G2</title>
   <defs>
     <linearGradient id="bgG2" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#1C2530"/>
@@ -36,6 +36,6 @@
     </g>
     <text x="0" y="128" text-anchor="middle" font-family="Consolas, monospace" font-size="15" letter-spacing="3" fill="#8A94A6">G2</text>
   </g>
-  <text x="48" y="424" font-family="Noto Sans SC, sans-serif" font-size="24" font-weight="600" fill="#F5F7FA">智能网关 G2</text>
-  <text x="48" y="450" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8A94A6">8 设备并发 / 本地边缘存储</text>
+  <text x="48" y="424" font-family="Noto Sans SC, sans-serif" font-size="24" font-weight="600" fill="#F5F7FA">智能網關 G2</text>
+  <text x="48" y="450" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8A94A6">8 設備並發 / 本地邊緣存儲</text>
 </svg>

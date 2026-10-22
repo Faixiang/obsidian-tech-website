@@ -33,10 +33,10 @@
     <text x="590" y="438">S1</text>
   </g>
   <g font-family="Noto Sans SC, sans-serif" font-size="12" fill="#8A94A6" text-anchor="middle">
-    <text x="210" y="228">在线</text>
-    <text x="590" y="228">在线</text>
-    <text x="210" y="492">在线</text>
-    <text x="590" y="492">在线</text>
+    <text x="210" y="228">在線</text>
+    <text x="590" y="228">在線</text>
+    <text x="210" y="492">在線</text>
+    <text x="590" y="492">在線</text>
   </g>
-  <text x="400" y="566" text-anchor="middle" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8A94A6">设备连接拓扑 · 边缘网关本地存储</text>
+  <text x="400" y="566" text-anchor="middle" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8A94A6">設備連接拓撲 · 邊緣網關本地存儲</text>
 </svg>

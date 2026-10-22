@@ -794,3 +794,128 @@
     document.body.appendChild(el);
   }
 })();
+
+/* ==========================================================================
+   T-01 新增組件：Accordion / Hero Slider
+   2026-10-23 · 決策層規格 docs/提示詞_T01_三項JS組件.md
+   ========================================================================== */
+
+/* --- 1. Accordion（單開，aria-expanded / hidden 三態同步） ------------------ */
+(function accordion() {
+  'use strict';
+
+  var root = document.querySelector('[data-accordion]');
+  if (!root) return;
+
+  var items = Array.prototype.slice.call(root.querySelectorAll('.acc__item'));
+  if (!items.length) return;
+
+  function setOpen(item, open) {
+    var btn = item.querySelector('.acc__trigger');
+    var panel = item.querySelector('.acc__panel');
+    if (!btn || !panel) return;
+
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    item.classList.toggle('is-open', open);
+    if (open) {
+      panel.removeAttribute('hidden');
+    } else {
+      panel.setAttribute('hidden', '');
+    }
+  }
+
+  items.forEach(function (item) {
+    var btn = item.querySelector('.acc__trigger');
+    if (!btn) return;
+
+    btn.addEventListener('click', function () {
+      var willOpen = btn.getAttribute('aria-expanded') !== 'true';
+      items.forEach(function (other) { setOpen(other, false); });
+      if (willOpen) setOpen(item, true);
+    });
+  });
+
+  /* 預設全部收起 */
+  items.forEach(function (item) { setOpen(item, false); });
+})();
+
+/* --- 2. Hero Slider（三幀，4000ms，懸停/聚焦暫停，reduced-motion 靜止） ----- */
+(function heroSlider() {
+  'use strict';
+
+  var root = document.querySelector('[data-slider]');
+  if (!root) return;
+
+  var track = root.querySelector('[data-slider-track]');
+  if (!track) return;
+
+  var slides = track.children;
+  var count = slides.length;
+  if (count < 2) return;
+
+  var dots = Array.prototype.slice.call(root.querySelectorAll('.slider__dot'));
+  var prev = root.querySelector('[data-slider-prev]');
+  var next = root.querySelector('[data-slider-next]');
+  var reduce = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+
+  var INTERVAL = 4000;
+  var index = 0;
+  var timer = null;
+  var hovering = false;
+  var focusing = false;
+
+  function render() {
+    track.style.transform = 'translateX(' + (-index * 100) + '%)';
+    dots.forEach(function (dot, i) {
+      var on = i === index;
+      dot.classList.toggle('is-active', on);
+      dot.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+  }
+
+  function go(i) {
+    index = (i % count + count) % count;
+    render();
+  }
+
+  function stop() {
+    if (timer) {
+      window.clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  function start() {
+    stop();
+    if (reduce && reduce.matches) return;
+    /* 懸停或聚焦期間不得恢復自動播放 —— 手動切換後仍須保持暫停 */
+    if (hovering || focusing) return;
+    timer = window.setInterval(function () { go(index + 1); }, INTERVAL);
+  }
+
+  dots.forEach(function (dot, i) {
+    dot.addEventListener('click', function () { go(i); start(); });
+  });
+
+  if (prev) prev.addEventListener('click', function () { go(index - 1); start(); });
+  if (next) next.addEventListener('click', function () { go(index + 1); start(); });
+
+  root.addEventListener('mouseenter', function () { hovering = true; stop(); });
+  root.addEventListener('mouseleave', function () { hovering = false; start(); });
+
+  root.addEventListener('focusin', function () { focusing = true; stop(); });
+  root.addEventListener('focusout', function (e) {
+    if (e.relatedTarget && root.contains(e.relatedTarget)) return;
+    focusing = false;
+    start();
+  });
+
+  if (reduce && reduce.addEventListener) {
+    reduce.addEventListener('change', function () {
+      if (reduce.matches) { stop(); } else { start(); }
+    });
+  }
+
+  render();
+  start();
+})();
