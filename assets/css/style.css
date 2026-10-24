@@ -487,27 +487,19 @@ em, i, cite { font-style: normal; }
   letter-spacing: var(--track-nav);
   text-transform: uppercase;
   color: var(--silver-dim);
-  transition: color 0.3s ease;
+  background: linear-gradient(var(--cyan), var(--cyan));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: color 0.3s ease, background-size 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.nav__link:hover { color: var(--cyan); }
-
-.nav__link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -3px;
-  height: 1px;
-  background: var(--cyan);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
+.nav__link:hover,
+.nav__link:focus-visible,
+.nav__link.is-active {
+  color: var(--cyan);
+  background-size: 100% 1px;
 }
-
-.nav__link:hover::after,
-.nav__link.is-active::after { transform: scaleX(1); }
-.nav__link.is-active { color: var(--cyan); }
 
 .nav__toggle {
   display: none;
@@ -568,7 +560,13 @@ em, i, cite { font-style: normal; }
     border-bottom: 1px solid var(--border);
   }
 
-  .nav__link::after { display: none; }
+  /* T-04：底線改用 background 實作後，移動端改為禁用展開而非 ::after */
+  .nav__link,
+  .nav__link:hover,
+  .nav__link:focus-visible,
+  .nav__link.is-active {
+    background-size: 0% 1px;
+  }
   .site-header__inner > .btn { display: none; }
 }
 
@@ -1295,10 +1293,18 @@ body.nav-locked { overflow: hidden; }
   font-size: 13px;
   line-height: 2.2;
   color: var(--text-dim);
-  transition: color 0.3s ease;
+  background: linear-gradient(var(--cyan), var(--cyan));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: color 0.3s ease, background-size 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.ft-col a:hover { color: var(--cyan); }
+.ft-col a:hover,
+.ft-col a:focus-visible {
+  color: var(--cyan);
+  background-size: 100% 1px;
+}
 
 .ft-rule { height: 1px; background: var(--border); }
 
@@ -1777,9 +1783,41 @@ body.nav-locked { overflow: hidden; }
 
 /* v1.2：已删除死关键帧 fadeIn / pulseGlow / slideLeft / glitch（全站无引用） */
 
+/* T-04：模糊淡入进场，取代原 fadeUp 直接播放
+   触发条件改为 .is-visible，由 main.js 的 reveal() 在进入视口时添加 */
+@keyframes blurRise {
+  from {
+    opacity: 0;
+    -webkit-filter: blur(6px);
+    filter: blur(6px);
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    -webkit-filter: blur(0);
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
 [data-reveal] {
   opacity: 0;
-  animation: fadeUp 0.7s ease forwards;
+}
+
+[data-reveal].is-visible {
+  animation: blurRise 0.7s cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+
+/* T-04：減弱動效偏好下直接顯示，不做模糊與位移 */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal].is-visible {
+    opacity: 1;
+    -webkit-filter: none;
+    filter: none;
+    transform: none;
+    animation: none;
+  }
 }
 
 .dot {
@@ -3462,4 +3500,45 @@ body.nav-locked { overflow: hidden; }
   .hdr-user__name { display: none; }
   .hdr-user__out { padding: 5px 9px; }
   .hdr-cart { width: 30px; height: 30px; }
+}
+
+/* ==========================================================================
+   T-05 · 訪客模式入口
+   --------------------------------------------------------------------------
+   樣式沿用既有按鈕與間距變數，不硬編碼色值。
+   ========================================================================== */
+
+.login-guest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s3);
+  margin-top: var(--s6);
+  padding-top: var(--s6);
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.login-guest__label {
+  font-size: var(--fs-tiny);
+  font-weight: 700;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.login-guest .btn {
+  min-width: 200px;
+}
+
+@media (max-width: 560px) {
+  .login-guest {
+    gap: var(--s2);
+    margin-top: var(--s4);
+    padding-top: var(--s4);
+  }
+  .login-guest .btn {
+    min-width: 0;
+    width: 100%;
+  }
 }

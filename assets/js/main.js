@@ -1029,3 +1029,85 @@
 
   renderAll();
 })();
+
+/* ==========================================================================
+   登入閘道（T-05）
+   --------------------------------------------------------------------------
+   未登入訪問內容頁即進入登入頁；登入頁另提供訪客模式。
+   白名單頁面不跳轉。
+   儲存被停用或解析失敗時一律放行，不阻斷瀏覽。
+   ========================================================================== */
+
+(function authGate() {
+  'use strict';
+
+  var KEY_SESSION = 'obsidian.session';
+
+  /* 白名單：這些頁面不跳轉 */
+  var WHITELIST = [
+    'login.html',
+    'register.html',
+    'register-done.html',
+    '404.html'
+  ];
+
+  var here = location.pathname.split('/').pop() || 'index.html';
+
+  /* 1. 白名單 → 直接返回 */
+  if (WHITELIST.indexOf(here) !== -1) return;
+
+  /* 2. 讀會話；讀取異常時直接放行 */
+  var raw;
+  try {
+    raw = window.localStorage.getItem(KEY_SESSION);
+  } catch (err) {
+    return;
+  }
+
+  /* 3. 解析失敗視為無會話 */
+  var session = null;
+  if (raw) {
+    try {
+      session = JSON.parse(raw);
+    } catch (err) {
+      session = null;
+    }
+  }
+
+  /* 4. 有會話 → 放行 */
+  if (session && session.name) return;
+
+  /* 5. 無會話 → 轉登入頁 */
+  location.replace('login.html');
+})();
+
+/* ==========================================================================
+   訪客模式入口（T-05）
+   --------------------------------------------------------------------------
+   以事件委託處理 [data-guest-entry]，寫入訪客會話後前往首頁。
+   ========================================================================== */
+
+(function guestEntry() {
+  'use strict';
+
+  var KEY_SESSION = 'obsidian.session';
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('[data-guest-entry]');
+    if (!link) return;
+
+    e.preventDefault();
+
+    try {
+      window.localStorage.setItem(KEY_SESSION, JSON.stringify({
+        role: 'guest',
+        name: '訪客',
+        at: Date.now()
+      }));
+    } catch (err) {
+      /* 寫入失敗仍前往首頁，不卡在登入頁 */
+    }
+
+    location.href = 'index.html';
+  });
+})();
