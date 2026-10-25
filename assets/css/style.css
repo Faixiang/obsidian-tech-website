@@ -94,10 +94,10 @@
   /* ======================================================================
      栅格（报告 §1.1：最大内容宽 1360px）
      ====================================================================== */
-  --container: 1360px;
+  --container: 1200px;
   --nav-ann: 28px;           /* 公告条高 */
-  --nav-main: 61px;          /* 主导航高 */
-  --nav-total: 89px;         /* 合计 */
+  --nav-main: 76px;          /* 主导航高 */
+  --nav-total: 104px;         /* 合计 */
   --hero-col: 420px;         /* Hero 右列宽 */
 
   /* ======================================================================
@@ -467,7 +467,12 @@ em, i, cite { font-style: normal; }
   flex-shrink: 0;
 }
 
-.brand img { height: 26px; width: auto; }
+.brand img { height: 48px; width: auto; }
+
+/* T-09：堆疊式 logo 較高，768px 以下縮小避免擠壓 */
+@media (max-width: 768px) {
+  .brand img { height: 36px; }
+}
 
 .nav { margin-left: auto; }
 
@@ -1261,7 +1266,7 @@ body.nav-locked { overflow: hidden; }
   .ft-top { grid-template-columns: 1fr; }
 }
 
-.ft-brand img { height: 28px; width: auto; margin-bottom: var(--s4); }
+.ft-brand img { height: 40px; width: auto; margin-bottom: var(--s4); }
 
 .ft-slogan {
   font-size: var(--fs-h4);
@@ -3500,4 +3505,133 @@ body.nav-locked { overflow: hidden; }
   .hdr-user__name { display: none; }
   .hdr-user__out { padding: 5px 9px; }
   .hdr-cart { width: 30px; height: 30px; }
+}
+
+/* ==========================================================================
+   浮動導航欄（T-10）
+   --------------------------------------------------------------------------
+   右側固定 rail：6 項頁面導航 + 當前頁章節錨點。
+   顏色一律取用 :root 既有變數；transition 只列具體屬性。
+   ========================================================================== */
+
+.rail {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 900;              /* 低於 header 的 1001 */
+  display: none;
+  max-height: 82vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.rail::-webkit-scrollbar { display: none; }
+
+/* 顯示 rail 需視口 >= 1536px：rail 佔 28px 邊距 + 123px 寬度，
+   container 1200px 居中後需 (視口-1200)/2 >= 151px 才不重疊。
+   1281–1535px 區間回退為 header 橫排導航，避免遮擋內容。 */
+@media (min-width: 1536px) {
+  .js-ready .rail { display: block; }
+  .js-ready .nav { display: none; }
+}
+
+/* --- 頁面導航項 --- */
+.rail__pages,
+.rail__sections {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rail__pages li,
+.rail__sections li {
+  position: relative;
+}
+
+.rail__pages a,
+.rail__sections a {
+  position: relative;
+  display: block;
+  padding: var(--s2) 0 var(--s2) var(--s4);
+  color: rgba(245, 245, 245, 0.72);
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.rail__pages a {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.rail__sections a {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(245, 245, 245, 0.5);
+}
+
+/* hover：左側 3px 青條 scaleY 展開 + 位移 4px */
+.rail__pages a::before,
+.rail__sections a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--cyan);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.rail__pages a:hover,
+.rail__pages a:focus-visible,
+.rail__sections a:hover,
+.rail__sections a:focus-visible {
+  color: var(--cyan);
+  transform: translateX(4px);
+}
+
+.rail__pages a:hover::before,
+.rail__pages a:focus-visible::before,
+.rail__sections a:hover::before,
+.rail__sections a:focus-visible::before {
+  transform: scaleY(1);
+}
+
+/* 當前頁與當前章節 */
+.rail__pages a.is-current,
+.rail__pages a[aria-current="page"] {
+  color: var(--cyan);
+}
+
+.rail__pages a.is-current::before,
+.rail__pages a[aria-current="page"]::before {
+  transform: scaleY(1);
+}
+
+.rail__sections a.is-current,
+.rail__sections a[aria-current="true"] {
+  color: var(--cyan);
+}
+
+.rail__sections a.is-current::before,
+.rail__sections a[aria-current="true"]::before {
+  transform: scaleY(1);
+}
+
+/* --- 分隔線 --- */
+.rail__divider {
+  width: 1px;
+  height: 18px;
+  margin: var(--s3) 0;
+  background: var(--border2);
+}
+
+/* --- 鍵盤 focus 可見 --- */
+.rail a:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
 }

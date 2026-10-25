@@ -1029,3 +1029,148 @@
 
   renderAll();
 })();
+
+/* ==========================================================================
+   浮動導航欄（T-10）
+   --------------------------------------------------------------------------
+   把 header 的 6 項頁面導航搬到右側固定 rail，並附上當前頁的章節錨點。
+   桌面端隱藏 .nav，窄屏照舊使用 .nav 抽屜。
+
+   漸進增強：先給 <html> 加 .js-ready，CSS 只在 .js-ready 存在時隱藏 .nav。
+   JS 失效 → 沒有 .js-ready → header 導航照常顯示，站點完全可用。
+   ========================================================================== */
+
+(function railNav() {
+  'use strict';
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* 來源：既有 .nav__list，克隆而非重寫 HTML */
+  var navList = document.querySelector('.nav__list');
+  if (!navList) return;
+
+  var here = location.pathname.split('/').pop() || 'index.html';
+
+  /* --- 章節清單：掃描 section，取首個 h2 文字 --- */
+  var sections = [];
+  var allSections = document.querySelectorAll('section');
+  var seq = 0;
+
+  for (var i = 0; i < allSections.length; i++) {
+    var sec = allSections[i];
+
+    var h2 = sec.querySelector('h2');
+    if (!h2) continue;
+
+    var label = (h2.textContent || '').trim();
+    if (!label) continue;
+
+    /* 排除以「？」結尾的 CTA 區 */
+    if (/[？?]$/.test(label)) continue;
+
+    /* data-rail 優先 */
+    var railLabel = sec.getAttribute('data-rail');
+    if (railLabel) label = railLabel.trim();
+
+    /* 沒有 id 則補 rail-N */
+    if (!sec.id) {
+      seq += 1;
+      sec.id = 'rail-' + seq;
+    }
+
+    sections.push({ id: sec.id, label: label, el: sec });
+  }
+
+  /* --- 組裝 rail --- */
+  var rail = document.createElement('nav');
+  rail.className = 'rail';
+  rail.setAttribute('aria-label', '頁面與章節導航');
+
+  var pageList = document.createElement('ul');
+  pageList.className = 'rail__pages';
+
+  /* 從 .nav__list 克隆 6 項 */
+  var items = navList.querySelectorAll('li');
+  for (var k = 0; k < items.length; k++) {
+    var li = items[k].cloneNode(true);
+    var a = li.querySelector('a');
+    if (!a) continue;
+    a.removeAttribute('aria-current');
+    if (a.getAttribute('href') === here) {
+      a.setAttribute('aria-current', 'page');
+      a.classList.add('is-current');
+    }
+    pageList.appendChild(li);
+  }
+
+  rail.appendChild(pageList);
+
+  /* 章節少於 2 個時不顯示章節區與分隔線 */
+  if (sections.length >= 2) {
+    var divider = document.createElement('div');
+    divider.className = 'rail__divider';
+    divider.setAttribute('aria-hidden', 'true');
+    rail.appendChild(divider);
+
+    var secList = document.createElement('ul');
+    secList.className = 'rail__sections';
+
+    for (var s = 0; s < sections.length; s++) {
+      var sli = document.createElement('li');
+      var sa = document.createElement('a');
+      sa.href = '#' + sections[s].id;
+      sa.textContent = sections[s].label;
+      sa.setAttribute('data-rail-anchor', sections[s].id);
+      sli.appendChild(sa);
+      secList.appendChild(sli);
+    }
+
+    rail.appendChild(secList);
+  }
+
+  document.body.appendChild(rail);
+
+  /* --- Scrollspy --- */
+  var anchors = rail.querySelectorAll('[data-rail-anchor]');
+
+  function setCurrent(id) {
+    for (var i = 0; i < anchors.length; i++) {
+      var el = anchors[i];
+      if (el.getAttribute('data-rail-anchor') === id) {
+        el.setAttribute('aria-current', 'true');
+        el.classList.add('is-current');
+      } else {
+        el.removeAttribute('aria-current');
+        el.classList.remove('is-current');
+      }
+    }
+  }
+
+  if (sections.length >= 2 && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        setCurrent(entry.target.id);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+
+    sections.forEach(function (sec) { io.observe(sec.el); });
+  }
+
+  /* --- 章節錨點點擊：平滑或瞬移 --- */
+  rail.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-rail-anchor]');
+    if (!a) return;
+
+    var id = a.getAttribute('data-rail-anchor');
+    var target = id ? document.getElementById(id) : null;
+    if (!target) return;
+
+    e.preventDefault();
+    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    setCurrent(id);
+  });
+
+  /* --- 標記 JS 就緒，CSS 據此隱藏 .nav --- */
+  document.documentElement.classList.add('js-ready');
+})();
