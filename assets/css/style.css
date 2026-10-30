@@ -3615,3 +3615,45 @@ body.nav-locked { overflow: hidden; }
   outline: 2px solid var(--cyan);
   outline-offset: 2px;
 }
+
+/* ==========================================================================
+   T-11：首屏整改
+   --------------------------------------------------------------------------
+   1. 桌面端隱藏 .mn-nav —— 導航已由 header 橫排（961–1535px）與浮動 rail
+      （≥1536px）承擔，首屏不再重複同一組連結。
+   2. 隱藏 .mn-brand__logo —— header 已有品牌 logo，首屏不再重複。
+   3. 首屏改為「左文右圖」兩欄，共用垂直中軸，消除原 300px 空欄。
+   ========================================================================== */
+
+/* header 已有品牌 logo，首屏在任何斷點都不再重複 */
+.mn-brand__logo { display: none; }
+
+@media (min-width: 961px) {
+  .mn-nav { display: none; }
+
+  .mn-hero__inner {
+    grid-template-columns: 1fr 480px;
+    grid-template-rows: auto;
+    gap: var(--s12);
+  }
+
+  .mn-brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* 標題在 672px 欄寬內會折成 8+1 字，改為均衡斷行 */
+  .mn-brand__title { text-wrap: balance; }
+
+  .mn-hero__visual {
+    grid-column: 2;
+    grid-row: 1;
+    max-width: 100%;
+  }
+}
+
+/* ≤960px：主菜單與輪播皆隱藏，雙欄 grid 會把首欄壓成 42px（文字被迫直排）。
+   改為單欄，讓標語獨佔全寬。 */
+@media (max-width: 960px) {
+  .mn-hero__inner { grid-template-columns: 1fr; }
+}
