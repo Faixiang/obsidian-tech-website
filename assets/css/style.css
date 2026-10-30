@@ -3628,6 +3628,14 @@ body.nav-locked { overflow: hidden; }
 /* header 已有品牌 logo，首屏在任何斷點都不再重複 */
 .mn-brand__logo { display: none; }
 
+/* 首屏 CTA：沿用既有 .btn，只補間距 */
+.mn-brand__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+  margin-top: var(--s8);
+}
+
 @media (min-width: 961px) {
   .mn-nav { display: none; }
 
